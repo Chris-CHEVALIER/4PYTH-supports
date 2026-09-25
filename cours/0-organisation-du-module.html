@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Organisation du module – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reset.css">
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reveal.css">
+  <link rel="stylesheet" href="../assets/css/hexagone.css">
+</head>
+<body data-pied="4PYTH – Langage Python · Organisation du module">
+<div class="reveal">
+<div class="slides">
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Organisation du module</h1>
+    <div class="sous-titre">
+      <span class="code-module">4PYTH</span> – Langage Python<br>
+      Chris CHEVALIER
+    </div>
+    <aside class="notes">
+      Accueil, tour de table rapide : qui a déjà programmé ? En quel langage ? Qui vient de la 1re année ?
+      Repérer les 5 « anciens » pour le parcours confirmé.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="sommaire">
+    <h1>Sommaire</h1>
+    <ol>
+      <li>Le module</li>
+      <li>Le déroulé</li>
+      <li>Évaluation et règles du jeu</li>
+    </ol>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#1</div>
+    <h2>Le module</h2>
+    <div class="sous-titre">Organisation du module</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Pourquoi Python en cyberdéfense ?</h2>
+    <div class="corps">
+      <div class="colonnes">
+        <div>
+          <p><strong>Vous le retrouverez dans vos prochains modules :</strong></p>
+          <ul>
+            <li><span class="etiquette">4CRYP</span> Cryptologie</li>
+            <li><span class="etiquette">4FSIC</span> Forensic</li>
+            <li><span class="etiquette">4TECH</span> Audit technique</li>
+            <li><span class="etiquette">5REVE</span> Reverse engineering</li>
+            <li><span class="etiquette">5XSOC</span> SOC &amp; <span class="etiquette">5IAAT</span> IA</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong>Des outils de référence écrits en Python :</strong></p>
+          <ul>
+            <li><strong>Volatility</strong> – analyse de mémoire</li>
+            <li><strong>Impacket</strong> – protocoles Windows</li>
+            <li><strong>sqlmap</strong> – injections SQL</li>
+            <li><strong>Scapy</strong> – forge de paquets</li>
+            <li><strong>pwntools</strong> – exploitation</li>
+          </ul>
+        </div>
+      </div>
+      <div class="encadre" style="margin-top: 14px;">
+        Savoir <strong>lire</strong>, <strong>adapter</strong> et <strong>écrire</strong> un script Python est un réflexe de base de l'analyste, de l'auditeur et du pentesteur.
+      </div>
+    </div>
+    <aside class="notes">
+      Motiver les débutants : ce module n'est pas une fin en soi, c'est un outil qui servira dans toute la formation.
+      Demander si certains ont déjà utilisé l'un de ces outils.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Objectifs du module</h2>
+    <div class="corps">
+      <p>À l'issue du module, vous serez capables de :</p>
+      <ul>
+        <li><strong>Écrire un programme Python structuré</strong> : types, conditions, boucles, fonctions, gestion des erreurs</li>
+        <li><strong>Modéliser un problème en objets</strong> : classes, héritage, composition</li>
+        <li><strong>Lire, écrire et sauvegarder des données</strong> : fichiers texte et binaires, JSON</li>
+        <li><strong>Utiliser Python comme outil de cybersécurité</strong> : octets et encodages, empreintes (hash), aléa sécurisé, analyse de journaux</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Programme</h2>
+    <div class="corps">
+      <div class="colonnes c3">
+        <div class="carte">
+          <h3>Cours 1 – Fondamentaux</h3>
+          Variables et types (dont octets), conditions, boucles, listes et dictionnaires, fonctions, exceptions, modules
+        </div>
+        <div class="carte">
+          <h3>Cours 2 – Objets</h3>
+          Classes et objets, encapsulation, héritage, polymorphisme, composition
+        </div>
+        <div class="carte">
+          <h3>Cours 3 – Données</h3>
+          Fichiers texte et binaires, JSON, sauvegarde d'objets, analyse de journaux
+        </div>
+      </div>
+      <div class="colonnes" style="margin-top: 26px;">
+        <div class="carte ambre">
+          <h3>Défis cyber</h3>
+          Exercices courts en séance, directement liés à chaque cours : mots de passe, empreintes, journaux, cryptographie…
+        </div>
+        <div class="carte pleine">
+          <h3>Projet fil rouge « Fondation »</h3>
+          4 TP qui s'enchaînent : un programme complet, construit étape par étape, jusqu'à sa sécurisation
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Deux parcours, une même évaluation</h2>
+    <div class="corps">
+      <div class="colonnes">
+        <div class="carte">
+          <h3>Parcours principal</h3>
+          <ul>
+            <li>Vous découvrez ou reprenez les bases</li>
+            <li>Cours → défis → TP</li>
+            <li>L'intervenant vous accompagne en priorité</li>
+          </ul>
+        </div>
+        <div class="carte pleine">
+          <h3>Parcours confirmé</h3>
+          <ul>
+            <li>Vous programmez déjà en Python</li>
+            <li>Défis avancés en parallèle : chiffrement, force brute, attaque de l'homme du milieu</li>
+            <li>Bonus du projet Fondation</li>
+          </ul>
+        </div>
+      </div>
+      <div class="encadre marine" style="margin-top: 22px;">
+        Les deux parcours sont évalués selon les <strong>mêmes modalités</strong>. Le parcours confirmé sert à progresser, pas à gagner des points.
+      </div>
+    </div>
+    <aside class="notes">
+      Les « anciens » de 1re année sont orientés vers le parcours confirmé, mais chacun peut changer de parcours à tout moment.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#2</div>
+    <h2>Le déroulé</h2>
+    <div class="sous-titre">Organisation du module</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Calendrier</h2>
+    <div class="corps">
+      <div class="frise">
+        <div class="etape">
+          <div class="date">Mer. 7 octobre</div>
+          <ul>
+            <li>Cours 1 et défis</li>
+            <li>TP1 – Gestion de l'équipage</li>
+            <li>Kahoot</li>
+          </ul>
+        </div>
+        <div class="etape">
+          <div class="date">Ven. 9 octobre</div>
+          <ul>
+            <li>Cours 2 et 3, défis</li>
+            <li>TP2 – Ajout des classes</li>
+            <li>Kahoot</li>
+          </ul>
+        </div>
+        <div class="etape marine">
+          <div class="date">10 oct. → 4 nov.</div>
+          <ul>
+            <li>TP2 et TP3 en autonomie</li>
+            <li>Invitation GitHub <strong>avant le ven. 16 octobre</strong></li>
+          </ul>
+        </div>
+        <div class="etape">
+          <div class="date">Jeu. 5 novembre</div>
+          <ul>
+            <li>TP4 – Sécurisation et défis</li>
+            <li>12h45 : Kahoot de révision</li>
+            <li>14h00 : soutenances</li>
+            <li>16h15 : gel du code</li>
+            <li>16h30 : examen écrit</li>
+          </ul>
+        </div>
+      </div>
+      <div class="encadre" style="margin-top: 26px;">
+        Le 5 novembre, <strong>aucune notion nouvelle</strong> : on applique uniquement ce qui a été vu les 7 et 9 octobre.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Une journée type</h2>
+    <div class="corps">
+      <table>
+        <tr><th style="width: 190px;">Horaire</th><th>Déroulé</th></tr>
+        <tr><td>9h00 – 13h00</td><td>Cours en alternance avec des défis courts : une notion, une mise en pratique immédiate</td></tr>
+        <tr><td>13h00 – 14h00</td><td>Pause déjeuner</td></tr>
+        <tr><td>14h00 – 16h45</td><td>TP du projet Fondation et défis ; accompagnement individuel</td></tr>
+        <tr><td>16h45 – 17h00</td><td>Kahoot : 10 questions pour ancrer la journée</td></tr>
+      </table>
+      <div class="encadre marine" style="margin-top: 22px;">
+        Des pauses courtes sont prévues le matin et l'après-midi. Levez la main dès que vous êtes bloqués : <strong>rester bloqué 20 minutes, c'est 20 minutes perdues</strong>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Votre environnement de travail</h2>
+    <div class="corps">
+      <ul style="margin-bottom: 18px;">
+        <li><strong>Python 3.12 ou plus récent</strong> (python.org) · <strong>VS Code</strong> et son extension Python · <strong>Git</strong> et un compte <strong>GitHub</strong></li>
+      </ul>
+      <div class="colonnes">
+        <pre data-titre="Windows (PowerShell)"><code class="language-powershell" data-trim data-noescape>
+py --version
+py -m venv .venv
+.venv\Scripts\activate
+git --version
+        </code></pre>
+        <pre data-titre="macOS / Linux"><code class="language-bash" data-trim data-noescape>
+python3 --version
+python3 -m venv .venv
+source .venv/bin/activate
+git --version
+        </code></pre>
+      </div>
+      <p class="petit muet">Sous Windows, cochez « Add python.exe to PATH » pendant l'installation. Un environnement virtuel (<code>.venv</code>) isole les bibliothèques de chaque projet.</p>
+    </div>
+    <aside class="notes">
+      Première heure du 7 octobre : vérifier que tout le monde a un terminal fonctionnel avec Python et Git.
+      Faire aider les débutants par les confirmés.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#3</div>
+    <h2>Évaluation et règles du jeu</h2>
+    <div class="sous-titre">Organisation du module</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Modalités d'évaluation</h2>
+    <div class="corps">
+      <table>
+        <tr><th>Épreuve</th><th>Conditions</th><th class="num">Poids</th></tr>
+        <tr><td><strong>Examen écrit</strong> <span class="etiquette ambre">Théorie</span></td><td>Sur table, sans documentation ni IA</td><td class="num"><strong>50 %</strong></td></tr>
+        <tr><td><strong>Soutenance individuelle</strong> <span class="etiquette">Pratique</span></td><td>Démonstration, explication et modification du code en direct</td><td class="num"><strong>25 %</strong></td></tr>
+        <tr><td><strong>Projet Fondation</strong> <span class="etiquette">Pratique</span></td><td>Code rendu sur GitHub, selon la grille d'évaluation</td><td class="num"><strong>15 %</strong></td></tr>
+        <tr><td><strong>Défis en séance</strong> <span class="etiquette">Pratique</span></td><td>Chaque défi : non fait (0), partiel (1) ou réussi (2) ; moyenne des 3 journées</td><td class="num"><strong>10 %</strong></td></tr>
+      </table>
+      <div class="encadre" style="margin-top: 22px;">
+        <strong>85 % de la note</strong> porte sur ce que vous démontrez vous-mêmes, en direct.
+      </div>
+    </div>
+    <aside class="notes">
+      Justifier la pondération : à l'heure de l'IA générative, un code rendu ne prouve pas qu'on sait programmer.
+      La note mesure donc surtout ce qui est démontré en personne.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Rendu du projet sur GitHub</h2>
+    <div class="corps">
+      <ul>
+        <li>Un dépôt <strong>privé</strong> nommé <code>4pyth-fondation-nom-prenom</code></li>
+        <li>Invitez <strong>Chris-CHEVALIER</strong> comme collaborateur <strong>avant le vendredi 16 octobre</strong></li>
+        <li><strong>Des commits réguliers</strong> : au moins un par séance de travail. Un dépôt poussé en une seule fois la veille sera questionné en soutenance</li>
+        <li>Un <code>README.md</code> contenant :
+          <ul>
+            <li>le mode d'emploi du programme ;</li>
+            <li>les bonus réalisés ;</li>
+            <li>la déclaration d'usage de l'IA.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="encadre marine" style="margin-top: 14px;">
+        Seul le <strong>dernier commit poussé avant le jeudi 5 novembre à 16h15</strong> est évalué.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Soutenance et examen écrit</h2>
+    <div class="corps">
+      <div class="colonnes">
+        <div class="carte">
+          <h3>Soutenance · 10 min · le 5 novembre</h3>
+          <ul>
+            <li><strong>3 min</strong> : démonstration de votre programme</li>
+            <li><strong>7 min</strong> : explication d'une partie du code choisie par l'intervenant, puis une petite modification en direct, <strong>sans IA</strong></li>
+          </ul>
+        </div>
+        <div class="carte">
+          <h3>Examen écrit · 30 min · le 5 novembre</h3>
+          <ul>
+            <li><strong>10 questions ouvertes</strong> sur l'ensemble des cours</li>
+            <li>Plusieurs questions portent sur des <strong>extraits de code</strong> à lire ou à corriger</li>
+            <li>Sans documentation ni IA</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>L'IA générative : autorisée, à une condition</h2>
+    <div class="corps">
+      <div class="colonnes">
+        <div>
+          <ul>
+            <li>ChatGPT, Claude, Copilot… sont <strong>autorisés</strong> pour le projet</li>
+            <li>Vous devez <strong>comprendre votre code de bout en bout</strong> : chaque ligne rendue doit pouvoir être expliquée</li>
+            <li>Déclarez votre usage dans le README : quels outils, pour quoi faire</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>La soutenance vérifie cette compréhension : <strong>une fonctionnalité non expliquée n'est pas comptée</strong></li>
+            <li>Examen et soutenance se font <strong>sans IA</strong></li>
+            <li>Le plagiat entre étudiants est sanctionné. L'entraide est encouragée : expliquer, oui ; donner son code, non</li>
+          </ul>
+        </div>
+      </div>
+      <div class="encadre" style="margin-top: 18px;">
+        Conseil : utilisez l'IA comme un <strong>tuteur</strong> (expliquer une erreur, relire votre code), pas comme un <strong>auteur</strong>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Des questions ?</h1>
+    <div class="sous-titre">
+      Chris CHEVALIER<br>
+      chris.chevalier@ecole-hexagone.com
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script src="../assets/vendor/reveal/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../assets/js/hexagone.js"></script>
+</body>
+</html>

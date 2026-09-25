@@ -1,0 +1,264 @@
+/* ==========================================================================
+   Thème reveal.js — charte graphique École Hexagone
+   Reproduit le modèle PowerPoint officiel (16:9, 1280 × 720)
+   Mises en page : data-layout="titre" | "section" | "sommaire" | (défaut) contenu
+   ========================================================================== */
+
+:root {
+  --marine: #1E427C;
+  --marine-fonce: #132B52;
+  --marine-code: #0F2244;
+  --ambre: #F7B120;
+  --jaune: #FFD301;
+  --blanc: #FFFFFF;
+  --gris-clair: #EEF2F8;
+  --ambre-clair: #FEF4DE;
+  --texte: var(--marine);
+  --police: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --police-code: "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+}
+
+/* ---------- Base ---------- */
+.reveal-viewport { background: var(--blanc); }
+.reveal {
+  font-family: var(--police);
+  font-size: 26px;
+  color: var(--texte);
+}
+.reveal .slides { text-align: left; }
+.reveal .slides section:not(.stack) {
+  width: 1280px;
+  height: 720px;
+  box-sizing: border-box;
+  padding: 0;
+}
+.reveal .deco { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.reveal .deco > * { position: absolute; }
+.reveal .slides section > *:not(.deco):not(aside):not(.pied):not(.numero-diapo) { position: relative; z-index: 1; }
+
+/* ---------- Typographie ---------- */
+.reveal h1, .reveal h2, .reveal h3 { font-family: var(--police); font-weight: 700; margin: 0; line-height: 1.15; }
+.reveal p { margin: 0 0 .6em; line-height: 1.4; }
+.reveal strong { color: inherit; font-weight: 700; }
+.reveal em { font-style: italic; }
+.reveal a { color: var(--marine); text-decoration: underline; text-decoration-color: var(--ambre); text-underline-offset: 3px; }
+.reveal .txt-ambre { color: var(--ambre); }
+.reveal .petit { font-size: .75em; }
+.reveal .muet { opacity: .75; }
+
+/* ==========================================================================
+   Mise en page : CONTENU (défaut) — fond blanc, bande ambre, emblème, hexagone
+   ========================================================================== */
+.reveal section.l-contenu .bande { left: 0; top: 0; width: 95px; height: 720px; background: var(--ambre); }
+.reveal section.l-contenu .embleme { left: 18px; top: 27px; width: 58px; }
+.reveal section.l-contenu .hexagone { left: 151px; top: 91px; width: 60px; }
+.reveal section.l-contenu > h2 {
+  position: absolute !important;
+  left: 228px; top: 58px; width: 947px; height: 139px;
+  display: flex; align-items: center;
+  font-size: 42px; color: var(--marine);
+}
+.reveal section.l-contenu > .corps {
+  position: absolute !important;
+  left: 228px; top: 215px; width: 960px; height: 460px;
+}
+.reveal section.l-contenu .numero-diapo {
+  position: absolute; right: 120px; bottom: 22px; font-size: 14px; color: var(--marine); opacity: .6;
+}
+.reveal section.l-contenu .pied {
+  position: absolute; left: 228px; bottom: 22px; font-size: 14px; color: var(--marine); opacity: .6;
+}
+
+/* ==========================================================================
+   Mise en page : TITRE — fond marine, panneau ambre + logo, filigrane
+   ========================================================================== */
+.reveal section.l-titre .panneau { left: 0; top: 0; width: 515px; height: 720px; background: var(--ambre); }
+.reveal section.l-titre .logo { left: 47px; top: 253px; width: 406px; }
+.reveal section.l-titre .filigrane { left: 513px; top: 0; height: 720px; opacity: .09; }
+.reveal section.l-titre > h1 {
+  position: absolute !important;
+  left: 563px; top: 118px; width: 680px; height: 250px;
+  display: flex; align-items: flex-end;
+  font-size: 54px; color: var(--blanc);
+}
+.reveal section.l-titre > .sous-titre {
+  position: absolute !important;
+  left: 563px; top: 390px; width: 680px;
+  font-size: 24px; color: var(--blanc); line-height: 1.5;
+}
+.reveal section.l-titre > .sous-titre .code-module { color: var(--jaune); font-weight: 700; }
+
+/* ==========================================================================
+   Mise en page : SOMMAIRE — comme TITRE, liste numérotée en jaune
+   ========================================================================== */
+.reveal section.l-sommaire .panneau { left: 0; top: 0; width: 515px; height: 720px; background: var(--ambre); }
+.reveal section.l-sommaire .logo { left: 47px; top: 253px; width: 406px; }
+.reveal section.l-sommaire .filigrane { left: 513px; top: 0; height: 720px; opacity: .09; }
+.reveal section.l-sommaire > h1 {
+  position: absolute !important; left: 562px; top: 150px;
+  font-size: 44px; color: var(--jaune);
+}
+.reveal section.l-sommaire > ol {
+  position: absolute !important; left: 562px; top: 245px; width: 660px;
+  list-style: none; margin: 0; padding: 0; counter-reset: partie;
+}
+.reveal section.l-sommaire > ol > li {
+  counter-increment: partie; font-size: 30px; color: var(--blanc); margin: 0 0 22px;
+}
+.reveal section.l-sommaire > ol > li::before {
+  content: "#" counter(partie); color: var(--jaune); font-weight: 700; display: inline-block; width: 64px;
+}
+
+/* ==========================================================================
+   Mise en page : SECTION — fond marine, bande ambre, grand numéro jaune
+   ========================================================================== */
+.reveal section.l-section .bande { left: 0; top: 0; width: 95px; height: 720px; background: var(--ambre); }
+.reveal section.l-section .embleme { left: 18px; top: 27px; width: 58px; }
+.reveal section.l-section .filigrane { left: 513px; top: 0; height: 720px; opacity: .09; }
+.reveal section.l-section > .numero {
+  position: absolute !important; left: 209px; top: 250px;
+  font-size: 107px; font-weight: 700; color: var(--jaune); line-height: 1;
+}
+.reveal section.l-section > h2 {
+  position: absolute !important; left: 365px; top: 147px; width: 860px; height: 210px;
+  display: flex; align-items: flex-end;
+  font-size: 58px; color: var(--blanc);
+}
+.reveal section.l-section > .sous-titre {
+  position: absolute !important; left: 365px; top: 372px; width: 860px;
+  font-size: 22px; color: var(--blanc); opacity: .85;
+}
+
+/* ==========================================================================
+   Composants du corps de diapo
+   ========================================================================== */
+
+/* Listes à puces hexagonales */
+.reveal .corps ul { list-style: none; margin: 0; padding: 0; }
+.reveal .corps ul > li { position: relative; padding-left: 34px; margin: 0 0 14px; line-height: 1.35; }
+.reveal .corps ul > li::before {
+  content: "⬢"; position: absolute; left: 0; top: .05em; color: var(--ambre); font-size: .85em;
+}
+.reveal .corps ul ul { margin-top: 8px; }
+.reveal .corps ul ul > li { font-size: .85em; margin-bottom: 6px; }
+.reveal .corps ul ul > li::before { content: "–"; color: var(--marine); }
+.reveal .corps ol { margin: 0; padding-left: 1.3em; }
+.reveal .corps ol > li { margin-bottom: 12px; line-height: 1.35; }
+
+/* Colonnes */
+.reveal .colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.reveal .colonnes.c3 { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+/* Tableaux */
+.reveal table { border-collapse: collapse; width: 100%; font-size: .8em; }
+.reveal th { background: var(--marine); color: var(--blanc); text-align: left; padding: 10px 14px; font-weight: 700; }
+.reveal td { padding: 9px 14px; border-bottom: 1px solid #D5DDEA; vertical-align: top; }
+.reveal tr:nth-child(even) td { background: var(--gris-clair); }
+.reveal td.num, .reveal th.num { text-align: right; white-space: nowrap; }
+.reveal tr.total td { font-weight: 700; border-top: 2px solid var(--marine); background: var(--blanc); }
+
+/* Encadrés */
+.reveal .encadre {
+  background: var(--ambre-clair); border-left: 6px solid var(--ambre);
+  padding: 14px 20px; border-radius: 0 6px 6px 0; font-size: .85em; line-height: 1.4;
+}
+.reveal .encadre.marine { background: var(--gris-clair); border-left-color: var(--marine); }
+.reveal .encadre > :last-child { margin-bottom: 0; }
+
+/* Cartes */
+.reveal .carte {
+  border: 2px solid var(--marine); border-radius: 8px; padding: 16px 20px; font-size: .85em; line-height: 1.35;
+}
+.reveal .carte h3 { font-size: 1.1em; color: var(--marine); margin-bottom: 10px; }
+.reveal .carte.pleine { background: var(--marine); color: var(--blanc); }
+.reveal .carte.pleine h3 { color: var(--jaune); }
+.reveal .carte.ambre { border-color: var(--ambre); background: var(--ambre-clair); }
+
+/* Étiquettes (codes de modules, etc.) */
+.reveal .etiquette {
+  display: inline-block; font-size: .7em; font-weight: 700; padding: 2px 9px; border-radius: 4px;
+  background: var(--marine); color: var(--blanc); vertical-align: .12em; letter-spacing: .02em;
+}
+.reveal .etiquette.ambre { background: var(--ambre); color: var(--marine); }
+
+/* Grand chiffre (pondérations, etc.) */
+.reveal .chiffre { font-size: 2.2em; font-weight: 700; color: var(--marine); line-height: 1; }
+.reveal .chiffre.ambre { color: var(--ambre); }
+
+/* Frise chronologique */
+.reveal .frise { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.reveal .frise .etape { border-top: 6px solid var(--ambre); padding-top: 10px; font-size: .8em; line-height: 1.35; }
+.reveal .frise .etape.marine { border-top-color: var(--marine); }
+.reveal .frise .date { font-weight: 700; font-size: 1.15em; color: var(--marine); margin-bottom: 6px; }
+.reveal .frise ul > li { margin-bottom: 5px; padding-left: 22px; }
+
+/* ==========================================================================
+   Code — texte éditable, coloration aux couleurs de la charte
+   ========================================================================== */
+.reveal pre {
+  position: relative; margin: 0 0 18px; width: 100%;
+  background: var(--marine-code); border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(19, 43, 82, .25);
+  font-size: 19px; line-height: 1.5; overflow: hidden;
+}
+.reveal pre::before {
+  /* Barre de fenêtre : trois pastilles aux couleurs de la charte */
+  content: ""; display: block; height: 34px; background: var(--marine);
+  background-image:
+    radial-gradient(circle at 20px 17px, var(--ambre) 6px, transparent 6.5px),
+    radial-gradient(circle at 40px 17px, var(--jaune) 6px, transparent 6.5px),
+    radial-gradient(circle at 60px 17px, rgba(255,255,255,.55) 6px, transparent 6.5px);
+}
+.reveal pre[data-titre]::after {
+  content: attr(data-titre); position: absolute; top: 0; left: 0; right: 0; height: 34px; line-height: 34px;
+  text-align: center; font-family: var(--police); font-size: 14px; color: rgba(255,255,255,.75);
+}
+.reveal pre code {
+  display: block; padding: 16px 22px; max-height: 420px; overflow: auto;
+  font-family: var(--police-code); color: #E8EEF8; background: transparent; white-space: pre; tab-size: 4;
+}
+.reveal code { font-family: var(--police-code); }
+.reveal :not(pre) > code {
+  font-size: .88em; background: var(--gris-clair); color: var(--marine); padding: 1px 7px; border-radius: 4px;
+}
+
+/* Coloration syntaxique (highlight.js) */
+.reveal .hljs-keyword, .reveal .hljs-built_in.hljs-keyword, .reveal .hljs-meta .hljs-keyword { color: var(--ambre); font-weight: 700; }
+.reveal .hljs-string, .reveal .hljs-subst .hljs-string { color: #FFE27A; }
+.reveal .hljs-number, .reveal .hljs-literal { color: #FF9E7A; }
+.reveal .hljs-built_in { color: #8EC5FF; }
+.reveal .hljs-title, .reveal .hljs-title.function_, .reveal .hljs-title.class_ { color: #8EC5FF; font-weight: 700; }
+.reveal .hljs-params { color: #E8EEF8; }
+.reveal .hljs-comment { color: #8FA3C4; font-style: italic; }
+.reveal .hljs-meta, .reveal .hljs-decorator { color: var(--jaune); }
+.reveal .hljs-variable, .reveal .hljs-attr, .reveal .hljs-property { color: #C9D8F0; }
+.reveal .hljs-subst { color: #E8EEF8; }
+.reveal .hljs-operator { color: var(--ambre); }
+.reveal .hljs-prompt, .reveal .invite { color: var(--ambre); user-select: none; }
+
+/* Surlignage de lignes (data-line-numbers="2|4-5") */
+.reveal pre code .hljs-ln-line.highlight-line { background: rgba(247, 177, 32, .14); }
+.reveal .hljs-ln-numbers { color: #5E7599; padding-right: 14px; text-align: right; user-select: none; }
+.reveal .hljs.has-highlights tr:not(.highlight-line) { opacity: .45; }
+
+/* Bouton copier */
+.reveal pre .copier {
+  position: absolute; top: 5px; right: 8px; z-index: 2; pointer-events: auto;
+  font: 700 12px var(--police); color: var(--marine); background: var(--ambre);
+  border: 0; border-radius: 4px; padding: 5px 10px; cursor: pointer; opacity: .85;
+}
+.reveal pre .copier:hover { opacity: 1; }
+
+/* Terminal (commande shell) */
+.reveal pre.terminal code { color: #E8EEF8; }
+
+/* ---------- Interface reveal ---------- */
+.reveal .controls { color: var(--ambre); }
+.reveal .progress { color: var(--ambre); height: 5px; }
+.reveal .slide-number { display: none; }
+
+/* ---------- Impression / PDF ---------- */
+@media print {
+  .reveal pre .copier { display: none; }
+  .reveal pre code { max-height: none; overflow: visible; }
+}
