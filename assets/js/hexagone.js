@@ -31,6 +31,11 @@
   diapos.forEach((diapo, index) => {
     const layout = diapo.dataset.layout || "contenu";
     diapo.classList.add("l-" + layout);
+
+    // Les titres sont en display:flex : on enveloppe leur contenu pour préserver les espaces
+    diapo.querySelectorAll(":scope > h1, :scope > h2").forEach((titre) => {
+      titre.innerHTML = `<span>${titre.innerHTML}</span>`;
+    });
     diapo.dataset.backgroundColor = COULEURS_FOND[layout];
 
     const deco = document.createElement("div");

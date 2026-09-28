@@ -262,3 +262,41 @@
   .reveal pre .copier { display: none; }
   .reveal pre code { max-height: none; overflow: visible; }
 }
+
+/* ==========================================================================
+   Compléments (cours 1)
+   ========================================================================== */
+/* Colonnes asymétriques : code à gauche, explications à droite */
+.reveal .colonnes > * { min-width: 0; }
+.reveal .colonnes.code-texte { grid-template-columns: 1.6fr 1fr; gap: 30px; align-items: start; }
+.reveal .colonnes.code-texte pre, .reveal .colonnes.texte-code pre { font-size: 16.5px; }
+.reveal .colonnes.code-texte pre code, .reveal .colonnes.texte-code pre code { padding: 12px 18px; }
+.reveal .colonnes.texte-code { grid-template-columns: 1fr 1.25fr; gap: 30px; align-items: start; }
+
+/* Code plus dense pour les diapos chargées */
+.reveal pre.compact { font-size: 16.5px; }
+.reveal pre.compact code { padding: 12px 18px; }
+
+/* Texte réduit dans les cartes et listes denses */
+.reveal .dense { font-size: .8em; }
+.reveal .dense ul > li { margin-bottom: 8px; }
+
+/* Tableau d'indices d'une chaîne */
+.reveal table.indices { width: auto; font-family: var(--police-code); font-size: .72em; margin-bottom: 18px; }
+.reveal table.indices td, .reveal table.indices th { text-align: center; padding: 5px 9px; border: 1px solid #D5DDEA; }
+.reveal table.indices th { background: var(--marine); }
+.reveal table.indices tr.car td { background: var(--ambre-clair); font-weight: 700; font-size: 1.15em; }
+.reveal table.indices tr.neg td { color: #8FA3C4; }
+
+/* Réponse de quiz révélée en fragment */
+.reveal .reponse { border-left: 6px solid var(--ambre); background: var(--ambre-clair); padding: 12px 18px;
+  border-radius: 0 6px 6px 0; font-size: .82em; margin-bottom: 12px; line-height: 1.35; }
+.reveal .reponse code { background: var(--blanc); }
+
+/* Mauvaise / bonne pratique */
+.reveal .ko, .reveal .ok { font-weight: 700; margin: 0 0 8px; font-size: .85em; }
+.reveal .ko { color: #B42318; }
+.reveal .ok { color: #1E7B3A; }
+
+/* Code dans un titre : même couleur que le titre, sans fond */
+.reveal h1 code, .reveal h2 code { background: none; color: inherit; padding: 0; font-size: .95em; }
