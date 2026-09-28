@@ -1,0 +1,146 @@
+/* ==========================================================================
+   Pages d'énoncé (défis, TP) — charte graphique École Hexagone
+   Page qu'on fait défiler, lisible à l'écran comme à l'impression
+   ========================================================================== */
+
+:root {
+  --marine: #1E427C;
+  --marine-code: #0F2244;
+  --ambre: #F7B120;
+  --jaune: #FFD301;
+  --gris-clair: #EEF2F8;
+  --ambre-clair: #FEF4DE;
+  --bordure: #D5DDEA;
+  --police: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --police-code: "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--police); font-size: 17px; line-height: 1.6; color: var(--marine); background: #fff; }
+
+/* ---------- En-tête ---------- */
+.entete { background: var(--marine); color: #fff; display: flex; min-height: 190px; }
+.entete .panneau { background: var(--ambre); display: flex; align-items: center; justify-content: center; padding: 24px 32px; flex: 0 0 auto; }
+.entete .panneau img { width: 230px; max-width: 60vw; display: block; }
+.entete .titre { padding: 26px 32px; display: flex; flex-direction: column; justify-content: center; }
+.entete h1 { margin: 0 0 6px; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; }
+.entete p { margin: 0; font-size: 18px; }
+.entete .code-module { color: var(--jaune); font-weight: 700; }
+
+main { max-width: 900px; margin: 0 auto; padding: 28px 16px 56px; }
+a { color: var(--marine); text-decoration-color: var(--ambre); text-underline-offset: 3px; }
+strong { font-weight: 700; }
+
+/* ---------- Titres ---------- */
+h2 { font-size: 28px; line-height: 1.2; margin: 48px 0 16px; display: flex; align-items: center; gap: 14px; scroll-margin-top: 16px; }
+h2 .num {
+  flex: 0 0 auto; width: 52px; height: 58px; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--ambre); color: var(--marine); font-size: 22px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+h3 { font-size: 19px; margin: 26px 0 8px; padding-left: 12px; border-left: 5px solid var(--ambre); }
+.defi { border-top: 2px solid var(--gris-clair); }
+.defi:first-of-type { border-top: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin: -4px 0 14px; }
+
+/* ---------- Étiquettes ---------- */
+.etiquette { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 4px; background: var(--marine); color: #fff; }
+.etiquette.ambre { background: var(--ambre); color: var(--marine); }
+.etiquette.clair { background: var(--gris-clair); color: var(--marine); }
+
+/* ---------- Listes ---------- */
+ul { list-style: none; padding: 0; margin: 0 0 14px; }
+ul > li { position: relative; padding-left: 26px; margin-bottom: 6px; }
+ul > li::before { content: "⬢"; position: absolute; left: 0; top: .05em; color: var(--ambre); font-size: .85em; }
+ol { padding-left: 1.4em; margin: 0 0 14px; }
+ol > li { margin-bottom: 6px; }
+ol > li::marker { font-weight: 700; }
+
+/* ---------- Encadrés ---------- */
+.encadre { background: var(--ambre-clair); border-left: 6px solid var(--ambre); padding: 14px 18px; border-radius: 0 6px 6px 0; margin: 16px 0; }
+.encadre.marine { background: var(--gris-clair); border-left-color: var(--marine); }
+.encadre > :first-child { margin-top: 0; }
+.encadre > :last-child { margin-bottom: 0; }
+.encadre .intitule { display: block; font-weight: 700; margin-bottom: 6px; }
+
+.sommaire { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 18px 0; }
+.sommaire a { display: block; border: 2px solid var(--marine); border-radius: 8px; padding: 12px 16px; text-decoration: none; }
+.sommaire a:hover { background: var(--gris-clair); }
+.sommaire .n { font-weight: 700; color: var(--ambre); }
+
+/* ---------- Indices dépliables ---------- */
+details { border: 1px solid var(--bordure); border-radius: 6px; padding: 10px 16px; margin: 14px 0; background: #fff; }
+details summary { cursor: pointer; font-weight: 700; }
+details[open] summary { margin-bottom: 8px; }
+
+/* ---------- Tableaux ---------- */
+table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 12px 0 16px; }
+th { background: var(--marine); color: #fff; text-align: left; padding: 8px 12px; }
+td { padding: 8px 12px; border-bottom: 1px solid var(--bordure); vertical-align: top; }
+tr:nth-child(even) td { background: var(--gris-clair); }
+
+/* ---------- Code ---------- */
+code { font-family: var(--police-code); }
+:not(pre) > code { font-size: .88em; background: var(--gris-clair); padding: 1px 6px; border-radius: 4px; }
+pre {
+  position: relative; margin: 12px 0 18px; background: var(--marine-code); border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(19, 43, 82, .2); overflow: hidden; font-size: 14.5px; line-height: 1.55;
+}
+pre::before {
+  content: ""; display: block; height: 30px; background: var(--marine);
+  background-image:
+    radial-gradient(circle at 18px 15px, var(--ambre) 5px, transparent 5.5px),
+    radial-gradient(circle at 36px 15px, var(--jaune) 5px, transparent 5.5px),
+    radial-gradient(circle at 54px 15px, rgba(255,255,255,.55) 5px, transparent 5.5px);
+}
+pre[data-titre]::after {
+  content: attr(data-titre); position: absolute; top: 0; left: 70px; right: 70px; height: 30px; line-height: 30px;
+  text-align: center; font-family: var(--police); font-size: 13px; color: rgba(255,255,255,.75);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+pre code { display: block; padding: 14px 18px; overflow-x: auto; color: #E8EEF8; white-space: pre; tab-size: 4; }
+pre .copier {
+  position: absolute; top: 4px; right: 8px; font: 700 12px var(--police); color: var(--marine); background: var(--ambre);
+  border: 0; border-radius: 4px; padding: 4px 10px; cursor: pointer; opacity: .85;
+}
+pre .copier:hover { opacity: 1; }
+
+.hljs-keyword, .hljs-meta .hljs-keyword { color: var(--ambre); font-weight: 700; }
+.hljs-string { color: #FFE27A; }
+.hljs-number, .hljs-literal { color: #FF9E7A; }
+.hljs-built_in, .hljs-title, .hljs-title.function_, .hljs-title.class_ { color: #8EC5FF; }
+.hljs-comment { color: #8FA3C4; font-style: italic; }
+.hljs-meta { color: var(--jaune); }
+.hljs-params, .hljs-subst { color: #E8EEF8; }
+.hljs-operator { color: var(--ambre); }
+
+/* ---------- Pied de page ---------- */
+.pied { text-align: center; font-size: 14px; opacity: .7; padding: 24px 16px; border-top: 1px solid var(--gris-clair); }
+
+@media (max-width: 640px) {
+  .entete { flex-direction: column; }
+  h2 { font-size: 23px; }
+}
+
+@media print {
+  body { font-size: 14px; }
+  .entete { min-height: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  pre, .encadre, h2 .num, th, tr:nth-child(even) td, .etiquette { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  pre .copier { display: none; }
+  pre code { white-space: pre-wrap; word-break: break-all; }
+  details { border: 0; padding: 0; }
+  details > summary { list-style: none; }
+  .defi { break-before: page; border-top: 0; }
+  h3, pre, .encadre, table { break-inside: avoid; }
+  pre.donnees { break-inside: auto; }
+  pre.donnees code { font-size: 8.6px; }
+  h3 { break-after: avoid; }
+  main { padding-top: 12px; }
+}
+
+/* Code dans les tableaux : lisible sur les lignes grisées */
+td code { background: #fff !important; border: 1px solid var(--bordure); }
+
+/* Blocs de données larges (journaux) : police réduite pour éviter le défilement horizontal */
+pre.donnees { font-size: 11.6px; }
