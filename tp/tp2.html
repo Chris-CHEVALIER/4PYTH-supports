@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP2 – Ajout des classes – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/css/enonce.css">
+</head>
+<body>
+
+<header class="entete">
+  <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
+  <div class="titre">
+    <h1>TP2 – Ajout des classes</h1>
+    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation » · Vendredi 9 octobre, 15h15 – 16h45</p>
+  </div>
+</header>
+
+<main>
+
+  <figure class="illustration">
+    <img src="../assets/img/fondation-flotte.jpg" alt="Une flotte de vaisseaux spatiaux en orbite autour d'une planète">
+  </figure>
+
+  <h3>Contexte</h3>
+  <p>
+    La galaxie est toujours sous la menace du Mulet. Vos équipages sont recensés, mais une simple liste ne suffit plus :
+    la flotte <strong>Galactica</strong> compte cinq vaisseaux, des opérateurs aux métiers variés et trois
+    <strong>mentalistes</strong> de la Seconde Fondation, capables d'influencer l'esprit des autres.
+  </p>
+  <p>
+    Il est temps de structurer votre programme avec des <strong>objets</strong> : chaque personne, chaque vaisseau et la flotte
+    elle-même deviennent des classes, qui portent leurs données <strong>et</strong> leurs comportements.
+  </p>
+
+  <div class="encadre marine">
+    <span class="intitule">Ce TP en bref</span>
+    <ul>
+      <li><strong>Objectifs</strong> : modéliser avec des classes, utiliser l'héritage, le polymorphisme, l'encapsulation et la composition,
+        puis faire passer le programme du TP1 des dictionnaires aux objets.</li>
+      <li>Commencé en séance, il se termine <strong>en autonomie</strong>, avant de passer au TP3.</li>
+      <li>Il enrichit votre dépôt <code>4pyth-fondation-nom-prenom</code> : commitez et poussez à chaque étape.</li>
+      <li>L'IA est autorisée pour le projet, à une condition : <strong>comprendre chaque ligne</strong> de votre code.</li>
+    </ul>
+  </div>
+
+  <nav class="sommaire">
+    <a href="#etape-1"><span class="n">Étape 1</span><br>Les personnes</a>
+    <a href="#etape-2"><span class="n">Étape 2</span><br>Les vaisseaux et la flotte</a>
+    <a href="#etape-3"><span class="n">Étape 3</span><br>Tester vos classes</a>
+    <a href="#etape-4"><span class="n">Étape 4</span><br>Construire la flotte</a>
+    <a href="#etape-5"><span class="n">Étape 5</span><br>Le menu en objets</a>
+    <a href="#bonus"><span class="n">Bonus</span><br>Pour aller plus loin</a>
+    <a href="#auto-evaluation"><span class="n">Checklist</span><br>Avant de continuer</a>
+  </nav>
+
+  <div class="encadre">
+    <span class="intitule">Organisation des fichiers</span>
+    <table class="compact">
+      <tr><th>Fichier</th><th>Contenu</th></tr>
+      <tr><td><code>models.py</code></td><td>les cinq classes du projet et leurs tests (étapes 1 à 3)</td></tr>
+      <tr><td><code>fleet_data.py</code></td><td>les données de la flotte, à copier (étape 4)</td></tr>
+      <tr><td><code>crew.py</code></td><td>les fonctions du menu, adaptées aux objets (étapes 4 et 5)</td></tr>
+      <tr><td><code>main.py</code></td><td>le menu interactif (étape 5)</td></tr>
+    </table>
+  </div>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-1">
+    <h2><span class="num">1</span> Les personnes</h2>
+    <div class="meta"><span class="etiquette">≈ 35 min</span><span class="etiquette clair">Classes · héritage · @property</span></div>
+
+    <h3><code>Person</code> – une personne de la flotte</h3>
+    <table>
+      <tr><th>Élément</th><th>Rôle</th></tr>
+      <tr><td><code>first_name</code>, <code>last_name</code>, <code>gender</code>, <code>age</code></td><td>attributs initialisés par <code>__init__()</code></td></tr>
+      <tr><td><code>introduce_yourself()</code></td><td>renvoie <code>Je m'appelle Bel Riose, je suis un homme de 48 ans.</code></td></tr>
+      <tr><td><code>__str__()</code></td><td>renvoie <code>Bel Riose (M, 48 ans)</code></td></tr>
+    </table>
+
+    <div class="encadre marine">
+      <span class="intitule">Fallom et Joie n'ont pas de nom de famille</span>
+      Pour eux, <code>last_name</code> vaut <code>""</code>. Vos affichages ne doivent pas laisser d'espace en trop
+      (<code>Joie (F, 25 ans)</code> et non <code>Joie  (F, 25 ans)</code>). Pour retirer un membre de l'équipage, on utilisera son nom de famille…
+      ou son prénom s'il n'en a pas.
+    </div>
+
+    <h3><code>Operator(Person)</code> – un membre d'équipage avec un rôle</h3>
+    <table>
+      <tr><th>Élément</th><th>Rôle</th></tr>
+      <tr><td><code>role</code></td><td>un rôle de la liste <code>ROLES</code> du TP1. Un rôle inconnu lève une <code>ValueError</code> : validez-le avec un <strong>setter <code>@property</code></strong></td></tr>
+      <tr><td><code>experience</code></td><td>niveau d'expérience, <code>0</code> par défaut</td></tr>
+      <tr><td><code>act()</code></td><td>affiche l'action du membre selon son rôle (voir <code>ACTIONS</code>) puis appelle <code>gain_experience()</code></td></tr>
+      <tr><td><code>gain_experience()</code></td><td>augmente l'expérience de 1</td></tr>
+      <tr><td><code>__str__()</code></td><td>complète celui de <code>Person</code> : <code>Hugo Crast (M, 37 ans) – pilote</code></td></tr>
+    </table>
+
+    <pre data-titre="models.py – données à copier"><code class="language-python">
+      ROLES = ["commandant", "pilote", "technicien", "armurier", "marchand", "entretien"]
+
+      ACTIONS = {
+          "commandant": "donne ses ordres à l'équipage",
+          "pilote": "pilote le vaisseau",
+          "technicien": "répare les moteurs",
+          "armurier": "vérifie les canons",
+          "marchand": "négocie une cargaison",
+          "entretien": "nettoie le vaisseau",
+      }
+    </code></pre>
+
+    <h3><code>Mentalist(Person)</code> – un membre de la Seconde Fondation</h3>
+    <table>
+      <tr><th>Élément</th><th>Rôle</th></tr>
+      <tr><td><code>mana</code></td><td>points de mana, <code>100</code> par défaut, <strong>toujours compris entre 0 et 100</strong> : bornez-les avec un setter <code>@property</code></td></tr>
+      <tr><td><code>act()</code></td><td>affiche <code>Joie se concentre.</code> et regagne 10 points de mana</td></tr>
+      <tr><td><code>recharge_mana()</code></td><td>regagne 50 points de mana</td></tr>
+      <tr><td><code>influence(operator)</code></td><td>coûte 20 points de mana et force l'opérateur à agir (appelle son <code>act()</code>). Sans assez de mana, affiche
+        <code>Joie n'a pas assez de mana pour influencer Hugo Crast.</code> et renvoie <code>False</code></td></tr>
+      <tr><td><code>__str__()</code></td><td><code>Joie (F, 25 ans) – mentaliste, 100 mana</code></td></tr>
+    </table>
+
+    <div class="encadre">
+      <span class="intitule">Le polymorphisme en action</span>
+      <code>Operator</code> et <code>Mentalist</code> ont tous deux une méthode <code>act()</code> <strong>sans argument</strong>.
+      Un vaisseau pourra donc faire agir tout son équipage avec une simple boucle, sans jamais tester le type de chaque membre.
+    </div>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Revoyez les diapos « Hériter d'une classe », « Étendre une méthode avec <code>super()</code> » et « <code>@property</code> : valider une écriture » du cours 2.</li>
+        <li>Dans <code>__init__()</code>, écrivez <code>self.role = role</code> : l'affectation passe par votre setter, donc la validation s'applique aussi à la création.</li>
+        <li>Pour borner une valeur : <code>max(0, min(value, 100))</code>.</li>
+        <li>Une propriété <code>name</code> qui assemble le prénom et le nom puis retire les espaces superflus (<code>strip()</code>) vous simplifiera tous les affichages.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-2">
+    <h2><span class="num">2</span> Les vaisseaux et la flotte</h2>
+    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Composition · attributs de classe · isinstance</span></div>
+
+    <h3><code>Spaceship</code> – un vaisseau et son équipage</h3>
+    <table>
+      <tr><th>Élément</th><th>Rôle</th></tr>
+      <tr><td><code>name</code>, <code>ship_type</code>, <code>condition</code></td><td>nom, type (<code>"transport"</code>, <code>"guerre"</code> ou <code>"marchand"</code>)
+        et état (<code>"opérationnel"</code> par défaut ou <code>"endommagé"</code>)</td></tr>
+      <tr><td><code>crew</code></td><td>liste d'objets <code>Operator</code> et <code>Mentalist</code>, vide au départ</td></tr>
+      <tr><td><code>MAX_CREW = 10</code></td><td>attribut de classe : capacité maximale</td></tr>
+      <tr><td><code>add_member(member)</code></td><td>ajoute un membre. Lève une <code>ValueError</code> si le vaisseau est plein ou si le nom est déjà à bord</td></tr>
+      <tr><td><code>find_member(name)</code></td><td>renvoie le membre correspondant ou <code>None</code></td></tr>
+      <tr><td><code>remove_member(name)</code></td><td>retire le membre et le renvoie (ou <code>None</code> s'il est introuvable)</td></tr>
+      <tr><td><code>check_preparation()</code></td><td>renvoie <code>True</code> si l'équipage compte au moins un pilote et un technicien</td></tr>
+      <tr><td><code>watch_round()</code></td><td><strong>tour de garde</strong> : chaque membre de l'équipage agit</td></tr>
+      <tr><td><code>__str__()</code></td><td><code>Fearless (guerre, opérationnel) – 6 membres</code></td></tr>
+    </table>
+
+    <h3><code>Fleet</code> – la flotte</h3>
+    <table>
+      <tr><th>Élément</th><th>Rôle</th></tr>
+      <tr><td><code>name</code>, <code>spaceships</code></td><td>nom de la flotte et liste d'objets <code>Spaceship</code>, vide au départ</td></tr>
+      <tr><td><code>MAX_SPACESHIPS = 15</code></td><td>attribut de classe : capacité maximale</td></tr>
+      <tr><td><code>add_spaceship(spaceship)</code></td><td>ajoute un vaisseau. Lève une <code>ValueError</code> si la flotte est pleine ou si le nom existe déjà</td></tr>
+      <tr><td><code>find_spaceship(name)</code></td><td>renvoie le vaisseau correspondant (sans tenir compte de la casse) ou <code>None</code></td></tr>
+      <tr><td><code>statistics()</code></td><td>affiche le nombre de vaisseaux et de membres, la répartition par rôle, le nombre de mentalistes,
+        l'expérience moyenne des opérateurs et le nombre de vaisseaux prêts</td></tr>
+    </table>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Revoyez les diapos « Des objets dans des objets » et « Tester le type : <code>isinstance()</code> » du cours 2.</li>
+        <li>Un mentaliste n'a pas de rôle : dans <code>check_preparation()</code> et <code>statistics()</code>, ne regardez le rôle que des objets <code>Operator</code>.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-3">
+    <h2><span class="num">3</span> Tester vos classes</h2>
+    <div class="meta"><span class="etiquette">≈ 10 min</span><span class="etiquette clair">if __name__ == "__main__"</span></div>
+
+    <p>
+      À la fin de <code>models.py</code>, sous <code>if __name__ == "__main__":</code>, instanciez des objets de chaque classe et appelez leurs
+      méthodes. Voici ce que doit afficher ce programme de test :
+    </p>
+
+    <pre data-titre="models.py – tests"><code class="language-python">
+      bel = Operator("Bel", "Riose", "M", 48, "commandant")
+      hugo = Operator("Hugo", "Crast", "M", 37, "pilote")
+      joie = Mentalist("Joie", "", "F", 25)
+
+      print(bel.introduce_yourself())   # Je m'appelle Bel Riose, je suis un homme de 48 ans.
+      print(joie.introduce_yourself())  # Je m'appelle Joie, je suis une femme de 25 ans.
+      print(hugo)                       # Hugo Crast (M, 37 ans) – pilote
+      print(joie)                       # Joie (F, 25 ans) – mentaliste, 100 mana
+
+      hugo.act()                        # Hugo Crast pilote le vaisseau.
+      print(hugo.experience)            # 1
+
+      for _ in range(6):
+          joie.influence(hugo)          # 5 fois : Joie influence Hugo Crast. (puis Hugo agit)
+                                        # 6e fois : Joie n'a pas assez de mana…
+      print(joie.mana)                  # 0
+      joie.recharge_mana()
+      joie.recharge_mana()
+      joie.recharge_mana()
+      print(joie.mana)                  # 100 : le mana ne dépasse jamais 100
+
+      ship = Spaceship("Fearless", "guerre")
+      ship.add_member(bel)
+      ship.add_member(hugo)
+      print(ship.check_preparation())   # False : pas de technicien
+      ship.add_member(Operator("Yugo", "Amary", "M", 33, "technicien"))
+      print(ship.check_preparation())   # True
+      print(ship)                       # Fearless (guerre, opérationnel) – 3 membres
+
+      Operator("Eve", "Hacker", "F", 30, "root")
+      # ValueError: rôle inconnu : root
+    </code></pre>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-4">
+    <h2><span class="num">4</span> Construire la flotte</h2>
+    <div class="meta"><span class="etiquette">≈ 15 min</span><span class="etiquette clair">Dictionnaires · objets</span></div>
+
+    <p>
+      Copiez les données de la flotte Galactica dans <code>fleet_data.py</code>. Chaque vaisseau et chaque membre y est décrit par un
+      <strong>dictionnaire</strong> ; la clé <code>type</code> indique s'il faut créer un <code>Operator</code> ou un <code>Mentalist</code>.
+    </p>
+
+    <details>
+      <summary>Données à copier – fleet_data.py (5 vaisseaux, 24 membres)</summary>
+      <pre class="donnees" data-titre="fleet_data.py"><code class="language-python">
+FLEET_DATA = {
+    "name": "Galactica",
+    "spaceships": [
+        {"name": "Bayta", "ship_type": "marchand", "condition": "opérationnel", "crew": [
+            {"type": "operator", "first_name": "Hugo", "last_name": "Crast", "gender": "M", "age": 37, "role": "pilote"},
+            {"type": "operator", "first_name": "Gaal", "last_name": "Dornick", "gender": "F", "age": 34, "role": "technicien"},
+            {"type": "operator", "first_name": "Lathan", "last_name": "Devers", "gender": "M", "age": 46, "role": "marchand"},
+            {"type": "operator", "first_name": "Novi", "last_name": "Sura", "gender": "F", "age": 25, "role": "entretien"},
+        ]},
+        {"name": "Dark Nebula", "ship_type": "guerre", "condition": "endommagé", "crew": [
+            {"type": "operator", "first_name": "Jagger", "last_name": "Fount", "gender": "M", "age": 41, "role": "pilote"},
+            {"type": "operator", "first_name": "Munn", "last_name": "Compor", "gender": "M", "age": 27, "role": "technicien"},
+            {"type": "operator", "first_name": "Salvor", "last_name": "Hardin", "gender": "F", "age": 28, "role": "armurier"},
+            {"type": "operator", "first_name": "Ebling", "last_name": "Mis", "gender": "M", "age": 34, "role": "entretien"},
+            {"type": "mentalist", "first_name": "Tellem", "last_name": "Bond", "gender": "M", "age": 48, "mana": 100},
+        ]},
+        {"name": "Fearless", "ship_type": "guerre", "condition": "opérationnel", "crew": [
+            {"type": "operator", "first_name": "Bel", "last_name": "Riose", "gender": "M", "age": 48, "role": "commandant"},
+            {"type": "operator", "first_name": "Hober", "last_name": "Mallow", "gender": "M", "age": 52, "role": "pilote"},
+            {"type": "operator", "first_name": "Yugo", "last_name": "Amary", "gender": "M", "age": 33, "role": "technicien"},
+            {"type": "operator", "first_name": "Han", "last_name": "Pritcher", "gender": "M", "age": 31, "role": "armurier"},
+            {"type": "operator", "first_name": "Harlan", "last_name": "Branno", "gender": "F", "age": 38, "role": "entretien"},
+            {"type": "mentalist", "first_name": "Yanna", "last_name": "Seldon", "gender": "F", "age": 52, "mana": 100},
+        ]},
+        {"name": "Unimara", "ship_type": "marchand", "condition": "opérationnel", "crew": [
+            {"type": "operator", "first_name": "Fallom", "last_name": "", "gender": "F", "age": 28, "role": "pilote"},
+            {"type": "operator", "first_name": "Toran", "last_name": "Darell", "gender": "M", "age": 52, "role": "technicien"},
+            {"type": "operator", "first_name": "Limmar", "last_name": "Ponyets", "gender": "M", "age": 43, "role": "marchand"},
+            {"type": "operator", "first_name": "Jord", "last_name": "Commasson", "gender": "M", "age": 53, "role": "entretien"},
+            {"type": "mentalist", "first_name": "Joie", "last_name": "", "gender": "F", "age": 25, "mana": 100},
+        ]},
+        {"name": "Weinis", "ship_type": "marchand", "condition": "endommagé", "crew": [
+            {"type": "operator", "first_name": "Lewis", "last_name": "Pirenne", "gender": "M", "age": 34, "role": "pilote"},
+            {"type": "operator", "first_name": "Stora", "last_name": "Gendibal", "gender": "F", "age": 35, "role": "technicien"},
+            {"type": "operator", "first_name": "Eskel", "last_name": "Gorov", "gender": "M", "age": 32, "role": "marchand"},
+            {"type": "operator", "first_name": "Bayta", "last_name": "Darell", "gender": "F", "age": 48, "role": "entretien"},
+        ]},
+    ],
+}
+      </code></pre>
+    </details>
+
+    <p>
+      Dans <code>crew.py</code>, écrivez <code>build_fleet(data)</code>, qui parcourt ces dictionnaires et renvoie un objet <code>Fleet</code>
+      complet, avec ses vaisseaux et leurs équipages.
+    </p>
+
+    <div class="encadre">
+      <span class="intitule">Gardez ce format en tête</span>
+      Au TP3, vous sauvegarderez la flotte dans un fichier JSON… <strong>exactement dans ce format</strong>. <code>build_fleet()</code> vous servira alors à la recharger.
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-5">
+    <h2><span class="num">5</span> Le menu en objets</h2>
+    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">Menu · exceptions</span></div>
+
+    <ol>
+      <li>Au lancement, <code>main.py</code> construit la flotte avec <code>build_fleet(FLEET_DATA)</code>.</li>
+      <li>Adaptez les options [1] à [4] du TP1 : on choisit d'abord le vaisseau <strong>par son nom</strong>, puis on agit sur son équipage.
+        Pour ajouter un membre, on précise s'il s'agit d'un opérateur ou d'un mentaliste.</li>
+      <li>Ajoutez les options <strong>[5] Ajouter un vaisseau</strong> et <strong>[6] Statistiques de la flotte</strong>.
+        Le TP3 ajoutera [7] et [8].</li>
+      <li>Les <code>ValueError</code> levées par vos classes (vaisseau plein, nom déjà pris, rôle inconnu…) sont interceptées et affichées :
+        <strong>elles ne font jamais planter le programme</strong>.</li>
+    </ol>
+
+    <pre data-titre="Proposition d'affichage"><code class="language-plaintext">
+      ===== Flotte marchande – Poste de commandement =====
+      [1] Ajouter un membre
+      [2] Retirer un membre
+      [3] Afficher la flotte
+      [4] Vérifier un vaisseau
+      [5] Ajouter un vaisseau
+      [6] Statistiques de la flotte
+      [0] Quitter
+      Votre choix : 6
+      Flotte Galactica : 5 vaisseaux, 24 membres
+        pilote : 5
+        technicien : 5
+        marchand : 3
+        entretien : 5
+        armurier : 2
+        commandant : 1
+        mentaliste : 3
+      Expérience moyenne des opérateurs : 0.0
+      Vaisseaux prêts : 5 / 5
+    </code></pre>
+
+    <div class="encadre marine">
+      <span class="intitule">Commitez !</span>
+      Un commit par étape terminée : <code>git add .</code> puis <code>git commit -m "Ajout des classes Spaceship et Fleet"</code> et <code>git push</code>.
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="bonus">
+    <h2><span class="num">+</span> Pour aller plus loin</h2>
+    <div class="meta"><span class="etiquette ambre">Facultatif</span></div>
+
+    <h3>Bonus 1 – Un équipage vraiment prêt</h3>
+    <ul>
+      <li><code>check_preparation()</code> exige aussi un <strong>mentaliste ayant au moins 50 points de mana</strong>.</li>
+      <li>Un vaisseau <code>"endommagé"</code> n'est jamais prêt. Combien de vaisseaux de la flotte restent prêts ?</li>
+    </ul>
+
+    <h3>Bonus 2 – Nouvelles options du menu</h3>
+    <ul>
+      <li><strong>Tour de garde</strong> : tout l'équipage d'un vaisseau agit (<code>watch_round()</code>).</li>
+      <li><strong>Influence</strong> : un mentaliste influence un opérateur de son vaisseau.</li>
+      <li>Choisissez des numéros libres : [7] et [8] sont réservés au TP3.</li>
+    </ul>
+
+    <h3>Bonus 3 – Promotions</h3>
+    <ul>
+      <li>Comme au TP1, un technicien ayant au moins 10 points d'expérience peut être <strong>promu pilote</strong>.
+        Cette fois, c'est une méthode <code>promote()</code> de la classe <code>Operator</code>.</li>
+    </ul>
+
+    <h3>Bonus 4 – Messages immersifs</h3>
+    <ul>
+      <li>Enrichissez les messages de vos classes pour faire vivre l'univers de Fondation : alertes, dialogues, ambiance…</li>
+    </ul>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="auto-evaluation">
+    <h2><span class="num">✓</span> Avant de continuer</h2>
+
+    <p>Vérifiez chaque point. Ils correspondent à la grille d'évaluation du projet Fondation.</p>
+    <ul class="checklist">
+      <li>Les cinq classes existent avec leurs attributs et leurs méthodes. Vos tests donnent les résultats attendus.</li>
+      <li><code>Operator</code> et <code>Mentalist</code> héritent de <code>Person</code> et appellent <code>super().__init__()</code>.</li>
+      <li>Un rôle inconnu est refusé et le mana reste toujours entre 0 et 100.</li>
+      <li>Les options [0] à [6] du menu fonctionnent et aucune erreur ne fait planter le programme.</li>
+      <li>Les dictionnaires du TP1 ont disparu : le menu ne manipule plus que des objets.</li>
+      <li>Chaque classe et chaque méthode a une docstring ; les noms sont en <code>snake_case</code> (classes en <code>PascalCase</code>).</li>
+      <li>Plusieurs commits ont été poussés sur GitHub depuis le TP1.</li>
+      <li>Vous pouvez expliquer <strong>chaque ligne</strong> de votre code.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="pied">Chris CHEVALIER · 4PYTH – Langage Python · École Hexagone</footer>
+
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/js/enonce.js"></script>
+</body>
+</html>
