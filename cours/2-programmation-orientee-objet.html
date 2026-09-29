@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programmation orientée objet – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reset.css">
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reveal.css">
+  <link rel="stylesheet" href="../assets/css/hexagone.css">
+</head>
+<body data-pied="4PYTH – Langage Python · Programmation orientée objet">
+<div class="reveal">
+<div class="slides">
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Programmation orientée objet</h1>
+    <div class="sous-titre">
+      <span class="code-module">4PYTH</span> – Langage Python<br>
+      Chris CHEVALIER
+    </div>
+    <aside class="notes">
+      Vendredi 9 octobre, première partie de la matinée (environ 1h30). Le cours 3 suit après la pause.
+      Fil rouge : des comptes utilisateurs et un parc de serveurs, pour préparer les classes du TP2.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="sommaire">
+    <h1>Sommaire</h1>
+    <ol>
+      <li>Pourquoi des objets ?</li>
+      <li>Classes et objets</li>
+      <li>Encapsulation</li>
+      <li>Héritage et polymorphisme</li>
+      <li>Composition</li>
+    </ol>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#1</div>
+    <h2>Pourquoi des objets ?</h2>
+    <div class="sous-titre">Programmation orientée objet</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Les limites des dictionnaires</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <div>
+          <p>Au TP1, un membre d'équipage était un dictionnaire. Rien ne protège ses données :</p>
+          <pre data-titre="compte.py"><code class="language-python" data-trim>
+user = {"username": "alice", "role": "analyste",
+        "failed_attempts": 0}
+
+user["role"] = "n'importe quoi"   # aucun contrôle
+user["failed_attemps"] = 5        # faute de frappe :
+                                  # une nouvelle clé !
+          </code></pre>
+        </div>
+        <div class="dense">
+          <ul>
+            <li>Les <strong>données</strong> ne sont pas contrôlées</li>
+            <li>Les <strong>fonctions</strong> qui les manipulent sont ailleurs, dans un autre fichier</li>
+            <li>Rien ne dit quelles clés un compte doit avoir</li>
+          </ul>
+          <div class="encadre">
+            La programmation orientée objet <strong>réunit les données et les comportements</strong> dans un même modèle, qui décide de ce qui est permis.
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Partir du vécu du TP1 : les étudiants ont tous écrit des dictionnaires et des fonctions séparées.
+      La faute de frappe « failed_attemps » ne provoque aucune erreur : elle crée silencieusement une nouvelle clé.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Le vocabulaire de l'objet</h2>
+    <div class="corps">
+      <table>
+        <tr><th style="width: 190px;">Terme</th><th>Définition</th><th style="width: 290px;">Exemple</th></tr>
+        <tr><td><strong>Classe</strong></td><td>Le modèle : il décrit les données et les actions communes</td><td><code>User</code></td></tr>
+        <tr><td><strong>Objet</strong> (instance)</td><td>Un exemplaire concret, créé à partir de la classe</td><td><code>alice</code></td></tr>
+        <tr><td><strong>Attribut</strong></td><td>Une donnée propre à l'objet : son état</td><td><code>alice.role</code></td></tr>
+        <tr><td><strong>Méthode</strong></td><td>Une action que l'objet sait faire : une fonction de la classe</td><td><code>alice.record_failure()</code></td></tr>
+        <tr><td><strong>Instancier</strong></td><td>Créer un objet à partir de sa classe</td><td><code>User("alice", "analyste")</code></td></tr>
+      </table>
+      <div class="encadre marine" style="margin-top: 18px;">
+        La classe est le <strong>formulaire vierge</strong> de création de compte ; chaque compte créé à partir de ce formulaire est un <strong>objet</strong>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#2</div>
+    <h2>Classes et objets</h2>
+    <div class="sous-titre">Programmation orientée objet</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Définir une classe</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="user.py"><code class="language-python" data-trim>
+class User:
+    """Un compte utilisateur."""
+
+    def __init__(self, username, role):
+        self.username = username
+        self.role = role
+        self.failed_attempts = 0
+        self.is_locked = False
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><code>class User:</code> définit la classe, nommée en <strong>PascalCase</strong></li>
+            <li><code>__init__</code> est le <strong>constructeur</strong> : il est appelé automatiquement à la création de chaque objet</li>
+            <li><code>self</code> désigne <strong>l'objet en cours de création</strong> : <code>self.role = role</code> range la valeur dans cet objet</li>
+            <li>Un attribut peut avoir une valeur de départ fixe : <code>failed_attempts = 0</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Insister sur self : c'est le premier paramètre de toute méthode, Python le remplit tout seul.
+      Les attributs n'existent qu'une fois assignés à self.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Créer des objets</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="main.py"><code class="language-python" data-trim>
+alice = User("alice", "analyste")
+bob = User("bob", "auditeur")
+
+print(alice.username)        # alice
+print(bob.role)              # auditeur
+print(type(alice))           # &lt;class '__main__.User'&gt;
+
+alice.failed_attempts = 2
+print(bob.failed_attempts)   # 0
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li>On appelle la classe comme une fonction : Python crée l'objet puis exécute <code>__init__</code></li>
+            <li>On accède aux attributs avec le <strong>point</strong> : <code>alice.username</code></li>
+            <li>Chaque objet a <strong>ses propres attributs</strong> : modifier <code>alice</code> ne touche pas <code>bob</code></li>
+            <li>Le type de l'objet est sa classe</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Les méthodes</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="user.py"><code class="language-python" data-trim>
+class User:
+    def __init__(self, username, role):
+        ...  # comme sur la diapo précédente
+
+    def record_failure(self):
+        """Enregistre un échec et verrouille au 3e."""
+        self.failed_attempts += 1
+        if self.failed_attempts >= 3:
+            self.is_locked = True
+
+alice = User("alice", "analyste")
+for _ in range(3):
+    alice.record_failure()
+print(alice.is_locked)       # True
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li>Une méthode est une <strong>fonction définie dans la classe</strong></li>
+            <li>Son premier paramètre est toujours <code>self</code> : elle agit sur l'objet qui l'appelle</li>
+            <li><code>alice.record_failure()</code> revient à écrire <code>User.record_failure(alice)</code></li>
+            <li>La règle de verrouillage est écrite <strong>une seule fois</strong>, au plus près des données</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Les points de suspension (...) sont un vrai mot-clé Python : ici, ils signifient « le code déjà vu ».
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Attributs de classe ou d'instance</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="user.py"><code class="language-python" data-trim>
+class User:
+    MAX_ATTEMPTS = 3      # attribut de classe
+
+    def __init__(self, username, role):
+        self.username = username   # d'instance
+        ...
+
+    def record_failure(self):
+        self.failed_attempts += 1
+        if self.failed_attempts >= User.MAX_ATTEMPTS:
+            self.is_locked = True
+
+print(User.MAX_ATTEMPTS)     # 3
+print(alice.MAX_ATTEMPTS)    # 3 : lu depuis la classe
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><strong>Attribut d'instance</strong> (<code>self.x</code>) : une valeur par objet</li>
+            <li><strong>Attribut de classe</strong> : une seule valeur, <strong>partagée par tous les objets</strong></li>
+            <li>Idéal pour une constante de la classe : on ne répète plus le nombre 3 dans le code</li>
+          </ul>
+          <div class="encadre">
+            Au TP2, la <strong>capacité maximale</strong> d'un vaisseau (10 membres) sera un attribut de classe.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Afficher un objet : <code>__str__</code></h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <div>
+          <p class="ko">Sans <code>__str__</code></p>
+          <pre class="mini" data-titre="Terminal"><code class="language-plaintext" data-trim>
+&gt;&gt;&gt; print(alice)
+&lt;__main__.User object at 0x10291aa50&gt;
+          </code></pre>
+          <p class="ok">Avec <code>__str__</code></p>
+          <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
+class User:
+    ...
+    def __str__(self):
+        state = "actif"
+        if self.is_locked:
+            state = "verrouillé"
+        return f"{self.username} ({self.role}, {state})"
+
+print(alice)    # alice (analyste, verrouillé)
+          </code></pre>
+        </div>
+        <div class="dense">
+          <ul>
+            <li><code>__str__</code> est une <strong>méthode spéciale</strong> : <code>print()</code> et <code>str()</code> l'appellent automatiquement</li>
+            <li>Elle <strong>renvoie</strong> une chaîne, elle ne l'affiche pas</li>
+            <li>Les méthodes entourées de <code>__</code> (<em>dunder</em>) sont réservées à Python : <code>__init__</code>, <code>__str__</code>…</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Qu'affiche ce programme ?</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="quiz_1.py"><code class="language-python" data-trim>
+class Probe:
+    total = 0
+    def __init__(self, name):
+        self.name = name
+        self.hits = 0
+        Probe.total += 1
+    def hit(self):
+        self.hits += 1
+        return self.hits
+
+ssh = Probe("ssh")
+web = Probe("web")
+ssh.hit()
+ssh.hit()
+web.hit()
+print(ssh.hits, web.hits)
+print(Probe.total)
+print(ssh.hit())
+        </code></pre>
+        <div>
+          <div class="reponse fragment"><code>2 1</code> : chaque sonde compte <strong>ses propres</strong> passages</div>
+          <div class="reponse fragment"><code>2</code> : <code>total</code> est un attribut de classe, incrémenté à chaque création</div>
+          <div class="reponse fragment"><code>3</code> : <code>hit()</code> incrémente puis <strong>renvoie</strong> la nouvelle valeur</div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Laisser 30 secondes, faire répondre à l'oral, puis révéler ligne par ligne.
+      Réponses : 2 1 · 2 · 3. Le piège : total est partagé, hits est propre à chaque objet.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#3</div>
+    <h2>Encapsulation</h2>
+    <div class="sous-titre">Programmation orientée objet</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Le principe et les conventions</h2>
+    <div class="corps">
+      <p>L'<strong>encapsulation</strong> consiste à garder la maîtrise des données d'un objet : on les modifie par ses méthodes plutôt que directement.</p>
+      <div class="colonnes code-texte">
+        <pre data-titre="user.py"><code class="language-python" data-trim>
+class User:
+    def __init__(self, username, password):
+        self.username = username      # public
+        self._sessions = []           # usage interne
+        self.__password = password    # nom modifié
+        </code></pre>
+        <table class="dense">
+          <tr><th>Nom</th><th>Signification</th></tr>
+          <tr><td><code>username</code></td><td>public</td></tr>
+          <tr><td><code>_sessions</code></td><td>« ne pas toucher » : <strong>simple convention</strong></td></tr>
+          <tr><td><code>__password</code></td><td>renommé en <code>_User__password</code></td></tr>
+        </table>
+      </div>
+      <div class="encadre marine" style="margin-top: 16px;">
+        En Python, <strong>rien n'est vraiment privé</strong>. Le <code>_</code> n'est pas « réservé aux classes filles » : c'est un signal adressé aux autres développeurs, que Python ne vérifie pas.
+      </div>
+    </div>
+    <aside class="notes">
+      Correction par rapport à l'ancienne version du cours : le simple underscore n'impose aucune restriction d'accès.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>🛡️ Côté sécurité</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="Terminal"><code class="language-python" data-trim>
+&gt;&gt;&gt; alice = User("alice", "S3cr3t!")
+&gt;&gt;&gt; alice.__password
+AttributeError: 'User' object has no attribute
+'__password'
+&gt;&gt;&gt; alice._User__password
+'S3cr3t!'
+&gt;&gt;&gt; vars(alice)
+{'username': 'alice', '_sessions': [],
+ '_User__password': 'S3cr3t!'}
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li>Le double underscore ne fait que <strong>renommer</strong> l'attribut</li>
+            <li><code>vars()</code> affiche tous les attributs d'un objet, « privés » compris</li>
+          </ul>
+          <div class="encadre">
+            <strong>L'encapsulation n'est pas un mécanisme de sécurité.</strong> Elle protège contre les erreurs, pas contre un attaquant.
+            Un secret ne se stocke jamais en clair : il se <strong>hache</strong>. Vous le ferez au TP4.
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Point clé pour un public cyber. Faire le parallèle avec un mot de passe « caché » dans le code source d'une application :
+      quiconque a accès au code ou à la mémoire du processus le récupère.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2><code>@property</code> : un attribut en lecture seule</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
+class User:
+    def __init__(self, username):
+        self.username = username
+        self._failed_attempts = 0
+
+    @property
+    def failed_attempts(self):   # lecture seule
+        return self._failed_attempts
+
+alice = User("alice")
+print(alice.failed_attempts)     # 0
+alice.failed_attempts = 5
+# AttributeError: property 'failed_attempts'
+#   of 'User' object has no setter
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><code>@property</code> transforme une méthode en <strong>attribut calculé</strong> : on l'utilise sans parenthèses</li>
+            <li>Sans <em>setter</em>, l'attribut est en <strong>lecture seule</strong></li>
+            <li>Seules les méthodes de la classe, comme <code>record_failure()</code>, modifient <code>_failed_attempts</code></li>
+          </ul>
+          <div class="encadre marine">
+            C'est la façon pythonique de remplacer les <code>get_…()</code> et <code>set_…()</code> d'autres langages.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2><code>@property</code> : valider une écriture</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
+ROLES = ["analyste", "auditeur", "admin"]
+
+class User:
+    def __init__(self, username, role):
+        self.username = username
+        self.role = role          # passe par le setter
+
+    @property
+    def role(self):
+        return self._role
+
+    @role.setter
+    def role(self, value):
+        if value not in ROLES:
+            raise ValueError(f"rôle inconnu : {value}")
+        self._role = value
+        </code></pre>
+        <div class="dense">
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
+alice = User("alice", "analyste")
+alice.role = "auditeur"   # accepté
+alice.role = "hacker"
+# ValueError: rôle inconnu : hacker
+          </code></pre>
+          <ul>
+            <li>Le <strong>setter</strong> s'exécute à chaque affectation, y compris dans <code>__init__</code></li>
+            <li>Le rôle est validé par <strong>liste blanche</strong>, comme au TP1</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Faire remarquer que self.role = role dans __init__ passe déjà par le setter : un objet ne peut pas naître dans un état invalide.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#4</div>
+    <h2>Héritage et polymorphisme</h2>
+    <div class="sous-titre">Programmation orientée objet</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Hériter d'une classe</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="admin.py"><code class="language-python" data-trim>
+class Admin(User):
+    def __init__(self, username, scope):
+        super().__init__(username, "admin")
+        self.scope = scope     # attribut en plus
+
+root = Admin("root", "serveurs Linux")
+print(root.username, root.role)   # root admin
+root.record_failure()             # méthode héritée
+print(root.failed_attempts)       # 1
+print(isinstance(root, User))     # True
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><code>class Admin(User):</code> : la <strong>classe fille</strong> <code>Admin</code> hérite de la <strong>classe mère</strong> <code>User</code></li>
+            <li>Elle récupère <strong>tous</strong> ses attributs et toutes ses méthodes</li>
+            <li><code>super().__init__(…)</code> appelle le constructeur de la classe mère : sans lui, <code>username</code> n'existerait pas</li>
+            <li>Un <code>Admin</code> <strong>est un</strong> <code>User</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Oublier super().__init__ est l'erreur la plus fréquente au TP2 (Operator et Mentalist héritent de Person).
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Redéfinir une méthode</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="comptes.py"><code class="language-python" data-trim>
+class User:
+    ...
+    def describe(self):
+        return f"Compte {self.username} ({self.role})"
+
+class Admin(User):
+    ...
+    def describe(self):          # redéfinition
+        return f"Administrateur {self.username}"
+
+print(User("alice", "analyste").describe())
+# Compte alice (analyste)
+print(Admin("root", "serveurs Linux").describe())
+# Administrateur root
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li>La classe fille peut <strong>remplacer</strong> une méthode héritée en la redéfinissant avec le même nom</li>
+            <li>Python utilise toujours la version <strong>la plus proche</strong> de la classe de l'objet</li>
+          </ul>
+          <div class="encadre">
+            On parle de <strong>redéfinition</strong> (<em>override</em>), pas de surcharge. La surcharge (plusieurs méthodes de même nom avec des paramètres différents) <strong>n'existe pas en Python</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Correction par rapport à l'ancienne version du cours, qui parlait de « surcharge ».
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étendre une méthode avec <code>super()</code></h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="admin.py"><code class="language-python" data-trim>
+class Admin(User):
+    ...
+    def describe(self):
+        base = super().describe()    # version de User
+        return f"{base} – périmètre : {self.scope}"
+
+root = Admin("root", "serveurs Linux")
+print(root.describe())
+# Compte root (admin) – périmètre : serveurs Linux
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><code>super()</code> donne accès à la version de la <strong>classe mère</strong></li>
+            <li>On <strong>réutilise</strong> son résultat au lieu de le réécrire : moins de code dupliqué</li>
+            <li>Si le format de <code>User.describe()</code> change, <code>Admin</code> suit automatiquement</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Le polymorphisme</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <div>
+          <pre data-titre="audit.py"><code class="language-python" data-trim>
+accounts = [
+    User("alice", "analyste"),
+    Admin("root", "serveurs Linux"),
+    User("bob", "auditeur"),
+]
+for account in accounts:
+    print(account.describe())
+          </code></pre>
+          <pre class="mini" data-titre="Terminal"><code class="language-plaintext" data-trim>
+Compte alice (analyste)
+Compte root (admin) – périmètre : serveurs Linux
+Compte bob (auditeur)
+          </code></pre>
+        </div>
+        <div class="dense">
+          <ul>
+            <li>Un <strong>même appel</strong> produit un comportement <strong>adapté</strong> au type de chaque objet</li>
+            <li>La boucle n'a pas besoin de savoir qui est administrateur</li>
+          </ul>
+          <div class="encadre">
+            Au TP2, <code>act()</code> fera agir un opérateur et un mentaliste chacun à sa manière.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Tester le type : <code>isinstance()</code></h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="audit.py"><code class="language-python" data-trim>
+admins = 0
+for account in accounts:
+    if isinstance(account, Admin):
+        admins += 1
+print(admins)                           # 1
+
+print(isinstance(accounts[1], User))    # True
+print(type(accounts[1]) == User)        # False
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><code>isinstance(objet, Classe)</code> est vrai si l'objet est de cette classe <strong>ou d'une classe fille</strong></li>
+            <li><code>type(…) == …</code> ignore l'héritage : préférez <code>isinstance()</code></li>
+            <li>Pratique pour <strong>compter par type</strong> : administrateurs, mentalistes…</li>
+          </ul>
+          <div class="encadre">
+            Au TP2, <code>statistics()</code> de la flotte comptera les membres par type et par rôle.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Qu'affiche ce programme ?</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="quiz_2.py"><code class="language-python" data-trim>
+class Alert:
+    def __init__(self, source):
+        self.source = source
+    def level(self):
+        return "info"
+    def report(self):
+        return f"[{self.level()}] {self.source}"
+
+class CriticalAlert(Alert):
+    def level(self):
+        return "CRITIQUE"
+
+alerts = [Alert("ssh"), CriticalAlert("firewall")]
+for alert in alerts:
+    print(alert.report())
+print(isinstance(alerts[1], Alert))
+        </code></pre>
+        <div>
+          <div class="reponse fragment"><code>[info] ssh</code> : méthodes de <code>Alert</code></div>
+          <div class="reponse fragment"><code>[CRITIQUE] firewall</code> : <code>report()</code> est héritée, mais <code>self.level()</code> appelle la version <strong>redéfinie</strong></div>
+          <div class="reponse fragment"><code>True</code> : une <code>CriticalAlert</code> est une <code>Alert</code></div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Réponses : [info] ssh · [CRITIQUE] firewall · True.
+      Le piège est la 2e ligne : même dans une méthode héritée, self.level() choisit la version de la classe de l'objet.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="section">
+    <div class="numero">#5</div>
+    <h2>Composition</h2>
+    <div class="sous-titre">Programmation orientée objet</div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>« Est un » ou « a un » ?</h2>
+    <div class="corps">
+      <table>
+        <tr><th>Relation</th><th>Exemple</th><th>En Python</th></tr>
+        <tr><td><strong>Est un</strong> → héritage</td><td>Un administrateur <strong>est un</strong> utilisateur</td><td><code>class Admin(User):</code></td></tr>
+        <tr><td><strong>A un</strong> → composition</td><td>Un réseau <strong>a des</strong> serveurs</td><td><code>self.servers = []</code></td></tr>
+      </table>
+      <div class="colonnes code-texte" style="margin-top: 18px;">
+        <pre data-titre="server.py"><code class="language-python" data-trim>
+class Server:
+    def __init__(self, hostname, ip, services):
+        self.hostname = hostname
+        self.ip = ip
+        self.services = services   # liste de chaînes
+        </code></pre>
+        <div class="encadre marine">
+          La <strong>composition</strong> consiste à ranger des objets <strong>dans les attributs</strong> d'un autre objet. En cas de doute, préférez-la à l'héritage.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Des objets dans des objets</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="network.py"><code class="language-python" data-trim>
+class Network:
+    MAX_SERVERS = 3
+
+    def __init__(self, name):
+        self.name = name
+        self.servers = []          # objets Server
+
+    def add_server(self, server):
+        if len(self.servers) >= Network.MAX_SERVERS:
+            raise ValueError("capacité maximale atteinte")
+        self.servers.append(server)
+
+    def find_by_ip(self, ip):
+        for server in self.servers:
+            if server.ip == ip:
+                return server
+        return None
+        </code></pre>
+        <div class="dense">
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
+dmz = Network("DMZ")
+dmz.add_server(Server("web01",
+    "10.0.1.10", ["http", "https"]))
+dmz.add_server(Server("mail01",
+    "10.0.1.20", ["smtp"]))
+dmz.find_by_ip("10.0.1.20").hostname
+# 'mail01'
+          </code></pre>
+          <ul>
+            <li>Le réseau <strong>contrôle</strong> ce qu'on lui ajoute : capacité maximale</li>
+            <li>Au TP2 : <code>Spaceship</code> a un équipage, <code>Fleet</code> a des vaisseaux</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Au 4e serveur, add_server lève ValueError: capacité maximale atteinte (testé).
+      find_by_ip renvoie None si l'adresse est inconnue : même logique que find_member au TP1.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Vue d'ensemble</h2>
+    <div class="corps">
+      <div class="schema-classes">
+        <div class="colonne-schema">
+          <div class="classe-uml">
+            <div class="nom">User</div>
+            <div class="attributs">username · role · failed_attempts · is_locked<br><span class="classe-attr">MAX_ATTEMPTS = 3</span></div>
+            <div class="methodes">record_failure() · describe() · __str__()</div>
+          </div>
+          <div class="lien heritage"><span>hérite de</span></div>
+          <div class="classe-uml">
+            <div class="nom">Admin</div>
+            <div class="attributs">+ scope</div>
+            <div class="methodes">describe() <em>redéfinie</em></div>
+          </div>
+        </div>
+        <div class="colonne-schema">
+          <div class="classe-uml">
+            <div class="nom">Network</div>
+            <div class="attributs">name · servers<br><span class="classe-attr">MAX_SERVERS = 3</span></div>
+            <div class="methodes">add_server() · find_by_ip()</div>
+          </div>
+          <div class="lien composition"><span>contient de 0 à 3</span></div>
+          <div class="classe-uml">
+            <div class="nom">Server</div>
+            <div class="attributs">hostname · ip · services</div>
+            <div class="methodes">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Notation inspirée d'UML : la flèche à pointe creuse indique l'héritage, le losange plein indique la composition.
+      Au TP2, faire dessiner aux étudiants le même schéma pour Person, Operator, Mentalist, Spaceship et Fleet.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Récapitulatif</h2>
+    <div class="corps">
+      <table class="serre">
+        <tr><th>Notion</th><th>Dans ce cours</th><th>Au TP2</th></tr>
+        <tr><td>Classe, <code>__init__</code>, <code>self</code></td><td><code>User</code></td><td><code>Person</code></td></tr>
+        <tr><td>Méthode</td><td><code>record_failure()</code></td><td><code>gain_experience()</code>, <code>recharge_mana()</code></td></tr>
+        <tr><td>Attribut de classe</td><td><code>MAX_ATTEMPTS</code>, <code>MAX_SERVERS</code></td><td>10 membres par vaisseau, 15 vaisseaux par flotte</td></tr>
+        <tr><td><code>__str__</code></td><td><code>print(alice)</code></td><td>affichage des membres</td></tr>
+        <tr><td><code>@property</code></td><td><code>failed_attempts</code>, <code>role</code></td><td><code>mana</code> entre 0 et 100</td></tr>
+        <tr><td>Héritage et <code>super()</code></td><td><code>Admin(User)</code></td><td><code>Operator(Person)</code>, <code>Mentalist(Person)</code></td></tr>
+        <tr><td>Polymorphisme</td><td><code>describe()</code></td><td><code>act()</code></td></tr>
+        <tr><td><code>isinstance()</code></td><td>compter les administrateurs</td><td><code>statistics()</code> de la flotte</td></tr>
+        <tr><td>Composition</td><td><code>Network</code> → <code>Server</code></td><td><code>Spaceship</code> → équipage, <code>Fleet</code> → vaisseaux</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Des questions ?</h1>
+    <div class="sous-titre">
+      Suite : cours 3 – Fichiers et données, après la pause<br>
+      Chris CHEVALIER
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script src="../assets/vendor/reveal/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../assets/js/hexagone.js"></script>
+</body>
+</html>

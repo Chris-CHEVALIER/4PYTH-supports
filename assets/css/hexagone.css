@@ -300,3 +300,40 @@
 
 /* Code dans un titre : même couleur que le titre, sans fond */
 .reveal h1 code, .reveal h2 code { background: none; color: inherit; padding: 0; font-size: .95em; }
+
+/* ==========================================================================
+   Compléments (cours 2)
+   ========================================================================== */
+/* Code réduit pour les listings longs (quiz, classes complètes) */
+.reveal .corps pre.mini, .reveal .corps .colonnes pre.mini { font-size: 14.5px; line-height: 1.45; }
+.reveal .corps pre.mini code, .reveal .corps .colonnes pre.mini code { padding: 10px 16px; }
+
+/* Tableau resserré (récapitulatifs longs) */
+.reveal table.serre { font-size: 19px; }
+.reveal table.serre td, .reveal table.serre th { padding: 7px 12px; }
+
+/* Schéma de classes façon UML */
+.reveal .schema-classes { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; padding: 0 20px; }
+.reveal .colonne-schema { display: flex; flex-direction: column; align-items: stretch; }
+.reveal .classe-uml { border: 2px solid var(--marine); border-radius: 8px; overflow: hidden; font-size: 17px; background: var(--blanc); }
+.reveal .classe-uml .nom { background: var(--marine); color: var(--blanc); font-weight: 700; text-align: center; padding: 8px; font-size: 20px; }
+.reveal .classe-uml .attributs, .reveal .classe-uml .methodes { padding: 8px 14px; font-family: var(--police-code); font-size: 15px; line-height: 1.5; }
+.reveal .classe-uml .attributs { border-bottom: 1px solid #D5DDEA; }
+.reveal .classe-uml .classe-attr { color: #9A6A00; font-weight: 700; }
+.reveal .classe-uml .methodes em { font-family: var(--police); font-size: .9em; color: #9A6A00; }
+.reveal .lien { position: relative; height: 92px; margin: 0 auto; width: 3px; background: var(--marine); }
+.reveal .lien span { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); white-space: nowrap; font-size: 16px; font-style: italic; }
+/* Héritage : pointe de flèche creuse vers la classe mère (en haut) */
+.reveal .lien.heritage::before {
+  content: ""; position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-bottom: 20px solid var(--marine);
+}
+.reveal .lien.heritage::after {
+  content: ""; position: absolute; top: 3px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 12px solid var(--blanc);
+}
+/* Composition : losange plein côté conteneur (en haut) */
+.reveal .lien.composition::before {
+  content: ""; position: absolute; top: 0; left: 50%; width: 18px; height: 18px; background: var(--marine);
+  transform: translate(-50%, 0) rotate(45deg);
+}
