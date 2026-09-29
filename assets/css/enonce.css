@@ -162,3 +162,6 @@ table.compact td, table.compact th { padding: 5px 10px; }
 @media (max-width: 640px) { .deux-colonnes { grid-template-columns: 1fr; } }
 @media print { .illustration img { max-height: 220px; } }
 .muet { opacity: .75; }
+
+/* Code dans un en-tête de tableau : lisible sur fond marine */
+th code { background: rgba(255, 255, 255, .18) !important; color: #fff; border: 0 !important; }

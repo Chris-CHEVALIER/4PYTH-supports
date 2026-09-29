@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP3 – Intégration de la sauvegarde – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/css/enonce.css">
+</head>
+<body>
+
+<header class="entete">
+  <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
+  <div class="titre">
+    <h1>TP3 – Intégration de la sauvegarde</h1>
+    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation » · En autonomie, du 10 octobre au 4 novembre</p>
+  </div>
+</header>
+
+<main>
+
+  <figure class="illustration">
+    <img src="../assets/img/fondation-flotte.jpg" alt="Une flotte de vaisseaux spatiaux en orbite autour d'une planète">
+  </figure>
+
+  <h3>Contexte</h3>
+  <p>
+    La galaxie est en plein chaos et la gestion de vos équipages devient critique. Aujourd'hui, chaque fois que le programme
+    s'arrête, la flotte revient à son état de départ : recrues, promotions et vaisseaux ajoutés disparaissent.
+  </p>
+  <p>
+    Pour ne plus rien perdre, votre poste de commandement doit <strong>sauvegarder</strong> l'état de la flotte dans un fichier
+    et savoir le <strong>recharger</strong>… sans se laisser piéger par un fichier abîmé ou falsifié.
+  </p>
+
+  <div class="encadre marine">
+    <span class="intitule">Ce TP en bref</span>
+    <ul>
+      <li><strong>Objectifs</strong> : convertir des objets en dictionnaires, sauvegarder et charger en JSON, gérer les erreurs de fichier
+        et valider des données venues de l'extérieur.</li>
+      <li>Il se fait <strong>en autonomie</strong>. Le projet complet est évalué sur le <strong>dernier commit poussé avant le jeudi 5 novembre à 16h15</strong>.</li>
+      <li>Commitez et poussez <strong>régulièrement</strong> : je suis l'avancée de vos dépôts pendant ces quatre semaines.</li>
+      <li>Bloqué ? Relisez le cours 3, puis écrivez-moi : <a href="mailto:chris.chevalier@ecole-hexagone.com">chris.chevalier@ecole-hexagone.com</a>.</li>
+      <li>L'IA est autorisée pour le projet, à une condition : <strong>comprendre chaque ligne</strong> de votre code. Je le vérifierai en soutenance.</li>
+    </ul>
+  </div>
+
+  <nav class="sommaire">
+    <a href="#etape-1"><span class="n">Étape 1</span><br>Des objets aux dictionnaires</a>
+    <a href="#etape-2"><span class="n">Étape 2</span><br>Sauvegarder et charger</a>
+    <a href="#etape-3"><span class="n">Étape 3</span><br>Le menu</a>
+    <a href="#etape-4"><span class="n">Étape 4</span><br>Testez comme un attaquant</a>
+    <a href="#etape-5"><span class="n">Étape 5</span><br>Fichiers de test et README</a>
+    <a href="#bonus"><span class="n">Bonus</span><br>Pour aller plus loin</a>
+    <a href="#auto-evaluation"><span class="n">Checklist</span><br>Avant de rendre</a>
+  </nav>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-1">
+    <h2><span class="num">1</span> Des objets aux dictionnaires</h2>
+    <div class="meta"><span class="etiquette">≈ 1 h</span><span class="etiquette clair">Méthodes · héritage · composition</span></div>
+
+    <p>
+      JSON ne connaît pas vos classes : <code>json.dumps(fleet)</code> provoque une <code>TypeError</code>. Chaque classe doit donc savoir
+      se <strong>convertir en dictionnaire</strong>, avec une méthode <code>to_dict()</code>.
+    </p>
+
+    <table>
+      <tr><th>Classe</th><th><code>to_dict()</code> renvoie…</th></tr>
+      <tr><td><code>Person</code></td><td><code>first_name</code>, <code>last_name</code>, <code>gender</code> et <code>age</code></td></tr>
+      <tr><td><code>Operator</code></td><td><code>"type": "operator"</code>, les clés de <code>Person</code>, puis <code>role</code> et <code>experience</code></td></tr>
+      <tr><td><code>Mentalist</code></td><td><code>"type": "mentalist"</code>, les clés de <code>Person</code>, puis <code>mana</code></td></tr>
+      <tr><td><code>Spaceship</code></td><td><code>name</code>, <code>ship_type</code>, <code>condition</code> et <code>crew</code> : la liste des <code>to_dict()</code> de chaque membre</td></tr>
+      <tr><td><code>Fleet</code></td><td><code>name</code> et <code>spaceships</code> : la liste des <code>to_dict()</code> de chaque vaisseau</td></tr>
+    </table>
+
+    <div class="encadre">
+      <span class="intitule">Le bon format, vous l'avez déjà</span>
+      Le résultat de <code>fleet.to_dict()</code> a <strong>exactement le format de <code>FLEET_DATA</code></strong> du TP2, avec une clé
+      <code>experience</code> en plus pour les opérateurs. Votre <code>build_fleet()</code> saura donc reconstruire la flotte :
+      adaptez-le seulement pour lire l'expérience avec <code>m.get("experience", 0)</code>, puisqu'elle est absente de <code>FLEET_DATA</code>.
+    </div>
+
+    <pre data-titre="Vérification – l'aller-retour doit être parfait"><code class="language-python">
+      fleet = build_fleet(FLEET_DATA)
+      fleet.spaceships[0].crew[0].act()         # Hugo Crast pilote le vaisseau.
+
+      data = fleet.to_dict()
+      print(data["spaceships"][0]["crew"][0])
+      # {'type': 'operator', 'first_name': 'Hugo', 'last_name': 'Crast', 'gender': 'M',
+      #  'age': 37, 'role': 'pilote', 'experience': 1}
+
+      again = build_fleet(data)
+      print(again.to_dict() == data)             # True
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Revoyez la diapo « Sauvegarder des objets » du cours 3.</li>
+        <li>Dans <code>Operator</code>, ne réécrivez pas les quatre clés de <code>Person</code> : partez de <code>super().to_dict()</code> puis complétez le dictionnaire.</li>
+        <li>Dans <code>Spaceship</code> et <code>Fleet</code>, chaque objet contenu sait déjà se convertir : une boucle qui appelle leur <code>to_dict()</code> suffit.
+          C'est la composition qui travaille pour vous.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-2">
+    <h2><span class="num">2</span> Sauvegarder et charger</h2>
+    <div class="meta"><span class="etiquette">≈ 1 h</span><span class="etiquette clair">JSON · fichiers · exceptions</span></div>
+
+    <p>Dans un nouveau fichier <code>storage.py</code>, écrivez :</p>
+    <ol>
+      <li><code>save_fleet(fleet, path)</code>, qui enregistre <code>fleet.to_dict()</code> dans un fichier JSON <strong>lisible</strong> :
+        indenté, en UTF-8, avec les accents conservés.</li>
+      <li><code>load_fleet(path)</code>, qui relit le fichier et renvoie un objet <code>Fleet</code> grâce à <code>build_fleet()</code>.</li>
+    </ol>
+
+    <p>
+      <code>load_fleet()</code> ne doit <strong>jamais faire planter le programme</strong>. Quand le chargement est impossible, elle lève une
+      <code>ValueError</code> avec un message clair, que le menu affichera :
+    </p>
+    <table>
+      <tr><th>Situation</th><th>Exception d'origine</th><th>Message conseillé</th></tr>
+      <tr><td>le fichier n'existe pas</td><td><code>FileNotFoundError</code></td><td><code>aucune sauvegarde « flotte.json »</code></td></tr>
+      <tr><td>le JSON est mal formé</td><td><code>json.JSONDecodeError</code></td><td><code>la sauvegarde « flotte.json » est corrompue</code></td></tr>
+      <tr><td>une clé attendue manque</td><td><code>KeyError</code></td><td><code>la sauvegarde « flotte.json » est incomplète</code></td></tr>
+      <tr><td>une valeur est interdite (rôle inconnu…)</td><td><code>ValueError</code> de vos classes</td><td>le message de votre classe, tel quel</td></tr>
+    </table>
+
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      save_fleet(fleet, "flotte.json")
+      print(load_fleet("flotte.json").to_dict() == fleet.to_dict())   # True
+
+      load_fleet("inexistant.json")
+      # ValueError: aucune sauvegarde « inexistant.json »
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Revoyez les diapos « Écrire et lire du JSON » et « Charger sans planter » du cours 3.</li>
+        <li><code>json.dump(data, f, indent=2, ensure_ascii=False)</code> dans un fichier ouvert avec <code>encoding="utf-8"</code>.</li>
+        <li>Dans un <code>except</code>, vous pouvez lever une nouvelle exception : <code>raise ValueError("…")</code>.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-3">
+    <h2><span class="num">3</span> Le menu</h2>
+    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">Menu · exceptions</span></div>
+
+    <ol>
+      <li>Ajoutez <strong>[7] Sauvegarder la flotte</strong> et <strong>[8] Charger une flotte</strong>.</li>
+      <li>Le nom du fichier est demandé à l'utilisateur, avec <code>flotte.json</code> par défaut s'il appuie simplement sur Entrée.</li>
+      <li>Si le chargement échoue, le message d'erreur s'affiche et <strong>la flotte actuelle est conservée</strong>.</li>
+    </ol>
+
+    <pre data-titre="Exemple de session"><code class="language-plaintext">
+      Votre choix : 7
+      Fichier de sauvegarde [flotte.json] :
+      Flotte Galactica sauvegardée dans « flotte.json ».
+
+      Votre choix : 8
+      Fichier à charger [flotte.json] : ancienne.json
+      Chargement impossible : aucune sauvegarde « ancienne.json »
+    </code></pre>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-4">
+    <h2><span class="num">4</span> Testez comme un attaquant</h2>
+    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">Validation des entrées</span><span class="etiquette ambre">Sécurité</span></div>
+
+    <p>
+      Un fichier de sauvegarde se modifie avec n'importe quel éditeur de texte. Mettez-vous à la place d'un utilisateur malveillant :
+      faites une copie de <code>flotte.json</code>, modifiez-la, puis essayez de la charger. Votre programme doit réagir ainsi :
+    </p>
+
+    <table>
+      <tr><th>Modification dans la copie</th><th>Comportement attendu</th></tr>
+      <tr><td>un rôle devient <code>"root"</code></td><td>chargement refusé : <code>rôle inconnu : root</code></td></tr>
+      <tr><td>un mana devient <code>9999</code></td><td>chargé, mais le mana est <strong>ramené à 100</strong> par votre setter</td></tr>
+      <tr><td>la clé <code>"age"</code> d'un membre est supprimée</td><td>chargement refusé : sauvegarde incomplète</td></tr>
+      <tr><td>la dernière accolade <code>}</code> est supprimée</td><td>chargement refusé : sauvegarde corrompue</td></tr>
+    </table>
+
+    <div class="encadre">
+      <span class="intitule">Réfléchissez</span>
+      <ul>
+        <li>Pour le mana, votre programme <strong>corrige</strong> la valeur ; pour le rôle, il la <strong>refuse</strong>. Quelle stratégie est la plus sûre ? Dans quels cas ?</li>
+        <li>Si l'attaquant change un âge de 37 en 38, aucune de vos validations ne le voit : la valeur est plausible.
+          Pour détecter <strong>toute</strong> modification, il faudra une empreinte de la sauvegarde. Ce sera le TP4.</li>
+        <li>C'est pour éviter ces pièges que l'on utilise JSON et jamais <code>pickle</code> ni <code>eval()</code> sur des données non fiables (cours 3).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-5">
+    <h2><span class="num">5</span> Fichiers de test et README</h2>
+    <div class="meta"><span class="etiquette">≈ 15 min</span><span class="etiquette clair">Git · documentation</span></div>
+
+    <ol>
+      <li>Commitez <strong>deux fichiers de test</strong> dans votre dépôt : une sauvegarde valide (<code>flotte.json</code>) et une sauvegarde
+        piégée (<code>flotte-corrompue.json</code>), que votre programme doit refuser proprement.</li>
+      <li>Complétez votre <code>README.md</code> :
+        <ul>
+          <li>comment lancer le programme et à quoi sert chaque option du menu ;</li>
+          <li>les bonus réalisés, TP par TP ;</li>
+          <li>votre <strong>déclaration d'usage de l'IA</strong> : quels outils, pour quelles tâches.</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="bonus">
+    <h2><span class="num">+</span> Pour aller plus loin</h2>
+    <div class="meta"><span class="etiquette ambre">Facultatif</span></div>
+
+    <h3>Bonus 1 – Événements aléatoires</h3>
+    <ul>
+      <li>Après chaque action du menu, un événement peut survenir au hasard : une <strong>attaque du Mulet</strong> endommage un vaisseau
+        opérationnel. Ou bien des <strong>renforts</strong> rejoignent un vaisseau qui a encore de la place.</li>
+      <li>Utilisez le module <code>random</code> : il convient parfaitement pour un jeu. Rappel du cours 1 : jamais pour générer un secret !</li>
+    </ul>
+
+    <h3>Bonus 2 – Statistiques enrichies</h3>
+    <ul>
+      <li>Complétez l'option [6] avec le nombre de vaisseaux opérationnels et endommagés.</li>
+    </ul>
+
+    <h3>Bonus 3 – Chargement automatique</h3>
+    <ul>
+      <li>Au lancement, si <code>flotte.json</code> existe, la dernière sauvegarde est chargée automatiquement. Sinon, on part de <code>FLEET_DATA</code>.</li>
+    </ul>
+
+    <h3>Bonus 4 – Parcours confirmé : <code>from_dict()</code></h3>
+    <ul>
+      <li>Remplacez <code>build_fleet()</code> par une méthode de classe <code>from_dict()</code> dans chaque classe, symétrique de <code>to_dict()</code>.
+        Découvrez le décorateur <a href="https://docs.python.org/fr/3/library/functions.html#classmethod" target="_blank"><code>@classmethod</code></a>.</li>
+    </ul>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="auto-evaluation">
+    <h2><span class="num">✓</span> Avant de rendre</h2>
+
+    <p>Vérifiez chaque point. Ils correspondent à la grille d'évaluation du projet Fondation.</p>
+    <ul class="checklist">
+      <li>Chaque classe a sa méthode <code>to_dict()</code> et l'aller-retour <code>build_fleet(fleet.to_dict())</code> est parfait.</li>
+      <li>La sauvegarde est un JSON lisible : indenté, accents conservés.</li>
+      <li>Après une sauvegarde, un redémarrage puis un chargement, la flotte est identique (membres, expérience, mana, état des vaisseaux).</li>
+      <li>Les quatre attaques de l'étape 4 et le fichier absent sont gérés sans jamais faire planter le programme.</li>
+      <li>Les options [0] à [8] du menu fonctionnent.</li>
+      <li>Le dépôt contient <code>flotte.json</code>, <code>flotte-corrompue.json</code> et un <code>README.md</code> complet, avec la déclaration d'usage de l'IA.</li>
+      <li>Des commits réguliers ont été poussés, avec des messages clairs.</li>
+      <li>Vous pouvez expliquer <strong>chaque ligne</strong> de votre code.</li>
+    </ul>
+
+    <div class="encadre marine">
+      <span class="intitule">Et le 5 novembre ?</span>
+      Le TP4 sécurisera votre programme, uniquement avec des notions déjà vues : empreinte SHA-256 de la sauvegarde pour détecter
+      toute modification, code d'accès haché, journal horodaté des actions. Arrivez avec un projet qui fonctionne !
+    </div>
+  </section>
+
+</main>
+
+<footer class="pied">Chris CHEVALIER · 4PYTH – Langage Python · École Hexagone</footer>
+
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/js/enonce.js"></script>
+</body>
+</html>
