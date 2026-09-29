@@ -12,7 +12,7 @@
   <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
   <div class="titre">
     <h1>TP3 – Intégration de la sauvegarde</h1>
-    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation » · En autonomie, du 10 octobre au 4 novembre</p>
+    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation » · En autonomie, du 10 octobre au 5 novembre</p>
   </div>
 </header>
 
@@ -37,7 +37,7 @@
     <ul>
       <li><strong>Objectifs</strong> : convertir des objets en dictionnaires, sauvegarder et charger en JSON, gérer les erreurs de fichier
         et valider des données venues de l'extérieur.</li>
-      <li>Il se fait <strong>en autonomie</strong>. Le projet complet est évalué sur le <strong>dernier commit poussé avant le jeudi 5 novembre à 16h15</strong>.</li>
+      <li>Il se fait <strong>en autonomie</strong>. Le projet complet est à rendre <strong>au plus tard le jeudi 5 novembre à 16h30</strong> : seul le dernier commit poussé avant cette heure est évalué.</li>
       <li>Commitez et poussez <strong>régulièrement</strong> : je suis l'avancée de vos dépôts pendant ces quatre semaines.</li>
       <li>Bloqué ? Relisez le cours 3, puis écrivez-moi : <a href="mailto:chris.chevalier@ecole-hexagone.com">chris.chevalier@ecole-hexagone.com</a>.</li>
       <li>L'IA est autorisée pour le projet, à une condition : <strong>comprendre chaque ligne</strong> de votre code. Je le vérifierai en soutenance.</li>
@@ -191,7 +191,7 @@
       <ul>
         <li>Pour le mana, votre programme <strong>corrige</strong> la valeur ; pour le rôle, il la <strong>refuse</strong>. Quelle stratégie est la plus sûre ? Dans quels cas ?</li>
         <li>Si l'attaquant change un âge de 37 en 38, aucune de vos validations ne le voit : la valeur est plausible.
-          Pour détecter <strong>toute</strong> modification, il faudra une empreinte de la sauvegarde. Ce sera le TP4.</li>
+          Pour détecter <strong>toute</strong> modification, il faut une empreinte de la sauvegarde : c'est le bonus 5.</li>
         <li>C'est pour éviter ces pièges que l'on utilise JSON et jamais <code>pickle</code> ni <code>eval()</code> sur des données non fiables (cours 3).</li>
       </ul>
     </div>
@@ -242,6 +242,13 @@
       <li>Remplacez <code>build_fleet()</code> par une méthode de classe <code>from_dict()</code> dans chaque classe, symétrique de <code>to_dict()</code>.
         Découvrez le décorateur <a href="https://docs.python.org/fr/3/library/functions.html#classmethod" target="_blank"><code>@classmethod</code></a>.</li>
     </ul>
+
+    <h3>Bonus 5 – Protéger la sauvegarde par une empreinte</h3>
+    <ul>
+      <li>À chaque sauvegarde, calculez l'<strong>empreinte SHA-256</strong> de <code>fleet.json</code> (cours 3) et enregistrez-la dans <code>fleet.json.sha256</code>.</li>
+      <li>Au chargement, recalculez l'empreinte : si elle diffère, refusez le fichier. Même le passage d'un âge de 37 à 38 est alors détecté.</li>
+      <li>Réfléchissez : un attaquant qui peut modifier <code>fleet.json</code> peut aussi recalculer l'empreinte. Comment l'en empêcher ?</li>
+    </ul>
   </section>
 
   <!-- ================================================================== -->
@@ -262,8 +269,7 @@
 
     <div class="encadre marine">
       <span class="intitule">Et le 5 novembre ?</span>
-      Le TP4 sécurisera votre programme, uniquement avec des notions déjà vues : empreinte SHA-256 de la sauvegarde pour détecter
-      toute modification, code d'accès haché, journal horodaté des actions. Arrivez avec un projet qui fonctionne !
+      Vous aurez encore du temps en séance pour terminer le TP3. Le projet complet est à rendre <strong>au plus tard à 16h30</strong>, juste avant l'examen écrit. Pendant la journée, je vous recevrai un par un pour la soutenance. Arrivez avec un projet qui fonctionne !
     </div>
   </section>
 

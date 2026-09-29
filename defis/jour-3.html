@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Défis cyber – Jour 3 – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/css/enonce.css">
+</head>
+<body>
+
+<header class="entete">
+  <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
+  <div class="titre">
+    <h1>Défis cyber – Jour 3</h1>
+    <p><span class="code-module">4PYTH</span> – Langage Python · Jeudi 5 novembre</p>
+  </div>
+</header>
+
+<main>
+
+  <p>
+    Dernière série ! Aucune notion nouvelle : ces trois défis mobilisent <strong>tout ce que vous avez appris</strong>
+    et sont un excellent entraînement pour l'examen écrit de 16h30. Comptez <strong>entre 20 et 25 minutes</strong> par défi.
+  </p>
+
+  <div class="encadre marine">
+    <span class="intitule">Règles du jeu</span>
+    <ul>
+      <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot.</li>
+      <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
+      <li>Un fichier par défi : <code>challenge7.py</code>, <code>challenge8.py</code> et <code>challenge9.py</code>.</li>
+      <li><strong>Validation</strong> : levez la main, exécutez votre code devant moi puis répondez à une question sur votre code.</li>
+      <li><strong>Notation</strong> : non fait (0), partiel (1) ou réussi (2). Les défis comptent pour 10 % de la note du module.</li>
+      <li><strong>Parcours confirmé</strong> : validez ces trois défis puis passez aux défis avancés.</li>
+    </ul>
+  </div>
+
+  <nav class="sommaire">
+    <a href="#defi-7"><span class="n">Défi 7</span><br>Audit de configuration SSH</a>
+    <a href="#defi-8"><span class="n">Défi 8</span><br>Chiffre de César</a>
+    <a href="#defi-9"><span class="n">Défi 9</span><br>Tableau de bord d'alertes</a>
+  </nav>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="defi-7">
+    <h2><span class="num">7</span> Audit de configuration SSH</h2>
+    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Fichiers · chaînes · dictionnaires · JSON</span><span class="etiquette ambre">Audit</span></div>
+
+    <p>
+      Lors d'un audit technique, on vérifie que la configuration des serveurs respecte la politique de sécurité de l'entreprise.
+      Le serveur SSH de <code>srv-web</code> vous semble mal durci : à vous d'écrire l'outil qui le prouve.
+    </p>
+
+    <h3>Votre mission</h3>
+    <ol>
+      <li>Écrivez le texte <code>SSHD_CONFIG</code> ci-dessous dans un fichier <code>sshd_config</code>.</li>
+      <li>Écrivez <code>parse_config(path)</code>, qui relit le fichier et renvoie un dictionnaire <code>{paramètre: valeur}</code>.
+        Les lignes vides et les commentaires (qui commencent par <code>#</code>) sont ignorés.</li>
+      <li>Écrivez <code>audit(config, policy)</code>, qui renvoie une liste de constats, un par règle de <code>POLICY</code> :
+        un dictionnaire avec le paramètre, la valeur attendue, la valeur trouvée et un statut <code>"OK"</code>, <code>"NON CONFORME"</code> ou <code>"ABSENT"</code>.
+        Quand la valeur attendue est un <strong>entier</strong>, c'est un <strong>maximum</strong>.</li>
+      <li>Écrivez <code>print_report(findings)</code>, qui affiche le rapport, puis enregistrez les constats dans <code>audit.json</code>.</li>
+    </ol>
+
+    <pre data-titre="Données à copier"><code class="language-python">
+      SSHD_CONFIG = """# Configuration du serveur SSH de srv-web
+      Port 22
+      PermitRootLogin yes
+      PasswordAuthentication yes
+      PermitEmptyPasswords no
+
+      MaxAuthTries 6
+      X11Forwarding yes
+      # UsePAM yes
+      """
+
+      POLICY = {
+          "PermitRootLogin": "no",
+          "PasswordAuthentication": "no",
+          "PermitEmptyPasswords": "no",
+          "MaxAuthTries": 3,            # un entier : valeur maximale autorisée
+          "X11Forwarding": "no",
+          "LogLevel": "VERBOSE",
+      }
+    </code></pre>
+
+    <h3>Exemples attendus</h3>
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      config = parse_config("sshd_config")
+      print(config["MaxAuthTries"])      # 6
+
+      findings = audit(config, POLICY)
+      print_report(findings)
+      # [NON CONFORME] PermitRootLogin : yes (attendu : no)
+      # [NON CONFORME] PasswordAuthentication : yes (attendu : no)
+      # [OK] PermitEmptyPasswords : no
+      # [NON CONFORME] MaxAuthTries : 6 (attendu : au plus 3)
+      # [NON CONFORME] X11Forwarding : yes (attendu : no)
+      # [ABSENT] LogLevel (attendu : VERBOSE)
+      # Conformité : 1 / 6
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li><code>line.split(maxsplit=1)</code> coupe la ligne en deux au premier espace seulement : le nom du paramètre puis sa valeur.</li>
+        <li><code>config.get(setting)</code> renvoie <code>None</code> si le paramètre est absent, au lieu de lever une <code>KeyError</code>.</li>
+        <li><code>isinstance(expected, int)</code> vous dit s'il faut comparer des nombres. Attention : <code>"10" &lt;= "3"</code> est vrai entre chaînes !</li>
+      </ul>
+    </details>
+
+    <div class="encadre">
+      <span class="intitule">Pour valider, montrez-moi…</span>
+      <ul>
+        <li>le rapport ci-dessus, qui donne exactement ce résultat ;</li>
+        <li>le fichier <code>audit.json</code> ouvert dans VS Code.</li>
+      </ul>
+    </div>
+
+    <h3>Bonus</h3>
+    <ul>
+      <li>Ne tenez pas compte de la casse des noms de paramètres, comme le fait le vrai serveur SSH.</li>
+      <li>Sur une machine Linux, auditez le vrai fichier <code>/etc/ssh/sshd_config</code>, en lecture seule.</li>
+    </ul>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="defi-8">
+    <h2><span class="num">8</span> Chiffre de César</h2>
+    <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">Boucles · % · fonctions · chaînes</span><span class="etiquette ambre">Cryptologie</span></div>
+
+    <p>
+      Jules César chiffrait ses messages en décalant chaque lettre de quelques positions dans l'alphabet. Vous avez intercepté un
+      message chiffré de cette façon, sans connaître le décalage. Montrez qu'un chiffrement avec seulement 26 clés possibles
+      ne protège rien.
+    </p>
+
+    <h3>Votre mission</h3>
+    <ol>
+      <li>Écrivez <code>encrypt(text, shift)</code>, qui décale chaque lettre de <code>shift</code> positions. Les majuscules restent en majuscules
+        et les autres caractères (espaces, apostrophes…) ne changent pas. Après <code>z</code>, on revient à <code>a</code>.</li>
+      <li>Écrivez <code>decrypt(text, shift)</code>… en une seule ligne, grâce à <code>encrypt</code>.</li>
+      <li>Écrivez <code>crack(ciphertext)</code>, qui teste <strong>les 26 décalages</strong> et renvoie le décalage et le texte les plus probables :
+        ceux qui contiennent le plus de mots de <code>COMMON_WORDS</code>.</li>
+    </ol>
+
+    <pre data-titre="Données à copier"><code class="language-python">
+      ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+      COMMON_WORDS = [
+          "le", "la", "les", "de", "des", "du", "et",
+          "est", "un", "une", "dans", "pour", "mot", "passe",
+      ]
+      SECRET = "Wp xze op alddp of dpcgpfc op dlfgprlcop pde olyd wp nzqqcp"
+    </code></pre>
+
+    <h3>Exemples attendus</h3>
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      print(encrypt("Attaque a l'aube", 3))   # Dwwdtxh d o'dxeh
+      print(decrypt("Dwwdtxh d o'dxeh", 3))   # Attaque a l'aube
+      print(encrypt("xyz", 3))                # abc
+
+      print(crack(SECRET))
+      # (décalage, message) : à vous de les découvrir !
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li><code>ALPHABET.index("c")</code> donne la position d'une lettre (ici <code>2</code>) ; <code>ALPHABET[4]</code> fait l'inverse.</li>
+        <li>L'opérateur <code>%</code> fait revenir au début de l'alphabet : <code>(25 + 3) % 26</code> vaut <code>2</code>.</li>
+        <li>Pour une majuscule, travaillez sur <code>char.lower()</code> puis remettez en majuscule avec <code>upper()</code>.</li>
+      </ul>
+    </details>
+
+    <div class="encadre">
+      <span class="intitule">Pour valider, montrez-moi…</span>
+      <ul>
+        <li>les trois premiers exemples, qui donnent exactement ces résultats ;</li>
+        <li>le message secret, retrouvé <strong>automatiquement</strong> par <code>crack</code>.</li>
+      </ul>
+    </div>
+
+    <h3>Bonus</h3>
+    <ul>
+      <li><strong>Analyse de fréquence</strong> : en français, la lettre la plus fréquente est le « e ». Retrouvez le décalage sans liste de mots.</li>
+      <li>Implémentez le <strong>chiffre de Vigenère</strong>, qui utilise un mot-clé au lieu d'un seul décalage. Est-il beaucoup plus solide ?</li>
+    </ul>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="defi-9">
+    <h2><span class="num">9</span> Tableau de bord d'alertes</h2>
+    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Classes · héritage · JSON · dictionnaires</span><span class="etiquette ambre">SOC</span></div>
+
+    <p>
+      Le SOC reçoit chaque matin un rapport d'alertes au format JSON. Votre mission : le recharger, recréer les objets du défi 6
+      puis afficher un <strong>tableau de bord</strong> pour l'équipe d'astreinte.
+    </p>
+
+    <h3>Votre mission</h3>
+    <ol>
+      <li>Placez votre <code>challenge6.py</code> du jour 2 dans le même dossier. Écrivez le rapport <code>REPORT</code> ci-dessous dans <code>report.json</code>.</li>
+      <li>Écrivez <code>alert_from_dict(data)</code>, qui recrée <strong>le bon type d'objet</strong> selon la clé <code>type</code> :
+        <code>BruteForceAlert</code>, <code>CompromiseAlert</code> ou <code>Alert</code>.</li>
+      <li>Écrivez <code>load_alerts(path)</code>, qui relit <code>report.json</code> et renvoie la liste des objets.</li>
+      <li>Écrivez <code>dashboard(alerts)</code>, qui affiche le nombre d'alertes par sévérité, l'IP la plus active et les comptes compromis.</li>
+    </ol>
+
+    <pre data-titre="Données à copier"><code class="language-python">
+      REPORT = [
+          {"type": "brute_force", "ip": "203.0.113.45", "failures": 7},
+          {"type": "brute_force", "ip": "198.51.100.23", "failures": 5},
+          {"type": "compromise", "ip": "203.0.113.45", "user": "alice"},
+          {"type": "info", "ip": "192.0.2.99"},
+          {"type": "brute_force", "ip": "203.0.113.45", "failures": 12},
+          {"type": "compromise", "ip": "198.51.100.23", "user": "backup"},
+          {"type": "info", "ip": "192.0.2.25"},
+      ]
+    </code></pre>
+
+    <h3>Exemples attendus</h3>
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      alerts = load_alerts("report.json")
+      print(type(alerts[2]).__name__)   # CompromiseAlert
+
+      dashboard(alerts)
+      # Alertes : 7
+      #   CRITICAL : 2
+      #   HIGH : 3
+      #   INFO : 2
+      # IP la plus active : 203.0.113.45 (3 alertes)
+      # Comptes compromis : alice, backup
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li><code>from challenge6 import Alert, BruteForceAlert, CompromiseAlert</code> fonctionne si les deux fichiers sont dans le même dossier.</li>
+        <li>Comptez avec des dictionnaires, comme au défi 2 : un pour les sévérités et un pour les IP. Parcourez ensuite celui des IP pour trouver la plus fréquente.</li>
+        <li><code>isinstance(alert, CompromiseAlert)</code> repère les comptes compromis.</li>
+      </ul>
+    </details>
+
+    <div class="encadre">
+      <span class="intitule">Pour valider, montrez-moi…</span>
+      <ul>
+        <li>les deux exemples ci-dessus, qui donnent exactement ces résultats ;</li>
+        <li>votre fonction <code>alert_from_dict</code>. Expliquez-moi aussi pourquoi recréer des objets plutôt que garder des dictionnaires.</li>
+      </ul>
+    </div>
+
+    <h3>Bonus</h3>
+    <ul>
+      <li>Affichez les alertes de la plus grave à la moins grave, grâce à leur méthode <code>describe()</code>.</li>
+      <li>Modifiez le <code>to_dict()</code> du défi 6 pour qu'il produise exactement ce format : l'aller-retour entre les défis 6 et 9 est alors complet,
+        comme la sauvegarde du TP3.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="pied">Chris CHEVALIER · 4PYTH – Langage Python · École Hexagone</footer>
+
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/js/enonce.js"></script>
+</body>
+</html>

@@ -140,7 +140,7 @@ log_event("Retrait du membre Hugo Crast")
       </div>
     </div>
     <aside class="notes">
-      Un journal horodaté est la première source d'une investigation. Au TP4, le programme Fondation journalisera toutes ses actions.
+      Un journal horodaté est la première source d'une investigation.
     </aside>
   </section>
 
@@ -308,7 +308,7 @@ def file_sha256(path):
             <li>Comparer deux empreintes permet de vérifier l'<strong>intégrité</strong> d'un fichier</li>
           </ul>
           <div class="encadre">
-            <strong>SHA-256 seul ne suffit pas</strong> pour stocker des mots de passe. Vous verrez pourquoi au TP4.
+            <strong>SHA-256 seul ne suffit pas</strong> pour stocker des mots de passe : il est trop rapide. On utilise des fonctions lentes comme bcrypt ou argon2.
           </div>
         </div>
       </div>
@@ -518,7 +518,7 @@ user_from_dict({"username": "eve", "role": "root"})
         </div>
       </div>
       <div class="encadre" style="margin-top: 14px;">
-        Au TP4, une <strong>empreinte SHA-256</strong> de la sauvegarde permettra de détecter toute modification du fichier.
+        Une <strong>empreinte SHA-256</strong> de la sauvegarde permet de détecter toute modification du fichier.
       </div>
     </div>
     <aside class="notes">
@@ -535,7 +535,7 @@ user_from_dict({"username": "eve", "role": "root"})
         <tr><td>Classes, héritage, polymorphisme, composition</td><td>TP2 : <code>Person</code>, <code>Operator</code>, <code>Mentalist</code>, <code>Spaceship</code>, <code>Fleet</code></td></tr>
         <tr><td>Lecture ligne par ligne, <code>bytes</code>, hexadécimal, <code>hashlib</code></td><td>Défis de cet après-midi</td></tr>
         <tr><td>JSON, <code>to_dict()</code>, chargement robuste</td><td>TP3 : sauvegarde et chargement de la flotte</td></tr>
-        <tr><td>Journal horodaté, empreinte SHA-256</td><td>TP4 : sécurisation du projet, le 5 novembre</td></tr>
+        <tr><td>Journal horodaté, empreinte SHA-256</td><td>Défi 5, bonus du TP3</td></tr>
       </table>
     </div>
   </section>
