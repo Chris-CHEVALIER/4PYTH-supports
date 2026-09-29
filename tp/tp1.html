@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TP1 – Gestion de l'équipage – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/css/enonce.css">
+</head>
+<body>
+
+<header class="entete">
+  <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
+  <div class="titre">
+    <h1>TP1 – Gestion de l'équipage</h1>
+    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation » · Mercredi 7 octobre, 15h15 – 16h45</p>
+  </div>
+</header>
+
+<main>
+
+  <figure class="illustration">
+    <img src="../assets/img/fondation-flotte.jpg" alt="Une flotte de vaisseaux spatiaux en orbite autour d'une planète">
+  </figure>
+
+  <h3>Contexte</h3>
+  <p>
+    Dans un futur lointain, la galaxie est plongée dans une crise sans précédent. La Seconde Fondation, un groupe secret
+    maîtrisant les sciences mentales, lutte pour maintenir la stabilité galactique. Mais un chef rebelle connu sous le nom
+    du <strong>Mulet</strong> menace cet équilibre.
+  </p>
+  <p>
+    Officier de la flotte marchande indépendante, vous êtes chargé de réorganiser les équipages de vos vaisseaux pour préparer
+    une contre-offensive. Première mission : <strong>gérer les membres d'équipage</strong> et vous assurer que vos vaisseaux
+    sont opérationnels avant l'arrivée des renforts. 🫡
+  </p>
+
+  <div class="encadre marine">
+    <span class="intitule">Ce TP en bref</span>
+    <ul>
+      <li><strong>Objectifs</strong> : manipuler une liste de dictionnaires, écrire des fonctions, valider les saisies de l'utilisateur et construire un menu interactif.</li>
+      <li><strong>À terminer pour le vendredi 9 octobre</strong>, début du TP2. Vous pouvez avancer chez vous.</li>
+      <li>Ce TP est la première brique du <strong>projet Fondation</strong>, remis le 5 novembre. Commitez et poussez <strong>régulièrement</strong> sur GitHub.</li>
+      <li>L'IA est autorisée pour le projet, à une condition : <strong>comprendre chaque ligne</strong> de votre code. Je le vérifierai en soutenance.</li>
+    </ul>
+  </div>
+
+  <nav class="sommaire">
+    <a href="#etape-0"><span class="n">Étape 0</span><br>Le dépôt GitHub</a>
+    <a href="#etape-1"><span class="n">Étape 1</span><br>L'équipage</a>
+    <a href="#etape-2"><span class="n">Étape 2</span><br>Les fonctions de gestion</a>
+    <a href="#etape-3"><span class="n">Étape 3</span><br>Le menu interactif</a>
+    <a href="#bonus"><span class="n">Bonus</span><br>Pour aller plus loin</a>
+    <a href="#auto-evaluation"><span class="n">Checklist</span><br>Avant de rendre</a>
+  </nav>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-0">
+    <h2><span class="num">0</span> Le dépôt GitHub</h2>
+    <div class="meta"><span class="etiquette">≈ 10 min</span><span class="etiquette clair">Git · venv</span></div>
+
+    <p>Tout le projet vit dans <strong>un seul dépôt</strong>, que vous enrichirez de TP en TP.</p>
+
+    <ol>
+      <li>Créez un dossier de projet, son environnement virtuel et initialisez Git :
+        <pre data-titre="Terminal"><code class="language-bash">
+          mkdir 4pyth-fondation
+          cd 4pyth-fondation
+          python3 -m venv .venv        # Windows : py -m venv .venv
+          git init
+        </code></pre>
+      </li>
+      <li>Créez un fichier <code>.gitignore</code>, pour que l'environnement virtuel ne soit jamais envoyé sur GitHub :
+        <pre data-titre=".gitignore"><code class="language-plaintext">
+          .venv/
+          __pycache__/
+        </code></pre>
+      </li>
+      <li>Créez un fichier <code>README.md</code> avec au moins le titre du projet et votre nom. Vous le compléterez au fil des TP
+        (mode d'emploi, bonus réalisés, déclaration d'usage de l'IA).</li>
+      <li>Sur GitHub, <a href="https://github.com/new" target="_blank">créez un dépôt</a> <strong>privé</strong> nommé
+        <code>4pyth-fondation-nom-prenom</code>, sans README, puis reliez-le et poussez :
+        <pre data-titre="Terminal"><code class="language-bash">
+          git add .
+          git commit -m "Initialisation du projet Fondation"
+          git branch -M main
+          git remote add origin https://github.com/votre-pseudo/4pyth-fondation-nom-prenom.git
+          git push -u origin main
+        </code></pre>
+      </li>
+      <li>Dans <strong>Settings → Collaborators</strong>, invitez <strong>Chris-CHEVALIER</strong>, <strong>au plus tard le vendredi 9 octobre</strong>.</li>
+    </ol>
+
+    <details>
+      <summary>Premier commit de votre vie ? Git vous demande votre identité</summary>
+      <pre data-titre="Terminal – une seule fois par machine"><code class="language-bash">
+        git config --global user.name "Prénom Nom"
+        git config --global user.email "adresse@exemple.fr"
+      </code></pre>
+      <p>Utilisez l'adresse de votre compte GitHub.</p>
+    </details>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-1">
+    <h2><span class="num">1</span> L'équipage</h2>
+    <div class="meta"><span class="etiquette">≈ 10 min</span><span class="etiquette clair">Listes · dictionnaires</span></div>
+
+    <p>
+      L'équipage est une <strong>liste</strong> de membres. Chaque membre est un <strong>dictionnaire</strong> contenant cinq clés :
+    </p>
+    <table>
+      <tr><th>Clé</th><th>Contenu</th><th>Type</th></tr>
+      <tr><td><code>first_name</code></td><td>prénom</td><td><code>str</code></td></tr>
+      <tr><td><code>last_name</code></td><td>nom de famille</td><td><code>str</code></td></tr>
+      <tr><td><code>gender</code></td><td><code>"F"</code> ou <code>"M"</code></td><td><code>str</code></td></tr>
+      <tr><td><code>age</code></td><td>âge en années</td><td><code>int</code></td></tr>
+      <tr><td><code>role</code></td><td>un rôle de la liste autorisée (voir étape 2)</td><td><code>str</code></td></tr>
+    </table>
+
+    <p>Dans un fichier <code>main.py</code>, créez l'équipage de départ en copiant ces cinq membres :</p>
+    <pre class="donnees" data-titre="main.py – équipage de départ"><code class="language-python">
+      crew = [
+          {"first_name": "Bel", "last_name": "Riose", "gender": "M", "age": 48, "role": "commandant"},
+          {"first_name": "Gaal", "last_name": "Dornick", "gender": "F", "age": 34, "role": "technicien"},
+          {"first_name": "Hugo", "last_name": "Crast", "gender": "M", "age": 37, "role": "pilote"},
+          {"first_name": "Salvor", "last_name": "Hardin", "gender": "F", "age": 28, "role": "armurier"},
+          {"first_name": "Novi", "last_name": "Sura", "gender": "F", "age": 25, "role": "entretien"},
+      ]
+    </code></pre>
+
+    <p>
+      Le reste de la flotte vous attend dans le jeu de données ci-dessous. Vous ajouterez ces membres <strong>avec votre propre
+      fonction <code>add_member</code></strong> : c'est la meilleure façon de la tester.
+    </p>
+
+    <h3>Jeu de données – flotte « Galactica », commandant Bel Riose</h3>
+    <div class="deux-colonnes">
+      <table class="compact">
+        <tr><th>Nom</th><th>Genre</th><th>Âge</th><th>Rôle</th></tr>
+        <tr><td>Bel Riose</td><td>M</td><td>48</td><td>commandant</td></tr>
+        <tr><td>Gaal Dornick</td><td>F</td><td>34</td><td>technicien</td></tr>
+        <tr><td>Salvor Hardin</td><td>F</td><td>28</td><td>armurier</td></tr>
+        <tr><td>Hugo Crast</td><td>M</td><td>37</td><td>pilote</td></tr>
+        <tr><td>Jagger Fount</td><td>M</td><td>41</td><td>pilote</td></tr>
+        <tr><td>Hober Mallow</td><td>M</td><td>52</td><td>pilote</td></tr>
+        <tr><td>Lathan Devers</td><td>M</td><td>46</td><td>marchand</td></tr>
+        <tr><td>Limmar Ponyets</td><td>M</td><td>43</td><td>marchand</td></tr>
+        <tr><td>Novi Sura</td><td>F</td><td>25</td><td>entretien</td></tr>
+        <tr><td>Ebling Mis</td><td>M</td><td>34</td><td>entretien</td></tr>
+        <tr><td>Eskel Gorov</td><td>M</td><td>32</td><td>marchand</td></tr>
+      </table>
+      <table class="compact">
+        <tr><th>Nom</th><th>Genre</th><th>Âge</th><th>Rôle</th></tr>
+        <tr><td>Fallom</td><td>F</td><td>28</td><td>pilote</td></tr>
+        <tr><td>Han Pritcher</td><td>M</td><td>31</td><td>armurier</td></tr>
+        <tr><td>Harlan Branno</td><td>F</td><td>38</td><td>entretien</td></tr>
+        <tr><td>Lewis Pirenne</td><td>M</td><td>34</td><td>pilote</td></tr>
+        <tr><td>Munn Compor</td><td>M</td><td>27</td><td>technicien</td></tr>
+        <tr><td>Yugo Amary</td><td>M</td><td>33</td><td>technicien</td></tr>
+        <tr><td>Bayta Darell</td><td>F</td><td>48</td><td>entretien</td></tr>
+        <tr><td>Toran Darell</td><td>M</td><td>52</td><td>technicien</td></tr>
+        <tr><td>Stora Gendibal</td><td>F</td><td>35</td><td>technicien</td></tr>
+        <tr><td>Jord Commasson</td><td>M</td><td>53</td><td>entretien</td></tr>
+      </table>
+    </div>
+    <p class="muet" style="font-size: 14px;">
+      Trois mentalistes complètent la flotte : Tellem Bond (M, 48 ans), Yanna Seldon (F, 52 ans) et Joie (F, 25 ans).
+      Ils ont des pouvoirs particuliers : vous les modéliserez au TP2.
+    </p>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-2">
+    <h2><span class="num">2</span> Les fonctions de gestion</h2>
+    <div class="meta"><span class="etiquette">≈ 50 min</span><span class="etiquette clair">Fonctions · conditions · boucles · exceptions</span></div>
+
+    <p>Dans un fichier <code>crew.py</code>, écrivez les quatre fonctions suivantes. Chacune reçoit l'équipage en paramètre.</p>
+
+    <h3><code>add_member(crew)</code> – Ajouter un membre</h3>
+    <ol>
+      <li>Demande le prénom, le nom de famille, le genre, l'âge et le rôle du nouveau membre avec <code>input()</code>.</li>
+      <li>Refuse toute saisie invalide et redemande tant qu'elle n'est pas correcte :
+        <ul>
+          <li>prénom et nom de famille : <strong>entre 3 et 15 caractères</strong> ;</li>
+          <li>nom de famille <strong>unique</strong> dans l'équipage, sans tenir compte de la casse ;</li>
+          <li>genre : <code>"F"</code> ou <code>"M"</code> ;</li>
+          <li>âge : un <strong>nombre entier</strong>. Une saisie comme <code>vingt</code> ne doit pas faire planter le programme ;</li>
+          <li>rôle : uniquement une valeur de la liste <code>ROLES</code>, sans tenir compte de la casse.</li>
+        </ul>
+      </li>
+      <li>Ajoute le dictionnaire du nouveau membre à la liste et affiche une confirmation.</li>
+    </ol>
+    <pre data-titre="crew.py – en haut du fichier"><code class="language-python">
+      ROLES = ["commandant", "pilote", "technicien", "armurier", "marchand", "entretien"]
+    </code></pre>
+
+    <div class="encadre">
+      <span class="intitule">Réflexe cyber : la liste blanche</span>
+      Plutôt que d'essayer d'interdire les mauvaises valeurs (liste noire, toujours incomplète), on <strong>n'accepte que les valeurs
+      connues</strong>. C'est le principe de validation des entrées recommandé partout en sécurité : formulaires web, paramètres d'API,
+      règles de pare-feu…
+    </div>
+
+    <h3><code>remove_member(crew)</code> – Retirer un membre</h3>
+    <ol>
+      <li>Demande le nom de famille du membre à retirer.</li>
+      <li>Le retire de la liste et affiche une confirmation.</li>
+      <li>Affiche un message clair si aucun membre ne porte ce nom.</li>
+    </ol>
+
+    <h3><code>display_crew(crew)</code> – Afficher l'équipage</h3>
+    <ol>
+      <li>Affiche chaque membre sur une ligne, numérotée.</li>
+      <li>Affiche un message si l'équipage est vide.</li>
+    </ol>
+
+    <h3><code>check_crew(crew)</code> – Vérifier l'équipage</h3>
+    <ol>
+      <li>Vérifie que l'équipage compte <strong>au moins 2 membres</strong>, dont <strong>au moins un pilote et un technicien</strong>.</li>
+      <li>Affiche <code>L'équipage est prêt pour la mission !</code> ou, sinon, ce qui manque.</li>
+      <li>Renvoie <code>True</code> ou <code>False</code> : le TP2 en aura besoin.</li>
+    </ol>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li><strong>Une fonction, une tâche</strong> : une petite fonction <code>ask_int(prompt)</code> qui redemande un entier jusqu'à obtenir
+          une saisie valide vous servira pour l'âge… et pour le menu de l'étape 3.</li>
+        <li>Même idée pour la recherche : une fonction <code>find_member(crew, last_name)</code> qui renvoie le membre ou <code>None</code>
+          sert à la fois pour l'ajout (unicité) et pour la suppression.</li>
+        <li>Revoyez les diapos « <code>try</code>, <code>except</code>, <code>else</code>, <code>raise</code> » et « <code>while</code>,
+          <code>break</code>, <code>continue</code> » du cours.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="etape-3">
+    <h2><span class="num">3</span> Le menu interactif</h2>
+    <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">while · match / case · modules</span></div>
+
+    <ol>
+      <li>Dans <code>main.py</code>, importez vos fonctions depuis <code>crew.py</code>.</li>
+      <li>Affichez le menu dans une boucle <code>while True</code> et traitez le choix avec <code>match</code> / <code>case</code>.</li>
+      <li>L'option <strong>[0] Quitter</strong> sort de la boucle. Les TP suivants ajouteront les options [5], [6], etc.</li>
+      <li>Un choix invalide (<code>abc</code>, <code>7</code>…) affiche un message et <strong>ne fait jamais planter</strong> le programme.</li>
+      <li>Placez le lancement du menu sous <code>if __name__ == "__main__":</code>.</li>
+    </ol>
+
+    <pre data-titre="Proposition d'affichage"><code class="language-plaintext">
+      ===== Flotte marchande – Gestion de l'équipage =====
+      [1] Ajouter un membre
+      [2] Retirer un membre
+      [3] Afficher l'équipage
+      [4] Vérifier l'équipage
+      [0] Quitter
+      Votre choix : 3
+       1. Bel Riose (M, 48 ans) – commandant
+       2. Gaal Dornick (F, 34 ans) – technicien
+       3. Hugo Crast (M, 37 ans) – pilote
+       4. Salvor Hardin (F, 28 ans) – armurier
+       5. Novi Sura (F, 25 ans) – entretien
+    </code></pre>
+
+    <div class="encadre marine">
+      <span class="intitule">Commitez !</span>
+      Un commit par étape terminée, avec un message qui dit ce qui a changé :
+      <code>git add .</code> puis <code>git commit -m "Ajout du menu interactif"</code> et <code>git push</code>.
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="bonus">
+    <h2><span class="num">+</span> Pour aller plus loin</h2>
+    <div class="meta"><span class="etiquette ambre">Facultatif</span></div>
+
+    <h3>Bonus 1 – Terminal de bord sécurisé</h3>
+    <ul>
+      <li>Au lancement, demandez un <strong>code d'accès</strong> avant d'afficher le menu. Masquez la saisie avec
+        <a href="https://docs.python.org/fr/3/library/getpass.html" target="_blank"><code>getpass</code></a>.</li>
+      <li>Après <strong>3 codes incorrects</strong>, le terminal se verrouille et le programme s'arrête.</li>
+      <li>Votre code d'accès est écrit en clair dans votre code source… ce qui est une mauvaise pratique.
+        Le TP4 vous montrera comment la corriger.</li>
+    </ul>
+
+    <h3>Bonus 2 – Contraintes d'âge</h3>
+    <ul>
+      <li>Un pilote doit avoir au moins 25 ans, un technicien au moins 18 ans.</li>
+      <li>Aucun membre ne peut avoir plus de 65 ans.</li>
+    </ul>
+
+    <h3>Bonus 3 – Promotions</h3>
+    <ul>
+      <li>Ajoutez une clé <code>experience</code> (en années) aux membres.</li>
+      <li>Un technicien ayant au moins 10 ans d'expérience peut être <strong>promu pilote</strong>, si les contraintes d'âge sont respectées.</li>
+    </ul>
+
+    <h3>Bonus 4 – Rapport d'équipage</h3>
+    <ul>
+      <li>Ajoutez une option de menu qui affiche le nombre total de membres, la répartition par rôle et les membres proches de l'âge maximum.</li>
+    </ul>
+
+    <div class="encadre">
+      <span class="intitule">À méditer</span>
+      Essayez d'ajouter <strong>Toran Darell</strong> puis <strong>Bayta Darell</strong>, et enfin <strong>Fallom</strong>, qui n'a pas de nom de famille.
+      Vos règles de validation fonctionnent… mais sont-elles adaptées à la réalité ? Une règle trop stricte bloque des utilisateurs légitimes ;
+      une règle trop souple laisse passer n'importe quoi. Trouver le bon équilibre est tout l'enjeu de la validation des entrées.
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="auto-evaluation">
+    <h2><span class="num">✓</span> Avant de rendre</h2>
+
+    <p>Vérifiez chaque point. Ils correspondent à la grille d'évaluation du projet Fondation.</p>
+    <ul class="checklist">
+      <li>Les quatre options du menu fonctionnent, et [0] quitte proprement.</li>
+      <li>Aucune saisie ne fait planter le programme : lettres à la place d'un nombre, option inexistante, nom inconnu…</li>
+      <li>Les règles de validation sont respectées : longueur des noms, nom unique, genre, rôle de la liste autorisée.</li>
+      <li>Les messages guident l'utilisateur : il sait toujours ce qui s'est passé et ce qu'il doit faire.</li>
+      <li>Le code est réparti entre <code>crew.py</code> (fonctions) et <code>main.py</code> (menu).</li>
+      <li>Noms de variables et de fonctions en <code>snake_case</code> et en anglais, avec une docstring par fonction.</li>
+      <li>Le dépôt est sur GitHub, j'y suis invité, et il contient plusieurs commits.</li>
+      <li>Vous pouvez expliquer <strong>chaque ligne</strong> de votre code.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="pied">Chris CHEVALIER · 4PYTH – Langage Python · École Hexagone</footer>
+
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/js/enonce.js"></script>
+</body>
+</html>
