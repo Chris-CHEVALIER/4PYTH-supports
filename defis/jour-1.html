@@ -28,7 +28,7 @@
     <ul>
       <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot. Désactivez-la dans VS Code.</li>
       <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
-      <li>Un fichier par défi : <code>defi1.py</code>, <code>defi2.py</code> et <code>defi3.py</code>, dans votre dossier de travail avec son venv activé.</li>
+      <li>Un fichier par défi : <code>challenge1.py</code>, <code>challenge2.py</code> et <code>challenge3.py</code>, dans votre dossier de travail avec son venv activé.</li>
       <li><strong>Validation</strong> : quand un défi est terminé, levez la main. Vous exécutez votre code devant moi, puis je vous pose une question sur votre code.</li>
       <li><strong>Notation</strong> : non fait (0), partiel (1) ou réussi (2). Les défis comptent pour 10 % de la note du module.</li>
       <li><strong>Parcours confirmé</strong> : validez ces trois défis, puis passez aux défis avancés.</li>
@@ -63,7 +63,7 @@
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Copiez la liste des mots de passe courants ci-dessous en haut de <code>defi1.py</code>.</li>
+      <li>Copiez la liste des mots de passe courants ci-dessous en haut de <code>challenge1.py</code>.</li>
       <li>Écrivez une fonction <code>check_password(password)</code> qui renvoie <strong>un tuple</strong> de deux valeurs :
         <code>True</code> ou <code>False</code> puis la liste des messages d'erreur (vide si le mot de passe est valide).</li>
       <li>Testez-la avec les exemples attendus.</li>
@@ -222,7 +222,7 @@
       <li>Le mot de passe contient <strong>toujours</strong> au moins une majuscule, une minuscule, un chiffre et un caractère spécial.
         Ces caractères ne sont pas toujours aux mêmes positions.</li>
       <li>Si <code>length</code> est inférieur à 12, la fonction <strong>lève une <code>ValueError</code></strong>.</li>
-      <li>Importez <code>check_password</code> depuis votre <code>defi1.py</code> et vérifiez que <strong>1 000 mots de passe générés</strong> sont tous valides.</li>
+      <li>Importez <code>check_password</code> depuis votre <code>challenge1.py</code> et vérifiez que <strong>1 000 mots de passe générés</strong> sont tous valides.</li>
     </ol>
 
     <h3>Exemples attendus</h3>
@@ -247,7 +247,7 @@
           <code>string.ascii_uppercase</code>, <code>string.ascii_lowercase</code> et <code>string.digits</code>. Choisissez vous-même vos caractères spéciaux.</li>
         <li><code>secrets.choice(sequence)</code> tire un élément au hasard. Commencez par un caractère de chaque catégorie, puis complétez.</li>
         <li>Pour mélanger une liste de manière sûre : <code>secrets.SystemRandom().shuffle(liste)</code>. Pour recoller une liste de caractères : <code>"".join(liste)</code>.</li>
-        <li><code>from defi1 import check_password</code> fonctionne si les deux fichiers sont dans le même dossier.</li>
+        <li><code>from challenge1 import check_password</code> fonctionne si les deux fichiers sont dans le même dossier.</li>
       </ul>
     </details>
 

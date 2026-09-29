@@ -86,7 +86,7 @@ Oct  9 10:15:44 srv-web sshd[2303]: Failed password for root from 198.51.100.23 
 Oct  9 11:31:02 srv-web sshd[2410]: Accepted password for carol from 192.0.2.10 port 42230 ssh2
       </code></pre>
       <div class="colonnes code-texte">
-        <pre class="mini" data-titre="analyse.py"><code class="language-python" data-trim>
+        <pre class="mini" data-titre="analysis.py"><code class="language-python" data-trim>
 failures = {}
 with open("auth.log", encoding="utf-8") as log:
     for line in log:
@@ -115,7 +115,7 @@ print(failures)
   <section>
     <h2>Écrire et ajouter</h2>
     <div class="corps">
-      <pre class="mini" data-titre="journal.py"><code class="language-python" data-trim>
+      <pre class="mini" data-titre="event_log.py"><code class="language-python" data-trim>
 from datetime import datetime
 
 def log_event(message):
@@ -149,9 +149,9 @@ log_event("Retrait du membre Hugo Crast")
     <h2>Les erreurs de fichier</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="lecture.py"><code class="language-python" data-trim>
+        <pre data-titre="reading.py"><code class="language-python" data-trim>
 try:
-    with open("rapport.txt", encoding="utf-8") as f:
+    with open("report.txt", encoding="utf-8") as f:
         print(f.read())
 except FileNotFoundError:
     print("Fichier introuvable")
@@ -159,7 +159,7 @@ except PermissionError:
     print("Accès refusé : droits insuffisants")
         </code></pre>
         <div class="dense">
-          <pre class="mini" data-titre="chemins.py"><code class="language-python" data-trim>
+          <pre class="mini" data-titre="paths.py"><code class="language-python" data-trim>
 from pathlib import Path
 
 path = Path("auth.log")
@@ -187,7 +187,7 @@ print(path.suffix)     # .log
     <h2>Texte ou octets ?</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="encodage.py"><code class="language-python" data-trim>
+        <pre data-titre="encoding.py"><code class="language-python" data-trim>
 text = "Clé"
 data = text.encode("utf-8")
 print(data)        # b'Cl\xc3\xa9'
@@ -215,7 +215,7 @@ print(data.decode("utf-8"))   # Clé
     <h2>L'hexadécimal</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="hexa.py"><code class="language-python" data-trim>
+        <pre data-titre="hexadecimal.py"><code class="language-python" data-trim>
 data = "Hi!".encode()
 print(data.hex())                 # 486921
 print(bytes.fromhex("486921"))    # b'Hi!'
@@ -257,7 +257,7 @@ def detect_type(path):
             return kind
     return "inconnu"
 
-print(detect_type("facture.pdf"))   # PDF
+print(detect_type("invoice.pdf"))   # PDF
 print(detect_type("photo.jpg"))     # PNG !
         </code></pre>
         <div class="dense">
@@ -273,7 +273,7 @@ print(detect_type("photo.jpg"))     # PNG !
       </div>
     </div>
     <aside class="notes">
-      Un malware déguisé en facture.pdf.exe ou une image qui cache une archive : l'extension ne prouve rien.
+      Un malware déguisé en invoice.pdf.exe ou une image qui cache une archive : l'extension ne prouve rien.
       La commande file sous Linux et macOS fait exactement ce travail.
     </aside>
   </section>
@@ -283,7 +283,7 @@ print(detect_type("photo.jpg"))     # PNG !
     <h2>Empreinte SHA-256</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre class="mini" data-titre="empreinte.py"><code class="language-python" data-trim>
+        <pre class="mini" data-titre="hashing.py"><code class="language-python" data-trim>
 import hashlib
 
 print(hashlib.sha256(b"Fondation").hexdigest())
@@ -464,7 +464,7 @@ json.dump(data, f, indent=2)
     <h2>Charger sans planter</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre class="mini" data-titre="sauvegarde.py"><code class="language-python" data-trim>
+        <pre class="mini" data-titre="save.py"><code class="language-python" data-trim>
 def load_users(path):
     try:
         with open(path, encoding="utf-8") as f:

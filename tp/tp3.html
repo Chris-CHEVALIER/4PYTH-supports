@@ -122,18 +122,18 @@
     </p>
     <table>
       <tr><th>Situation</th><th>Exception d'origine</th><th>Message conseillé</th></tr>
-      <tr><td>le fichier n'existe pas</td><td><code>FileNotFoundError</code></td><td><code>aucune sauvegarde « flotte.json »</code></td></tr>
-      <tr><td>le JSON est mal formé</td><td><code>json.JSONDecodeError</code></td><td><code>la sauvegarde « flotte.json » est corrompue</code></td></tr>
-      <tr><td>une clé attendue manque</td><td><code>KeyError</code></td><td><code>la sauvegarde « flotte.json » est incomplète</code></td></tr>
+      <tr><td>le fichier n'existe pas</td><td><code>FileNotFoundError</code></td><td><code>aucune sauvegarde « fleet.json »</code></td></tr>
+      <tr><td>le JSON est mal formé</td><td><code>json.JSONDecodeError</code></td><td><code>la sauvegarde « fleet.json » est corrompue</code></td></tr>
+      <tr><td>une clé attendue manque</td><td><code>KeyError</code></td><td><code>la sauvegarde « fleet.json » est incomplète</code></td></tr>
       <tr><td>une valeur est interdite (rôle inconnu…)</td><td><code>ValueError</code> de vos classes</td><td>le message de votre classe, tel quel</td></tr>
     </table>
 
     <pre data-titre="Résultats attendus"><code class="language-python">
-      save_fleet(fleet, "flotte.json")
-      print(load_fleet("flotte.json").to_dict() == fleet.to_dict())   # True
+      save_fleet(fleet, "fleet.json")
+      print(load_fleet("fleet.json").to_dict() == fleet.to_dict())   # True
 
-      load_fleet("inexistant.json")
-      # ValueError: aucune sauvegarde « inexistant.json »
+      load_fleet("missing.json")
+      # ValueError: aucune sauvegarde « missing.json »
     </code></pre>
 
     <details>
@@ -153,18 +153,18 @@
 
     <ol>
       <li>Ajoutez <strong>[7] Sauvegarder la flotte</strong> et <strong>[8] Charger une flotte</strong>.</li>
-      <li>Le nom du fichier est demandé à l'utilisateur, avec <code>flotte.json</code> par défaut s'il appuie simplement sur Entrée.</li>
+      <li>Le nom du fichier est demandé à l'utilisateur, avec <code>fleet.json</code> par défaut s'il appuie simplement sur Entrée.</li>
       <li>Si le chargement échoue, le message d'erreur s'affiche et <strong>la flotte actuelle est conservée</strong>.</li>
     </ol>
 
     <pre data-titre="Exemple de session"><code class="language-plaintext">
       Votre choix : 7
-      Fichier de sauvegarde [flotte.json] :
-      Flotte Galactica sauvegardée dans « flotte.json ».
+      Fichier de sauvegarde [fleet.json] :
+      Flotte Galactica sauvegardée dans « fleet.json ».
 
       Votre choix : 8
-      Fichier à charger [flotte.json] : ancienne.json
-      Chargement impossible : aucune sauvegarde « ancienne.json »
+      Fichier à charger [fleet.json] : old.json
+      Chargement impossible : aucune sauvegarde « old.json »
     </code></pre>
   </section>
 
@@ -175,7 +175,7 @@
 
     <p>
       Un fichier de sauvegarde se modifie avec n'importe quel éditeur de texte. Mettez-vous à la place d'un utilisateur malveillant :
-      faites une copie de <code>flotte.json</code>, modifiez-la, puis essayez de la charger. Votre programme doit réagir ainsi :
+      faites une copie de <code>fleet.json</code>, modifiez-la, puis essayez de la charger. Votre programme doit réagir ainsi :
     </p>
 
     <table>
@@ -203,8 +203,8 @@
     <div class="meta"><span class="etiquette">≈ 15 min</span><span class="etiquette clair">Git · documentation</span></div>
 
     <ol>
-      <li>Commitez <strong>deux fichiers de test</strong> dans votre dépôt : une sauvegarde valide (<code>flotte.json</code>) et une sauvegarde
-        piégée (<code>flotte-corrompue.json</code>), que votre programme doit refuser proprement.</li>
+      <li>Commitez <strong>deux fichiers de test</strong> dans votre dépôt : une sauvegarde valide (<code>fleet.json</code>) et une sauvegarde
+        piégée (<code>fleet-corrupted.json</code>), que votre programme doit refuser proprement.</li>
       <li>Complétez votre <code>README.md</code> :
         <ul>
           <li>comment lancer le programme et à quoi sert chaque option du menu ;</li>
@@ -234,7 +234,7 @@
 
     <h3>Bonus 3 – Chargement automatique</h3>
     <ul>
-      <li>Au lancement, si <code>flotte.json</code> existe, la dernière sauvegarde est chargée automatiquement. Sinon, on part de <code>FLEET_DATA</code>.</li>
+      <li>Au lancement, si <code>fleet.json</code> existe, la dernière sauvegarde est chargée automatiquement. Sinon, on part de <code>FLEET_DATA</code>.</li>
     </ul>
 
     <h3>Bonus 4 – Parcours confirmé : <code>from_dict()</code></h3>
@@ -255,7 +255,7 @@
       <li>Après une sauvegarde, un redémarrage puis un chargement, la flotte est identique (membres, expérience, mana, état des vaisseaux).</li>
       <li>Les quatre attaques de l'étape 4 et le fichier absent sont gérés sans jamais faire planter le programme.</li>
       <li>Les options [0] à [8] du menu fonctionnent.</li>
-      <li>Le dépôt contient <code>flotte.json</code>, <code>flotte-corrompue.json</code> et un <code>README.md</code> complet, avec la déclaration d'usage de l'IA.</li>
+      <li>Le dépôt contient <code>fleet.json</code>, <code>fleet-corrupted.json</code> et un <code>README.md</code> complet, avec la déclaration d'usage de l'IA.</li>
       <li>Des commits réguliers ont été poussés, avec des messages clairs.</li>
       <li>Vous pouvez expliquer <strong>chaque ligne</strong> de votre code.</li>
     </ul>

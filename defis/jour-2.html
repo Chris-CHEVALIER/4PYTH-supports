@@ -28,7 +28,7 @@
     <ul>
       <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot.</li>
       <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
-      <li>Un fichier par défi : <code>defi4.py</code>, <code>defi5.py</code> et <code>defi6.py</code>.</li>
+      <li>Un fichier par défi : <code>challenge4.py</code>, <code>challenge5.py</code> et <code>challenge6.py</code>.</li>
       <li><strong>Validation</strong> : levez la main, exécutez votre code devant moi puis répondez à une question sur votre code.</li>
       <li><strong>Notation</strong> : non fait (0), partiel (1) ou réussi (2). Les défis comptent pour 10 % de la note du module.</li>
       <li><strong>Parcours confirmé</strong> : validez ces trois défis puis passez aux défis avancés.</li>
@@ -47,7 +47,7 @@
     <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">Octets · mode binaire · dictionnaires</span><span class="etiquette ambre">Forensic</span></div>
 
     <p>
-      Un attaquant a glissé un exécutable Windows dans une pièce jointe nommée <code>facture.pdf</code>. L'extension ment,
+      Un attaquant a glissé un exécutable Windows dans une pièce jointe nommée <code>invoice.pdf</code>. L'extension ment,
       mais les premiers octets du fichier, ses <strong>magic bytes</strong>, disent la vérité. Votre mission : écrire l'outil
       qui démasque les fichiers déguisés.
     </p>
@@ -73,32 +73,32 @@
       }
 
       SAMPLES = {
-          "rapport.pdf": b"%PDF-1.7\n% rapport d'audit",
+          "report.pdf": b"%PDF-1.7\n% rapport d'audit",
           "logo.png": b"\x89PNG\r\n\x1a\n image",
           "photo.jpg": b"\x89PNG\r\n\x1a\n image",
           "archive.zip": b"PK\x03\x04 contenu",
-          "facture.pdf": b"MZ\x90\x00 programme Windows",
+          "invoice.pdf": b"MZ\x90\x00 programme Windows",
           "notes.txt": b"Liste des serveurs a auditer",
       }
     </code></pre>
 
     <h3>Exemples attendus</h3>
     <pre data-titre="Résultats attendus"><code class="language-python">
-      create_samples("echantillons")
+      create_samples("samples")
 
-      print(detect_type("echantillons/photo.jpg"))
+      print(detect_type("samples/photo.jpg"))
       # png
 
-      print(check_extension("echantillons/facture.pdf"))
+      print(check_extension("samples/invoice.pdf"))
       # (False, 'exe')
 
-      scan("echantillons")
+      scan("samples")
       # [OK] archive.zip
-      # [ALERTE] facture.pdf est en réalité un exe
+      # [ALERTE] invoice.pdf est en réalité un exe
       # [OK] logo.png
       # [?] notes.txt : type inconnu
       # [ALERTE] photo.jpg est en réalité un png
-      # [OK] rapport.pdf
+      # [OK] report.pdf
     </code></pre>
 
     <details>
@@ -115,7 +115,7 @@
     <div class="encadre">
       <span class="intitule">Pour valider, montrez-moi…</span>
       <ul>
-        <li>le dossier <code>echantillons</code> créé par votre programme ;</li>
+        <li>le dossier <code>samples</code> créé par votre programme ;</li>
         <li>les trois exemples ci-dessus, qui donnent exactement ces résultats.</li>
       </ul>
     </div>
@@ -140,7 +140,7 @@
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Créez un dossier <code>surveille</code> contenant les trois fichiers de <code>INITIAL_FILES</code>.</li>
+      <li>Créez un dossier <code>monitored</code> contenant les trois fichiers de <code>INITIAL_FILES</code>.</li>
       <li>Écrivez <code>sha256_file(path)</code>, qui renvoie l'empreinte SHA-256 d'un fichier lu <strong>par blocs</strong>.</li>
       <li>Écrivez <code>build_baseline(folder)</code>, qui renvoie un dictionnaire <code>{nom du fichier: empreinte}</code>.</li>
       <li>Écrivez <code>save_baseline(baseline, json_path)</code> et <code>load_baseline(json_path)</code>.</li>
@@ -168,14 +168,14 @@
 
     <h3>Exemples attendus</h3>
     <pre data-titre="Résultats attendus"><code class="language-python">
-      reference = build_baseline("surveille")
+      reference = build_baseline("monitored")
       print(reference["config.txt"])
       # 4e6c73486e42ac00fdf8ded97f2487a1d3849ed636b4a1420e436cc8476bf662
-      save_baseline(reference, "reference.json")
+      save_baseline(reference, "baseline.json")
 
       # ... intrusion ...
 
-      print(compare(load_baseline("reference.json"), build_baseline("surveille")))
+      print(compare(load_baseline("baseline.json"), build_baseline("monitored")))
       # {'added': ['backdoor.sh'], 'modified': ['config.txt'], 'deleted': ['backup.sh']}
     </code></pre>
     <p class="muet" style="font-size: 14px;">
@@ -190,14 +190,14 @@
         <li>Les <a href="https://docs.python.org/fr/3/tutorial/datastructures.html#sets" target="_blank">ensembles</a> font le gros du travail :
           <code>set(new) - set(old)</code> donne les noms présents seulement dans <code>new</code> ;
           <code>set(old) &amp; set(new)</code> ceux présents dans les deux.</li>
-        <li>Ne rangez pas <code>reference.json</code> dans le dossier surveillé. Devinez pourquoi !</li>
+        <li>Ne rangez pas <code>baseline.json</code> dans le dossier surveillé. Devinez pourquoi !</li>
       </ul>
     </details>
 
     <div class="encadre">
       <span class="intitule">Pour valider, montrez-moi…</span>
       <ul>
-        <li>le fichier <code>reference.json</code> ;</li>
+        <li>le fichier <code>baseline.json</code> ;</li>
         <li>le rapport après l'intrusion, qui donne exactement le résultat attendu.</li>
       </ul>
     </div>
@@ -237,7 +237,7 @@
         </ul>
       </li>
       <li>Écrivez <code>analyze(path, threshold=5)</code>, qui <strong>lit le fichier</strong> et renvoie la liste des alertes.</li>
-      <li>Affichez chaque alerte puis enregistrez-les toutes dans <code>rapport.json</code>.</li>
+      <li>Affichez chaque alerte puis enregistrez-les toutes dans <code>report.json</code>.</li>
     </ol>
 
     <details>
@@ -291,7 +291,7 @@
         <li>Revoyez les diapos « Attributs de classe ou d'instance », « Hériter d'une classe » et « Le polymorphisme » du cours 2.</li>
         <li><code>to_dict()</code> ne s'écrit <strong>qu'une fois</strong>, dans <code>Alert</code> : en appelant <code>self.describe()</code>,
           elle utilisera automatiquement la bonne version.</li>
-        <li>Pour que les accents restent lisibles dans <code>rapport.json</code> : <code>json.dump(…, indent=2, ensure_ascii=False)</code>.</li>
+        <li>Pour que les accents restent lisibles dans <code>report.json</code> : <code>json.dump(…, indent=2, ensure_ascii=False)</code>.</li>
       </ul>
     </details>
 
@@ -299,7 +299,7 @@
       <span class="intitule">Pour valider, montrez-moi…</span>
       <ul>
         <li>les trois exemples ci-dessus, qui donnent exactement ces résultats ;</li>
-        <li>le fichier <code>rapport.json</code> ouvert dans VS Code.</li>
+        <li>le fichier <code>report.json</code> ouvert dans VS Code.</li>
       </ul>
     </div>
 
@@ -307,7 +307,7 @@
     <ul>
       <li>Triez les alertes de la plus grave à la moins grave.</li>
       <li>Ajoutez une méthode <code>__str__</code> pour afficher une alerte avec un simple <code>print(alert)</code>.</li>
-      <li>Filtrez les alertes par sévérité grâce à un argument de la ligne de commande : <code>python defi6.py CRITICAL</code> (<code>sys.argv</code>).</li>
+      <li>Filtrez les alertes par sévérité grâce à un argument de la ligne de commande : <code>python challenge6.py CRITICAL</code> (<code>sys.argv</code>).</li>
     </ul>
   </section>
 
