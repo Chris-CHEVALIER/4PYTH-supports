@@ -27,7 +27,7 @@
     <span class="intitule">Règles du jeu</span>
     <ul>
       <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot. Désactivez-la dans VS Code.</li>
-      <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée, et même encouragée.</li>
+      <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
       <li>Un fichier par défi : <code>defi1.py</code>, <code>defi2.py</code> et <code>defi3.py</code>, dans votre dossier de travail avec son venv activé.</li>
       <li><strong>Validation</strong> : quand un défi est terminé, levez la main. Vous exécutez votre code devant moi, puis je vous pose une question sur votre code.</li>
       <li><strong>Notation</strong> : non fait (0), partiel (1) ou réussi (2). Les défis comptent pour 10 % de la note du module.</li>
@@ -65,7 +65,7 @@
     <ol>
       <li>Copiez la liste des mots de passe courants ci-dessous en haut de <code>defi1.py</code>.</li>
       <li>Écrivez une fonction <code>check_password(password)</code> qui renvoie <strong>un tuple</strong> de deux valeurs :
-        <code>True</code> ou <code>False</code>, et la liste des messages d'erreur (vide si le mot de passe est valide).</li>
+        <code>True</code> ou <code>False</code> puis la liste des messages d'erreur (vide si le mot de passe est valide).</li>
       <li>Testez-la avec les exemples attendus.</li>
     </ol>
 
@@ -116,7 +116,7 @@
     <ul>
       <li>Demandez un mot de passe à l'utilisateur <strong>jusqu'à ce qu'il soit valide</strong>, en affichant les règles non respectées à chaque essai.</li>
       <li>Masquez la saisie avec <a href="https://docs.python.org/fr/3/library/getpass.html" target="_blank"><code>getpass</code></a>, comme le fait <code>sudo</code>.</li>
-      <li>Réfléchissez : « correct horse battery staple » est long et difficile à deviner, et pourtant il est refusé. Ces règles sont-elles vraiment les bonnes ?</li>
+      <li>Réfléchissez : « correct horse battery staple » est long et difficile à deviner. Pourtant, il est refusé. Ces règles sont-elles vraiment les bonnes ?</li>
     </ul>
   </section>
 
@@ -213,14 +213,14 @@
     <p>
       Maintenant que l'application vérifie les mots de passe, elle doit aussi pouvoir en <strong>proposer</strong> de robustes
       à ses utilisateurs. Un générateur de secrets doit être imprévisible : vous utiliserez le module
-      <a href="https://docs.python.org/fr/3/library/secrets.html" target="_blank"><code>secrets</code></a>, et surtout pas <code>random</code>.
+      <a href="https://docs.python.org/fr/3/library/secrets.html" target="_blank"><code>secrets</code></a> et surtout pas <code>random</code>.
     </p>
 
     <h3>Votre mission</h3>
     <ol>
       <li>Écrivez <code>generate_password(length=16)</code>, qui renvoie un mot de passe aléatoire de <code>length</code> caractères.</li>
-      <li>Le mot de passe contient <strong>toujours</strong> au moins une majuscule, une minuscule, un chiffre et un caractère spécial,
-        et ces caractères ne sont pas toujours aux mêmes positions.</li>
+      <li>Le mot de passe contient <strong>toujours</strong> au moins une majuscule, une minuscule, un chiffre et un caractère spécial.
+        Ces caractères ne sont pas toujours aux mêmes positions.</li>
       <li>Si <code>length</code> est inférieur à 12, la fonction <strong>lève une <code>ValueError</code></strong>.</li>
       <li>Importez <code>check_password</code> depuis votre <code>defi1.py</code> et vérifiez que <strong>1 000 mots de passe générés</strong> sont tous valides.</li>
     </ol>
