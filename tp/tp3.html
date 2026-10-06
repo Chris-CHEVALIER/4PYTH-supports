@@ -57,7 +57,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-1">
     <h2><span class="num">1</span> Des objets aux dictionnaires</h2>
-    <div class="meta"><span class="etiquette">≈ 1 h</span><span class="etiquette clair">Méthodes · héritage · composition</span></div>
+    <div class="meta"><span class="etiquette clair">Méthodes · héritage · composition</span></div>
 
     <p>
       JSON ne connaît pas vos classes : <code>json.dumps(fleet)</code> provoque une <code>TypeError</code>. Chaque classe doit donc savoir
@@ -96,7 +96,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Revoyez la diapo « Sauvegarder des objets » du cours 3.</li>
+        <li>Revoyez la notion de sauvegarde d'objets avec <code>to_dict()</code>.</li>
         <li>Dans <code>Operator</code>, ne réécrivez pas les quatre clés de <code>Person</code> : partez de <code>super().to_dict()</code> puis complétez le dictionnaire.</li>
         <li>Dans <code>Spaceship</code> et <code>Fleet</code>, chaque objet contenu sait déjà se convertir : une boucle qui appelle leur <code>to_dict()</code> suffit.
           C'est la composition qui travaille pour vous.</li>
@@ -107,7 +107,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-2">
     <h2><span class="num">2</span> Sauvegarder et charger</h2>
-    <div class="meta"><span class="etiquette">≈ 1 h</span><span class="etiquette clair">JSON · fichiers · exceptions</span></div>
+    <div class="meta"><span class="etiquette clair">JSON · fichiers · exceptions</span></div>
 
     <p>Dans un nouveau fichier <code>storage.py</code>, écrivez :</p>
     <ol>
@@ -139,7 +139,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Revoyez les diapos « Écrire et lire du JSON » et « Charger sans planter » du cours 3.</li>
+        <li>Revoyez l'écriture et la lecture du JSON ainsi que le chargement robuste.</li>
         <li><code>json.dump(data, f, indent=2, ensure_ascii=False)</code> dans un fichier ouvert avec <code>encoding="utf-8"</code>.</li>
         <li>Dans un <code>except</code>, vous pouvez lever une nouvelle exception : <code>raise ValueError("…")</code>.</li>
       </ul>
@@ -149,7 +149,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-3">
     <h2><span class="num">3</span> Le menu</h2>
-    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">Menu · exceptions</span></div>
+    <div class="meta"><span class="etiquette clair">Menu · exceptions</span></div>
 
     <ol>
       <li>Ajoutez <strong>[7] Sauvegarder la flotte</strong> et <strong>[8] Charger une flotte</strong>.</li>
@@ -171,7 +171,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-4">
     <h2><span class="num">4</span> Testez comme un attaquant</h2>
-    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">Validation des entrées</span><span class="etiquette ambre">Sécurité</span></div>
+    <div class="meta"><span class="etiquette clair">Validation des entrées</span><span class="etiquette ambre">Sécurité</span></div>
 
     <p>
       Un fichier de sauvegarde se modifie avec n'importe quel éditeur de texte. Mettez-vous à la place d'un utilisateur malveillant :
@@ -200,7 +200,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-5">
     <h2><span class="num">5</span> Fichiers de test et README</h2>
-    <div class="meta"><span class="etiquette">≈ 15 min</span><span class="etiquette clair">Git · documentation</span></div>
+    <div class="meta"><span class="etiquette clair">Git · documentation</span></div>
 
     <ol>
       <li>Commitez <strong>deux fichiers de test</strong> dans votre dépôt : une sauvegarde valide (<code>fleet.json</code>) et une sauvegarde
@@ -224,7 +224,7 @@
     <ul>
       <li>Après chaque action du menu, un événement peut survenir au hasard : une <strong>attaque du Mulet</strong> endommage un vaisseau
         opérationnel. Ou bien des <strong>renforts</strong> rejoignent un vaisseau qui a encore de la place.</li>
-      <li>Utilisez le module <code>random</code> : il convient parfaitement pour un jeu. Rappel du cours 1 : jamais pour générer un secret !</li>
+      <li>Utilisez le module <code>random</code> : il convient parfaitement pour un jeu, jamais pour générer un secret !</li>
     </ul>
 
     <h3>Bonus 2 – Statistiques enrichies</h3>

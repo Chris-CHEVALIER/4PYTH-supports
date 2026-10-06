@@ -63,7 +63,7 @@
         <div>
           <div class="encadre">
             <p><strong>Python 2 ou Python 3 ?</strong></p>
-            <p>Python 2 n'est plus maintenu depuis le 1<sup>er</sup> janvier 2020. Pourtant, beaucoup de vieux scripts d'exploit sont encore écrits en Python 2 : il faut savoir les reconnaître et les adapter.</p>
+            <p>Python 2 n'est plus maintenu depuis le 1<sup>er</sup> janvier 2020. Pourtant, beaucoup de vieux scripts sont encore écrits en Python 2 : il faut savoir les reconnaître et les adapter.</p>
           </div>
           <pre data-titre="Reconnaître la version"><code class="language-python" data-trim>
 print "pwned"    # Python 2
@@ -150,7 +150,7 @@ $ python3 scan.py    # macOS / Linux
         <div class="dense">
           <ul>
             <li>Sans venv, tous les paquets s'installent <strong>au même endroit</strong> : deux projets qui exigent deux versions d'une même bibliothèque entrent en conflit</li>
-            <li>Un venv est un dossier <code>.venv</code> <strong>propre au projet</strong>, avec son Python et ses paquets</li>
+            <li>Un venv (<em>virtual environment</em>, environnement virtuel) est un dossier <code>.venv</code> <strong>propre au projet</strong>, avec son Python et ses paquets</li>
             <li><strong>Aucun droit administrateur</strong> nécessaire</li>
             <li><strong>Reproductible</strong> : la liste des paquets tient dans un fichier</li>
           </ul>
@@ -158,7 +158,7 @@ $ python3 scan.py    # macOS / Linux
         <div>
           <div class="encadre marine">
             <p><strong>Côté cyber</strong></p>
-            <p>Chaque outil (Impacket, pwntools…) dans son propre venv : pas de conflit et vous savez exactement ce qui est installé.</p>
+            <p>Chaque outil de sécurité installé dans son propre venv : pas de conflit entre outils et vous savez exactement ce qui est installé sur votre machine.</p>
           </div>
           <div class="encadre" style="margin-top: 16px;">
             <p><strong>Attention au typosquatting</strong></p>
@@ -187,7 +187,11 @@ python3 -m venv .venv
 source .venv/bin/activate
         </code></pre>
       </div>
-      <p>Une fois activé, l'invite affiche <code>(.venv)</code> et la commande <code>python</code> utilise le Python du venv, sur tous les systèmes.</p>
+      <ul class="dense">
+        <li><code>python -m venv .venv</code> <strong>crée</strong> le venv, une seule fois par projet</li>
+        <li><code>activate</code> <strong>active</strong> le venv dans le terminal ouvert : les commandes <code>python</code> et <code>pip</code> utilisent désormais le Python et les paquets du venv plutôt que ceux de l'ordinateur</li>
+        <li>L'invite affiche <code>(.venv)</code> : c'est le signe que le venv est actif</li>
+      </ul>
       <div class="encadre">
         <strong>PowerShell refuse l'activation</strong> (« l'exécution de scripts est désactivée sur ce système ») ? Une seule fois :
         <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>
@@ -204,16 +208,17 @@ pip install requests        # installer un paquet
 pip list                    # paquets installés
 pip freeze &gt; requirements.txt
 pip install -r requirements.txt
-deactivate                  # quitter le venv
+deactivate                  # désactiver le venv
         </code></pre>
         <pre data-titre=".gitignore"><code class="language-plaintext" data-trim>
 .venv/
 __pycache__/
         </code></pre>
       </div>
-      <ul>
+      <ul class="dense">
+        <li><strong>Activez toujours le venv avant <code>pip install</code></strong>, sinon le paquet s'installe sur tout l'ordinateur. L'activation vaut pour un terminal : à chaque nouveau terminal, on réactive. <code>deactivate</code> revient au Python de l'ordinateur</li>
         <li><code>requirements.txt</code> liste les paquets et leurs versions : <strong>on le versionne</strong> dans Git</li>
-        <li>Le dossier <code>.venv</code> se recrée en une commande : <strong>on ne le versionne jamais</strong></li>
+        <li><code>.venv</code> se recrée en une commande et <code>__pycache__</code> contient le code déjà compilé que Python garde pour démarrer plus vite : <strong>on ne versionne ni l'un ni l'autre</strong></li>
       </ul>
     </div>
   </section>
@@ -232,14 +237,14 @@ __pycache__/
     <div class="corps">
       <div class="colonnes code-texte">
         <div>
-          <p>Une variable est une <strong>boîte étiquetée</strong> : le nom est l'étiquette, la valeur est le contenu. On la crée avec <code>=</code>.</p>
+          <p>Une variable est une <strong>boîte étiquetée</strong> : le nom est l'étiquette, la valeur est le contenu. On la crée avec <strong>l'opérateur d'affectation</strong> <code>=</code>.</p>
           <pre data-titre="variables.py"><code class="language-python" data-trim>
-username = "alice"
+username = "Chris"
 failed_attempts = 0
 MAX_ATTEMPTS = 3        # constante : majuscules
 
 failed_attempts = failed_attempts + 1
-print(username, failed_attempts)   # alice 1
+print(username, failed_attempts)   # Chris 1
 </code></pre>
         </div>
         <div class="dense">
@@ -250,6 +255,7 @@ print(username, failed_attempts)   # alice 1
             <li>Sensible à la casse : <code>user</code> et <code>User</code> sont deux variables différentes</li>
             <li>Constantes en MAJUSCULES : <code>MAX_ATTEMPTS</code></li>
           </ul>
+          <p class="petit muet">La <strong>PEP 8</strong> (<em>Python Enhancement Proposal</em> n° 8) est le guide officiel de style du code Python : nommage, indentation, longueur des lignes…</p>
         </div>
       </div>
     </div>
@@ -279,7 +285,8 @@ print(type(last_login))   # &lt;class 'NoneType'&gt;
           <tr><td><code>None</code></td><td>absence de valeur</td></tr>
         </table>
       </div>
-      <p class="petit muet">Python devine le type tout seul (typage dynamique) ; <code>type()</code> permet de le vérifier. Les octets (<code>bytes</code>) viendront au cours 3.</p>
+      <p class="petit muet"><strong>Typage dynamique</strong> : le type est porté par la valeur et déterminé à l'exécution, on ne le déclare pas ; <code>type()</code> permet de le vérifier.
+        Le <a href="https://www.first.org/cvss/" target="_blank">score CVSS</a> note la gravité d'une vulnérabilité de 0 à 10.</p>
     </div>
   </section>
 
@@ -300,11 +307,11 @@ print("Port " + label)      # Port 443
 </code></pre>
         <div>
           <div class="encadre">
-            <strong><code>input()</code> renvoie toujours une chaîne</strong>, même si l'utilisateur tape un nombre. Pour calculer, il faut convertir avec <code>int()</code> ou <code>float()</code>.
+            <strong><code>input()</code> renvoie toujours une chaîne de caractères</strong>, même si l'utilisateur tape un nombre. Pour calculer, il faut convertir avec <code>int()</code> ou <code>float()</code>.
           </div>
           <ul class="dense" style="margin-top: 16px;">
             <li><code>print()</code> affiche une ou plusieurs valeurs, séparées par des espaces</li>
-            <li><code>int("https")</code> provoque une erreur <code>ValueError</code> : on verra comment la gérer en partie #7</li>
+            <li><strong>Concaténation</strong> : l'opérateur <code>+</code> colle deux chaînes de caractères bout à bout. Les deux côtés doivent être des chaînes : d'où le <code>str(443)</code></li>
           </ul>
         </div>
       </div>
@@ -364,7 +371,8 @@ print(f"CVSS : {9.8123:.1f}")      # CVSS : 9.8
           <tr><td><code>x in s</code></td><td><code>s</code> contient <code>x</code> ?</td></tr>
         </table>
       </div>
-      <p class="petit">La <strong>f-string</strong> (<code>f"…{variable}…"</code>) insère des valeurs dans un texte : c'est la façon moderne de construire un message.</p>
+      <p class="petit">La <strong>f-string</strong> (<code>f"…{variable}…"</code>) est une <strong>concaténation moderne</strong> : au lieu de coller des morceaux avec <code>+</code>,
+        on insère les valeurs directement dans le texte. <code>"Échec pour " + user</code> devient <code>f"Échec pour {user}"</code>, sans conversion avec <code>str()</code>.</p>
     </div>
     <aside class="notes">
       Exemple tiré d'un vrai journal SSH (/var/log/auth.log). Le découpage de ligne resservira dans le défi 2.
@@ -429,11 +437,11 @@ print(port == 443, port != 443, port &gt; 1024)
             <tr><td><code>&gt;</code> / <code>&gt;=</code></td><td>supérieur / ou égal</td></tr>
           </table>
           <div class="encadre" style="margin-top: 16px;">
-            <strong><code>%</code> (modulo)</strong> est au cœur de la cryptographie : chiffre de César, Diffie-Hellman, RSA. Vous le retrouverez en Cryptologie.
+            <strong><code>%</code> (modulo)</strong> donne le reste d'une division : il permet de « faire le tour » d'un cycle (les heures d'une horloge, les lettres d'un alphabet). Il est très utilisé en cryptographie.
           </div>
         </div>
       </div>
-      <p class="petit"><strong>Ne pas confondre</strong> : <code>=</code> affecte une valeur, <code>==</code> compare deux valeurs.</p>
+      <p class="petit"><strong>Ne pas confondre</strong> : <code>=</code> affecte une valeur, <code>==</code> compare deux valeurs. L'opérateur <code>===</code> de JavaScript ou de PHP <strong>n'existe pas</strong> en Python.</p>
     </div>
   </section>
 
@@ -513,8 +521,8 @@ match command:
           <li>Compare une valeur à plusieurs <strong>motifs</strong>, du premier au dernier</li>
           <li><code>|</code> signifie « ou »</li>
           <li><code>_</code> est le cas par défaut</li>
-          <li>Disponible depuis Python 3.10</li>
-          <li>Idéal pour un <strong>menu</strong> : vous l'utiliserez dans le TP1</li>
+          <li>Disponible depuis Python 3.10 : c'est l'équivalent du bloc <code>switch</code> / <code>case</code> de nombreux langages (C, Java, JavaScript…)</li>
+          <li>Idéal pour un <strong>menu</strong></li>
         </ul>
       </div>
     </div>
@@ -547,7 +555,7 @@ print(open_ports[-2:])      # [443, 3306]
         </code></pre>
         <ul class="dense">
           <li>Une collection <strong>ordonnée</strong> et <strong>modifiable</strong>, entre crochets <code>[]</code></li>
-          <li>Indices et découpage fonctionnent <strong>comme pour les chaînes</strong> : <code>logs[-10:]</code> donne les 10 dernières lignes</li>
+          <li>Indices et découpage fonctionnent <strong>comme pour les chaînes de caractères</strong> : <code>liste[-2:]</code> part du 2<sup>e</sup> élément en partant de la fin et va jusqu'au bout. <code>logs[-10:]</code> donne ainsi les 10 dernières lignes d'un journal</li>
           <li><code>remove()</code> retire la <strong>première</strong> occurrence trouvée</li>
           <li>Toutes les méthodes : <a href="https://docs.python.org/fr/3/tutorial/datastructures.html" target="_blank">documentation officielle</a></li>
         </ul>
@@ -591,7 +599,7 @@ print("10.0.0.9" in unique_ips)    # True
     <div class="corps">
       <div class="colonnes code-texte">
         <pre data-titre="account.py" class="compact"><code class="language-python" data-trim>
-user = {"username": "alice", "role": "analyst",
+user = {"username": "Chris", "role": "analyst",
         "mfa": True}
 
 print(user["role"])              # analyst
@@ -619,14 +627,14 @@ print(list(user.keys()))
       <div class="colonnes code-texte">
         <pre data-titre="accounts.py" class="compact"><code class="language-python" data-trim>
 accounts = [
-    {"username": "alice", "role": "admin"},
-    {"username": "bob", "role": "analyst"},
+    {"username": "Chris", "role": "admin"},
+    {"username": "Manon", "role": "analyst"},
 ]
-new_account = {"username": "carol", "role": "guest"}
+new_account = {"username": "Cosmo", "role": "guest"}
 accounts.append(new_account)
 
 print(len(accounts))              # 3
-print(accounts[1]["username"])    # bob
+print(accounts[1]["username"])    # Manon
 </code></pre>
         <table class="dense" style="font-size: .68em;">
           <tr><th></th><th>Ordre</th><th>Modifiable</th><th>Doublons</th></tr>
@@ -637,7 +645,7 @@ print(accounts[1]["username"])    # bob
         </table>
       </div>
       <div class="encadre marine">
-        Une <strong>liste de dictionnaires</strong> représente une table d'enregistrements : c'est exactement la structure de l'équipage du TP1.
+        Une <strong>liste de dictionnaires</strong> représente une table d'enregistrements, comme les lignes d'un tableur ou d'une base de données.
       </div>
     </div>
   </section>
@@ -667,7 +675,7 @@ for i in range(1, 4):     # 1, 2, 3
 for i, port in enumerate(open_ports, 1):
     print(i, port)   # 1 22 / 2 80 / 3 443
 
-user = {"name": "alice", "role": "admin"}
+user = {"name": "Chris", "role": "admin"}
 for key, value in user.items():
     print(f"{key} = {value}")
 </code></pre>
@@ -699,9 +707,10 @@ while True:
         </code></pre>
         <div>
           <ul class="dense">
-            <li><code>while condition:</code> répète <strong>tant que</strong> la condition est vraie</li>
-            <li><code>while True:</code> tourne indéfiniment : on en sort avec <code>break</code> (c'est le menu du TP1)</li>
-            <li><code>continue</code> passe directement au tour suivant</li>
+            <li><code>while cond:</code> répète <strong>tant que</strong> la condition est vraie</li>
+            <li><code>while True:</code> sans fin, sauf <code>break</code></li>
+            <li><code>continue</code> passe au tour suivant</li>
+            <li>⚠ <strong>Boucle infinie</strong> : prévoyez toujours une sortie (<kbd>Ctrl</kbd> + <kbd>C</kbd> pour l'interrompre)</li>
           </ul>
           <pre data-titre="continue.py" class="compact"><code class="language-python" data-trim>
 for port in [21, 22, 80]:
@@ -721,10 +730,10 @@ for port in [21, 22, 80]:
     <h2>Compter avec un dictionnaire</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="failures.py" class="compact"><code class="language-python" data-trim>
+        <pre data-titre="failures.py" class="mini"><code class="language-python" data-trim>
 log = [
     "Failed password for root from 10.0.0.5",
-    "Accepted password for alice from 10.0.0.9",
+    "Accepted password for Chris from 10.0.0.9",
     "Failed password for admin from 10.0.0.5",
 ]
 failures = {}
@@ -739,10 +748,12 @@ print(failures)        # {'10.0.0.5': 2}
             <li><code>failures.get(ip, 0)</code> renvoie le compteur actuel ou <code>0</code> si l'IP est nouvelle</li>
             <li>On ajoute 1 et on enregistre le résultat sous la même clé</li>
           </ul>
-          <div class="encadre" style="margin-top: 14px;">
-            C'est le principe de la <strong>détection de brute force</strong> utilisée par fail2ban ou un SIEM : compter les échecs par source, puis alerter au-delà d'un seuil. Vous l'appliquerez dans le défi 2.
-          </div>
+
         </div>
+      </div>
+      <div class="encadre" style="margin-top: 12px; padding: 10px 18px;">
+        <strong>Détection de brute force</strong> : compter les échecs par source, puis alerter au-delà d'un seuil. C'est ce que font
+        <a href="https://github.com/fail2ban/fail2ban" target="_blank">fail2ban</a> (blocage des IP insistantes) et les <strong>SIEM</strong> (<em>Security Information and Event Management</em>), outils centraux d'un SOC.
       </div>
     </div>
   </section>
@@ -807,11 +818,35 @@ print(format_alert("10.0.0.5", level="HIGH"))
 </code></pre>
         <ul class="dense">
           <li><code>def nom(paramètres):</code> définit un bloc réutilisable</li>
-          <li><code>return</code> <strong>renvoie</strong> un résultat et termine la fonction</li>
+          <li><code>return</code> <strong>renvoie</strong> un résultat et termine la fonction. Il n'est pas obligatoire : sans <code>return</code>, la fonction renvoie <code>None</code> (on parle alors parfois de <strong>procédure</strong>)</li>
           <li>La <strong>docstring</strong> (<code>"""…"""</code>) documente la fonction</li>
           <li><code>level="INFO"</code> : valeur <strong>par défaut</strong>, utilisée si l'argument est omis</li>
-          <li>Nommez vos fonctions avec un <strong>verbe</strong> : une fonction, une tâche</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Les bonnes pratiques</h2>
+    <div class="corps">
+      <div class="colonnes c3">
+        <div class="carte">
+          <h3>Ne pas se répéter</h3>
+          Un même code copié à plusieurs endroits devient une fonction : on le corrige alors à un seul endroit
+          (principe <strong>DRY</strong>, <em>Don't Repeat Yourself</em>).
+        </div>
+        <div class="carte">
+          <h3>Une fonction, une tâche</h3>
+          Des fonctions courtes, <strong>15 lignes au maximum</strong>. Plus longue, elle fait plusieurs choses : découpez-la.
+        </div>
+        <div class="carte">
+          <h3>Rester générique</h3>
+          Passez les valeurs en <strong>paramètres</strong> plutôt que de les écrire en dur : <code>is_valid_port(port)</code> sert pour n'importe quel port.
+        </div>
+      </div>
+      <div class="encadre marine" style="margin-top: 24px;">
+        <strong>Bien nommer</strong> : un verbe pour une fonction (<code>check_password</code>, <code>count_failures</code>), comme pour les variables et les fichiers.
+        En anglais, en <code>snake_case</code> et explicite : on doit comprendre ce que fait la fonction sans lire son code.
       </div>
     </div>
   </section>
@@ -819,22 +854,27 @@ print(format_alert("10.0.0.5", level="HIGH"))
   <section>
     <h2>Portée et retours multiples</h2>
     <div class="corps">
-      <pre data-titre="parse.py" class="compact"><code class="language-python" data-trim>
+      <div class="colonnes code-texte">
+        <div>
+          <pre data-titre="parse.py" class="compact"><code class="language-python" data-trim>
 def parse_login(line):
-    words = line.split(" ")         # variable locale
-    return words[3], words[-1]      # renvoie un tuple
+    words = line.split(" ")     # locale
+    return words[3], words[-1]  # un tuple
 
-user, ip = parse_login("Failed password for root from 10.0.0.5")
-print(user, ip)                     # root 10.0.0.5
-print(words)                        # erreur !
+log = "Failed password for root from 10.0.0.5"
+user, ip = parse_login(log)
+print(user, ip)     # root 10.0.0.5
+print(words)        # erreur !
       </code></pre>
-      <div class="colonnes">
-        <pre data-titre="Terminal" class="compact"><code class="language-plaintext" data-trim>
+          <pre data-titre="Terminal" class="compact"><code class="language-plaintext" data-trim>
 NameError: name 'words' is not defined
         </code></pre>
+        </div>
         <ul class="dense">
-          <li>Une variable créée dans une fonction est <strong>locale</strong> : elle disparaît à la sortie</li>
-          <li>Pour renvoyer plusieurs valeurs, on renvoie un <strong>tuple</strong>, puis on le déballe</li>
+          <li>Variable créée dans une fonction : <strong>locale</strong>, elle n'existe que dans la fonction et disparaît à sa sortie</li>
+          <li>Variable créée hors de toute fonction : <strong>globale</strong>, à éviter dans les fonctions (passez-la en paramètre)</li>
+          <li>Un <code>if</code> ou une boucle <strong>ne crée pas de portée</strong> : une variable créée dans un bloc reste accessible après lui. Seules les fonctions et les classes en créent une</li>
+          <li>Pour renvoyer plusieurs valeurs : un <strong>tuple</strong>, que l'on déballe</li>
         </ul>
       </div>
     </div>
@@ -863,15 +903,33 @@ print(is_valid_port(-1))           # False
 </code></pre>
       </div>
       <ul class="dense">
-        <li>Tout fichier <code>.py</code> est un <strong>module</strong> importable depuis un fichier du même dossier : c'est ce que fera votre <code>main.py</code> avec <code>crew.py</code> dans le TP1</li>
+        <li>Tout fichier <code>.py</code> est un <strong>module</strong> importable depuis un fichier du même dossier</li>
         <li><code>if __name__ == "__main__":</code> contient le code exécuté <strong>seulement</strong> quand on lance le fichier directement, pas quand on l'importe</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2><code>random</code> ou <code>secrets</code> ?</h2>
+    <h2>La boîte à outils de la bibliothèque standard</h2>
     <div class="corps">
+      <table>
+        <tr><th style="width: 190px;">Module</th><th>Usage en cybersécurité</th></tr>
+        <tr><td><code>os</code>, <code>pathlib</code></td><td>parcourir des dossiers, manipuler des chemins</td></tr>
+        <tr><td><code>sys</code>, <code>argparse</code></td><td>lire les arguments d'un outil en ligne de commande</td></tr>
+        <tr><td><code>re</code></td><td>rechercher des motifs dans des journaux (expressions régulières)</td></tr>
+        <tr><td><code>datetime</code></td><td>horodater, comparer des dates d'événements</td></tr>
+        <tr><td><code>secrets</code></td><td>générer mots de passe et jetons</td></tr>
+        <tr><td><code>hashlib</code>, <code>json</code></td><td>calculer des empreintes (hash), sauvegarder des données</td></tr>
+        <tr><td><code>socket</code></td><td>communiquer sur le réseau</td></tr>
+      </table>
+      <p class="petit" style="margin-top: 14px;">Référence complète : <a href="https://docs.python.org/fr/3/library/index.html" target="_blank">la bibliothèque standard de Python</a>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Zoom : <code>random</code> ou <code>secrets</code> ?</h2>
+    <div class="corps">
+      <p class="petit" style="margin-bottom: 10px;">Deux modules de la bibliothèque standard produisent du hasard… mais un seul convient à la sécurité.</p>
       <div class="colonnes">
         <div>
           <p class="ko">✗ random : prévisible</p>
@@ -901,29 +959,12 @@ print(c)         # une lettre au hasard
         </div>
       </div>
       <div class="encadre">
-        <code>random</code> est un générateur <strong>pseudo-aléatoire</strong> : qui connaît son état peut prédire la suite. Il convient aux jeux et aux simulations (événements du TP1), <strong>jamais</strong> à un mot de passe, un jeton ou une clé : pour cela, <code>secrets</code>.
+        <code>random</code> est <strong>pseudo-aléatoire</strong> : qui connaît son état prédit la suite. Parfait pour un jeu, <strong>jamais</strong> pour un mot de passe, un jeton ou une clé : utilisez <code>secrets</code>.
       </div>
     </div>
     <aside class="notes">
       Le défi 3 consiste à écrire le générateur de mots de passe complet avec secrets : je ne donne donc pas la solution ici.
     </aside>
-  </section>
-
-  <section>
-    <h2>La boîte à outils de la bibliothèque standard</h2>
-    <div class="corps">
-      <table>
-        <tr><th style="width: 190px;">Module</th><th>Usage en cybersécurité</th></tr>
-        <tr><td><code>os</code>, <code>pathlib</code></td><td>parcourir des dossiers, manipuler des chemins</td></tr>
-        <tr><td><code>sys</code>, <code>argparse</code></td><td>lire les arguments d'un outil en ligne de commande</td></tr>
-        <tr><td><code>re</code></td><td>rechercher des motifs dans des journaux (expressions régulières)</td></tr>
-        <tr><td><code>datetime</code></td><td>horodater, comparer des dates d'événements</td></tr>
-        <tr><td><code>secrets</code></td><td>générer mots de passe et jetons</td></tr>
-        <tr><td><code>hashlib</code>, <code>json</code></td><td>empreintes, sauvegarde de données : <strong>cours 3</strong></td></tr>
-        <tr><td><code>socket</code></td><td>communications réseau : modules suivants</td></tr>
-      </table>
-      <p class="petit" style="margin-top: 14px;">Référence complète : <a href="https://docs.python.org/fr/3/library/index.html" target="_blank">la bibliothèque standard de Python</a>.</p>
-    </div>
   </section>
 
   <!-- ================================================================== -->
@@ -983,10 +1024,9 @@ print(f"Scan du port {ask_port()}")
 </code></pre>
         <ul class="dense">
           <li><code>try</code> : le code qui peut échouer</li>
-          <li><code>except ValueError</code> : ce qu'on fait <strong>si cette erreur précise</strong> survient ; le programme ne plante plus</li>
+          <li><code>except ValueError</code> : ce qu'on fait <strong>si cette erreur précise</strong> survient ; le programme ne plante plus. C'est l'équivalent du <code>catch</code> d'autres langages (Java, JavaScript, PHP)</li>
           <li><code>else</code> : exécuté <strong>seulement si</strong> aucune erreur n'a eu lieu</li>
-          <li><code>raise</code> : <strong>lever</strong> soi-même une erreur quand une valeur est inacceptable</li>
-          <li>Ce schéma rend le menu du TP1 robuste aux saisies invalides</li>
+          <li><code>raise</code> : <strong>lever</strong> soi-même une erreur quand une valeur est inacceptable. C'est l'équivalent du <code>throw</code> d'autres langages</li>
         </ul>
       </div>
     </div>
@@ -1018,7 +1058,7 @@ except ValueError:
       <ul class="dense">
         <li>Un <code>except: pass</code> <strong>masque les anomalies</strong>, y compris une tentative d'attaque : on attrape toujours une erreur <strong>précise</strong></li>
         <li>N'affichez jamais un traceback complet à l'utilisateur : chemins, versions et noms de fichiers sont une <strong>fuite d'informations</strong> précieuse pour un attaquant</li>
-        <li>Le détail de l'erreur se consigne dans un <strong>journal</strong>, côté serveur : on verra comment au cours 3</li>
+        <li>Le détail de l'erreur se consigne dans un <strong>journal</strong>, côté serveur</li>
       </ul>
     </div>
   </section>

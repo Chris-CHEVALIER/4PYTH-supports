@@ -56,12 +56,12 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-0">
     <h2><span class="num">0</span> Le dépôt GitHub</h2>
-    <div class="meta"><span class="etiquette">≈ 10 min</span><span class="etiquette clair">Git · venv</span></div>
+    <div class="meta"><span class="etiquette clair">Git · venv</span></div>
 
     <p>Tout le projet vit dans <strong>un seul dépôt</strong>, que vous enrichirez de TP en TP.</p>
 
     <ol>
-      <li>Créez un dossier de projet, son environnement virtuel et initialisez Git :
+      <li>Créez un dossier de projet et son environnement virtuel, puis initialisez votre dépôt Git :
         <pre data-titre="Terminal"><code class="language-bash">
           mkdir 4pyth-fondation
           cd 4pyth-fondation
@@ -93,7 +93,7 @@
     <details>
       <summary>Premier commit de votre vie ? Git vous demande votre identité</summary>
       <pre data-titre="Terminal – une seule fois par machine"><code class="language-bash">
-        git config --global user.name "Prénom Nom"
+        git config --global user.name "Nom d'utilisateur"
         git config --global user.email "adresse@exemple.fr"
       </code></pre>
       <p>Utilisez l'adresse de votre compte GitHub.</p>
@@ -103,7 +103,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-1">
     <h2><span class="num">1</span> L'équipage</h2>
-    <div class="meta"><span class="etiquette">≈ 10 min</span><span class="etiquette clair">Listes · dictionnaires</span></div>
+    <div class="meta"><span class="etiquette clair">Listes · dictionnaires</span></div>
 
     <p>
       L'équipage est une <strong>liste</strong> de membres. Chaque membre est un <strong>dictionnaire</strong> contenant cinq clés :
@@ -111,7 +111,7 @@
     <table>
       <tr><th>Clé</th><th>Contenu</th><th>Type</th></tr>
       <tr><td><code>first_name</code></td><td>prénom</td><td><code>str</code></td></tr>
-      <tr><td><code>last_name</code></td><td>nom de famille</td><td><code>str</code></td></tr>
+      <tr><td><code>last_name</code></td><td>nom de famille, <strong>unique</strong> dans l'équipage</td><td><code>str</code></td></tr>
       <tr><td><code>gender</code></td><td><code>"F"</code> ou <code>"M"</code></td><td><code>str</code></td></tr>
       <tr><td><code>age</code></td><td>âge en années</td><td><code>int</code></td></tr>
       <tr><td><code>role</code></td><td>un rôle de la liste autorisée (voir étape 2)</td><td><code>str</code></td></tr>
@@ -172,19 +172,19 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-2">
     <h2><span class="num">2</span> Les fonctions de gestion</h2>
-    <div class="meta"><span class="etiquette">≈ 50 min</span><span class="etiquette clair">Fonctions · conditions · boucles · exceptions</span></div>
+    <div class="meta"><span class="etiquette clair">Fonctions · conditions · boucles · exceptions</span></div>
 
     <p>Dans un fichier <code>crew.py</code>, écrivez les quatre fonctions suivantes. Chacune reçoit l'équipage en paramètre.</p>
 
     <h3><code>add_member(crew)</code> – Ajouter un membre</h3>
     <ol>
       <li>Demande le prénom, le nom de famille, le genre, l'âge et le rôle du nouveau membre avec <code>input()</code>.</li>
-      <li>Refuse toute saisie invalide et redemande tant qu'elle n'est pas correcte :
+      <li>Refuse toute saisie invalide et, grâce à une <strong>boucle <code>while</code></strong>, la redemande tant qu'elle n'est pas correcte :
         <ul>
           <li>prénom et nom de famille : <strong>entre 3 et 15 caractères</strong> ;</li>
           <li>nom de famille <strong>unique</strong> dans l'équipage, sans tenir compte de la casse ;</li>
           <li>genre : <code>"F"</code> ou <code>"M"</code> ;</li>
-          <li>âge : un <strong>nombre entier</strong>. Une saisie comme <code>vingt</code> ne doit pas faire planter le programme ;</li>
+          <li>âge : un <strong>nombre entier</strong> écrit en chiffres. Une saisie comme <code>vingt</code> est refusée (on ne la convertit pas en 20) et ne doit pas faire planter le programme ;</li>
           <li>rôle : uniquement une valeur de la liste <code>ROLES</code>, sans tenir compte de la casse.</li>
         </ul>
       </li>
@@ -210,7 +210,7 @@
 
     <h3><code>display_crew(crew)</code> – Afficher l'équipage</h3>
     <ol>
-      <li>Affiche chaque membre sur une ligne, numérotée.</li>
+      <li>Affiche toutes les informations de chaque membre sur une ligne, numérotée.</li>
       <li>Affiche un message si l'équipage est vide.</li>
     </ol>
 
@@ -218,7 +218,7 @@
     <ol>
       <li>Vérifie que l'équipage compte <strong>au moins 2 membres</strong>, dont <strong>au moins un pilote et un technicien</strong>.</li>
       <li>Affiche <code>L'équipage est prêt pour la mission !</code> ou, sinon, ce qui manque.</li>
-      <li>Renvoie <code>True</code> ou <code>False</code> : le TP2 en aura besoin.</li>
+      <li>Renvoie <code>True</code> ou <code>False</code>.</li>
     </ol>
 
     <details>
@@ -228,7 +228,7 @@
           une saisie valide vous servira pour l'âge… et pour le menu de l'étape 3.</li>
         <li>Même idée pour la recherche : une fonction <code>find_member(crew, last_name)</code> qui renvoie le membre ou <code>None</code>
           sert à la fois pour l'ajout (unicité) et pour la suppression.</li>
-        <li>Revoyez les diapos « <code>try</code>, <code>except</code>, <code>else</code>, <code>raise</code> » et « <code>while</code>,
+        <li>Revoyez les notions « <code>try</code>, <code>except</code>, <code>else</code>, <code>raise</code> » et « <code>while</code>,
           <code>break</code>, <code>continue</code> » du cours.</li>
       </ul>
     </details>
@@ -237,14 +237,15 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-3">
     <h2><span class="num">3</span> Le menu interactif</h2>
-    <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">while · match / case · modules</span></div>
+    <div class="meta"><span class="etiquette clair">while · match / case · modules</span></div>
 
     <ol>
       <li>Dans <code>main.py</code>, importez vos fonctions depuis <code>crew.py</code>.</li>
       <li>Affichez le menu dans une boucle <code>while True</code> et traitez le choix avec <code>match</code> / <code>case</code>.</li>
       <li>L'option <strong>[0] Quitter</strong> sort de la boucle. Les TP suivants ajouteront les options [5], [6], etc.</li>
       <li>Un choix invalide (<code>abc</code>, <code>7</code>…) affiche un message et <strong>ne fait jamais planter</strong> le programme.</li>
-      <li>Placez le lancement du menu sous <code>if __name__ == "__main__":</code>.</li>
+      <li>Placez le lancement du menu sous <code>if __name__ == "__main__":</code>. Ainsi, le menu ne démarre que si l'on exécute <code>main.py</code> directement
+        et pas si un autre fichier l'importe (pour réutiliser ses fonctions ou les tester, par exemple).</li>
     </ol>
 
     <pre data-titre="Proposition d'affichage"><code class="language-plaintext">
@@ -278,9 +279,9 @@
     <ul>
       <li>Au lancement, demandez un <strong>code d'accès</strong> avant d'afficher le menu. Masquez la saisie avec
         <a href="https://docs.python.org/fr/3/library/getpass.html" target="_blank"><code>getpass</code></a>.</li>
-      <li>Après <strong>3 codes incorrects</strong>, le terminal se verrouille et le programme s'arrête.</li>
-      <li>Votre code d'accès est écrit en clair dans votre code source… ce qui est une mauvaise pratique.
-        En production, on ne stocke que son empreinte, calculée par une fonction dédiée comme bcrypt ou argon2.</li>
+      <li>Après <strong>3 codes incorrects</strong>, le programme s'arrête.</li>
+      <li><strong>Pour votre culture (rien à coder)</strong> : votre code d'accès est écrit en clair dans votre code source, ce qui est une mauvaise pratique.
+        En production, on ne stocke jamais un secret en clair mais seulement son <strong>empreinte</strong> (<em>hash</em>), calculée par une fonction dédiée comme bcrypt ou argon2.</li>
     </ul>
 
     <h3>Bonus 2 – Contraintes d'âge</h3>

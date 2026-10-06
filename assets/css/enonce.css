@@ -1,3 +1,4 @@
+@import url("../fonts/outfit.css");
 /* ==========================================================================
    Pages d'énoncé (défis, TP) — charte graphique École Hexagone
    Page qu'on fait défiler, lisible à l'écran comme à l'impression
@@ -11,7 +12,7 @@
   --gris-clair: #EEF2F8;
   --ambre-clair: #FEF4DE;
   --bordure: #D5DDEA;
-  --police: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --police: "Outfit", Arial, "Helvetica Neue", Helvetica, sans-serif;
   --police-code: "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "Courier New", monospace;
 }
 

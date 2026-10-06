@@ -50,9 +50,9 @@
     <div class="corps">
       <div class="colonnes code-texte">
         <div>
-          <p>Au TP1, un membre d'équipage était un dictionnaire. Rien ne protège ses données :</p>
+          <p>Stockons un compte dans un dictionnaire : rien ne protège ses données.</p>
           <pre data-titre="account.py"><code class="language-python" data-trim>
-user = {"username": "alice", "role": "analyste",
+user = {"username": "Chris", "role": "analyste",
         "failed_attempts": 0}
 
 user["role"] = "n'importe quoi"   # aucun contrôle
@@ -85,10 +85,10 @@ user["failed_attemps"] = 5        # faute de frappe :
       <table>
         <tr><th style="width: 190px;">Terme</th><th>Définition</th><th style="width: 290px;">Exemple</th></tr>
         <tr><td><strong>Classe</strong></td><td>Le modèle : il décrit les données et les actions communes</td><td><code>User</code></td></tr>
-        <tr><td><strong>Objet</strong> (instance)</td><td>Un exemplaire concret, créé à partir de la classe</td><td><code>alice</code></td></tr>
-        <tr><td><strong>Attribut</strong></td><td>Une donnée propre à l'objet : son état</td><td><code>alice.role</code></td></tr>
-        <tr><td><strong>Méthode</strong></td><td>Une action que l'objet sait faire : une fonction de la classe</td><td><code>alice.record_failure()</code></td></tr>
-        <tr><td><strong>Instancier</strong></td><td>Créer un objet à partir de sa classe</td><td><code>User("alice", "analyste")</code></td></tr>
+        <tr><td><strong>Objet</strong> (instance)</td><td>Un exemplaire concret, créé à partir de la classe</td><td><code>chris</code></td></tr>
+        <tr><td><strong>Attribut</strong></td><td>Une donnée propre à l'objet : son état</td><td><code>chris.role</code></td></tr>
+        <tr><td><strong>Méthode</strong></td><td>Une action que l'objet sait faire : une fonction de la classe</td><td><code>chris.record_failure()</code></td></tr>
+        <tr><td><strong>Instancier</strong></td><td>Créer un objet à partir de sa classe</td><td><code>User("Chris", "analyste")</code></td></tr>
       </table>
       <div class="encadre marine" style="margin-top: 18px;">
         La classe est le <strong>formulaire vierge</strong> de création de compte ; chaque compte créé à partir de ce formulaire est un <strong>objet</strong>.
@@ -140,21 +140,21 @@ class User:
     <div class="corps">
       <div class="colonnes code-texte">
         <pre data-titre="main.py"><code class="language-python" data-trim>
-alice = User("alice", "analyste")
-bob = User("bob", "auditeur")
+chris = User("Chris", "analyste")
+manon = User("Manon", "auditeur")
 
-print(alice.username)        # alice
-print(bob.role)              # auditeur
-print(type(alice))           # &lt;class '__main__.User'&gt;
+print(chris.username)        # Chris
+print(manon.role)              # auditeur
+print(type(chris))           # &lt;class '__main__.User'&gt;
 
-alice.failed_attempts = 2
-print(bob.failed_attempts)   # 0
+chris.failed_attempts = 2
+print(manon.failed_attempts)   # 0
         </code></pre>
         <div class="dense">
           <ul>
             <li>On appelle la classe comme une fonction : Python crée l'objet puis exécute <code>__init__</code></li>
-            <li>On accède aux attributs avec le <strong>point</strong> : <code>alice.username</code></li>
-            <li>Chaque objet a <strong>ses propres attributs</strong> : modifier <code>alice</code> ne touche pas <code>bob</code></li>
+            <li>On accède aux attributs avec le <strong>point</strong> : <code>chris.username</code></li>
+            <li>Chaque objet a <strong>ses propres attributs</strong> : modifier <code>chris</code> ne touche pas <code>manon</code></li>
             <li>Le type de l'objet est sa classe</li>
           </ul>
         </div>
@@ -178,16 +178,16 @@ class User:
         if self.failed_attempts >= 3:
             self.is_locked = True
 
-alice = User("alice", "analyste")
+chris = User("Chris", "analyste")
 for _ in range(3):
-    alice.record_failure()
-print(alice.is_locked)       # True
+    chris.record_failure()
+print(chris.is_locked)       # True
         </code></pre>
         <div class="dense">
           <ul>
             <li>Une méthode est une <strong>fonction définie dans la classe</strong></li>
             <li>Son premier paramètre est toujours <code>self</code> : elle agit sur l'objet qui l'appelle</li>
-            <li><code>alice.record_failure()</code> revient à écrire <code>User.record_failure(alice)</code></li>
+            <li><code>chris.record_failure()</code> revient à écrire <code>User.record_failure(chris)</code></li>
             <li>La règle de verrouillage est écrite <strong>une seule fois</strong>, au plus près des données</li>
           </ul>
         </div>
@@ -217,7 +217,7 @@ class User:
             self.is_locked = True
 
 print(User.MAX_ATTEMPTS)     # 3
-print(alice.MAX_ATTEMPTS)    # 3 : lu depuis la classe
+print(chris.MAX_ATTEMPTS)    # 3 : lu depuis la classe
         </code></pre>
         <div class="dense">
           <ul>
@@ -226,7 +226,7 @@ print(alice.MAX_ATTEMPTS)    # 3 : lu depuis la classe
             <li>Idéal pour une constante de la classe : on ne répète plus le nombre 3 dans le code</li>
           </ul>
           <div class="encadre">
-            Au TP2, la <strong>capacité maximale</strong> d'un vaisseau (10 membres) sera un attribut de classe.
+            Idéal pour un <strong>seuil</strong> ou une <strong>capacité maximale</strong> commun à tous les objets d'une classe.
           </div>
         </div>
       </div>
@@ -241,7 +241,7 @@ print(alice.MAX_ATTEMPTS)    # 3 : lu depuis la classe
         <div>
           <p class="ko">Sans <code>__str__</code></p>
           <pre class="mini" data-titre="Terminal"><code class="language-plaintext" data-trim>
-&gt;&gt;&gt; print(alice)
+&gt;&gt;&gt; print(chris)
 &lt;__main__.User object at 0x10291aa50&gt;
           </code></pre>
           <p class="ok">Avec <code>__str__</code></p>
@@ -254,7 +254,7 @@ class User:
             state = "verrouillé"
         return f"{self.username} ({self.role}, {state})"
 
-print(alice)    # alice (analyste, verrouillé)
+print(chris)    # Chris (analyste, verrouillé)
           </code></pre>
         </div>
         <div class="dense">
@@ -348,14 +348,14 @@ class User:
     <div class="corps">
       <div class="colonnes code-texte">
         <pre data-titre="Terminal"><code class="language-python" data-trim>
-&gt;&gt;&gt; alice = User("alice", "S3cr3t!")
-&gt;&gt;&gt; alice.__password
+&gt;&gt;&gt; chris = User("Chris", "S3cr3t!")
+&gt;&gt;&gt; chris.__password
 AttributeError: 'User' object has no attribute
 '__password'
-&gt;&gt;&gt; alice._User__password
+&gt;&gt;&gt; chris._User__password
 'S3cr3t!'
-&gt;&gt;&gt; vars(alice)
-{'username': 'alice', '_sessions': [],
+&gt;&gt;&gt; vars(chris)
+{'username': 'Chris', '_sessions': [],
  '_User__password': 'S3cr3t!'}
         </code></pre>
         <div class="dense">
@@ -391,9 +391,9 @@ class User:
     def failed_attempts(self):   # lecture seule
         return self._failed_attempts
 
-alice = User("alice")
-print(alice.failed_attempts)     # 0
-alice.failed_attempts = 5
+chris = User("Chris")
+print(chris.failed_attempts)     # 0
+chris.failed_attempts = 5
 # AttributeError: property 'failed_attempts'
 #   of 'User' object has no setter
         </code></pre>
@@ -436,14 +436,14 @@ class User:
         </code></pre>
         <div class="dense">
           <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
-alice = User("alice", "analyste")
-alice.role = "auditeur"   # accepté
-alice.role = "hacker"
+chris = User("Chris", "analyste")
+chris.role = "auditeur"   # accepté
+chris.role = "hacker"
 # ValueError: rôle inconnu : hacker
           </code></pre>
           <ul>
             <li>Le <strong>setter</strong> s'exécute à chaque affectation, y compris dans <code>__init__</code></li>
-            <li>Le rôle est validé par <strong>liste blanche</strong>, comme au TP1</li>
+            <li>Le rôle est validé par <strong>liste blanche</strong> : on n'accepte que les valeurs connues</li>
           </ul>
         </div>
       </div>
@@ -508,8 +508,8 @@ class Admin(User):
     def describe(self):          # redéfinition
         return f"Administrateur {self.username}"
 
-print(User("alice", "analyste").describe())
-# Compte alice (analyste)
+print(User("Chris", "analyste").describe())
+# Compte Chris (analyste)
 print(Admin("root", "serveurs Linux").describe())
 # Administrateur root
         </code></pre>
@@ -564,17 +564,17 @@ print(root.describe())
         <div>
           <pre data-titre="audit.py"><code class="language-python" data-trim>
 accounts = [
-    User("alice", "analyste"),
+    User("Chris", "analyste"),
     Admin("root", "serveurs Linux"),
-    User("bob", "auditeur"),
+    User("Manon", "auditeur"),
 ]
 for account in accounts:
     print(account.describe())
           </code></pre>
           <pre class="mini" data-titre="Terminal"><code class="language-plaintext" data-trim>
-Compte alice (analyste)
+Compte Chris (analyste)
 Compte root (admin) – périmètre : serveurs Linux
-Compte bob (auditeur)
+Compte Manon (auditeur)
           </code></pre>
         </div>
         <div class="dense">
@@ -583,7 +583,7 @@ Compte bob (auditeur)
             <li>La boucle n'a pas besoin de savoir qui est administrateur</li>
           </ul>
           <div class="encadre">
-            Au TP2, <code>act()</code> fera agir un opérateur et un mentaliste chacun à sa manière.
+            Ajouter un nouveau type de compte ne demande <strong>aucune modification</strong> de la boucle.
           </div>
         </div>
       </div>
@@ -612,7 +612,7 @@ print(type(accounts[1]) == User)        # False
             <li>Pratique pour <strong>compter par type</strong> : administrateurs, mentalistes…</li>
           </ul>
           <div class="encadre">
-            Au TP2, <code>statistics()</code> de la flotte comptera les membres par type et par rôle.
+            Pratique pour produire des <strong>statistiques par type</strong> d'objet.
           </div>
         </div>
       </div>
@@ -722,7 +722,7 @@ dmz.find_by_ip("10.0.1.20").hostname
           </code></pre>
           <ul>
             <li>Le réseau <strong>contrôle</strong> ce qu'on lui ajoute : capacité maximale</li>
-            <li>Au TP2 : <code>Spaceship</code> a un équipage, <code>Fleet</code> a des vaisseaux</li>
+            <li>Un dossier contient des fichiers, une équipe contient des membres : la composition est partout</li>
           </ul>
         </div>
       </div>
@@ -777,16 +777,16 @@ dmz.find_by_ip("10.0.1.20").hostname
     <h2>Récapitulatif</h2>
     <div class="corps">
       <table class="serre">
-        <tr><th>Notion</th><th>Dans ce cours</th><th>Au TP2</th></tr>
-        <tr><td>Classe, <code>__init__</code>, <code>self</code></td><td><code>User</code></td><td><code>Person</code></td></tr>
-        <tr><td>Méthode</td><td><code>record_failure()</code></td><td><code>gain_experience()</code>, <code>recharge_mana()</code></td></tr>
-        <tr><td>Attribut de classe</td><td><code>MAX_ATTEMPTS</code>, <code>MAX_SERVERS</code></td><td>10 membres par vaisseau, 15 vaisseaux par flotte</td></tr>
-        <tr><td><code>__str__</code></td><td><code>print(alice)</code></td><td>affichage des membres</td></tr>
-        <tr><td><code>@property</code></td><td><code>failed_attempts</code>, <code>role</code></td><td><code>mana</code> entre 0 et 100</td></tr>
-        <tr><td>Héritage et <code>super()</code></td><td><code>Admin(User)</code></td><td><code>Operator(Person)</code>, <code>Mentalist(Person)</code></td></tr>
-        <tr><td>Polymorphisme</td><td><code>describe()</code></td><td><code>act()</code></td></tr>
-        <tr><td><code>isinstance()</code></td><td>compter les administrateurs</td><td><code>statistics()</code> de la flotte</td></tr>
-        <tr><td>Composition</td><td><code>Network</code> → <code>Server</code></td><td><code>Spaceship</code> → équipage, <code>Fleet</code> → vaisseaux</td></tr>
+        <tr><th>Notion</th><th>Exemple du cours</th><th>À retenir</th></tr>
+        <tr><td>Classe, <code>__init__</code>, <code>self</code></td><td><code>User</code></td><td>le modèle ; <code>__init__</code> initialise, <code>self</code> désigne l'objet</td></tr>
+        <tr><td>Méthode</td><td><code>record_failure()</code></td><td>une action que l'objet sait faire</td></tr>
+        <tr><td>Attribut de classe</td><td><code>MAX_ATTEMPTS</code>, <code>MAX_SERVERS</code></td><td>partagé par tous les objets de la classe</td></tr>
+        <tr><td><code>__str__</code></td><td><code>print(chris)</code></td><td>rend l'affichage d'un objet lisible</td></tr>
+        <tr><td><code>@property</code></td><td><code>failed_attempts</code>, <code>role</code></td><td>lecture seule ou écriture validée</td></tr>
+        <tr><td>Héritage et <code>super()</code></td><td><code>Admin(User)</code></td><td>reprendre une classe puis la compléter</td></tr>
+        <tr><td>Polymorphisme</td><td><code>describe()</code></td><td>même appel, comportement propre à chaque classe</td></tr>
+        <tr><td><code>isinstance()</code></td><td>compter les administrateurs</td><td>tester le type d'un objet</td></tr>
+        <tr><td>Composition</td><td><code>Network</code> → <code>Server</code></td><td>un objet en contient d'autres (« a un »)</td></tr>
       </table>
     </div>
   </section>

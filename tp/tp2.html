@@ -68,7 +68,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-1">
     <h2><span class="num">1</span> Les personnes</h2>
-    <div class="meta"><span class="etiquette">≈ 35 min</span><span class="etiquette clair">Classes · héritage · @property</span></div>
+    <div class="meta"><span class="etiquette clair">Classes · héritage · @property</span></div>
 
     <h3><code>Person</code> – une personne de la flotte</h3>
     <table>
@@ -128,7 +128,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Revoyez les diapos « Hériter d'une classe », « Étendre une méthode avec <code>super()</code> » et « <code>@property</code> : valider une écriture » du cours 2.</li>
+        <li>Revoyez les notions d'héritage, de <code>super()</code> et de <code>@property</code> (validation d'une écriture).</li>
         <li>Dans <code>__init__()</code>, écrivez <code>self.role = role</code> : l'affectation passe par votre setter, donc la validation s'applique aussi à la création.</li>
         <li>Pour borner une valeur : <code>max(0, min(value, 100))</code>.</li>
         <li>Une propriété <code>name</code> qui assemble le prénom et le nom puis retire les espaces superflus (<code>strip()</code>) vous simplifiera tous les affichages.</li>
@@ -139,7 +139,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-2">
     <h2><span class="num">2</span> Les vaisseaux et la flotte</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Composition · attributs de classe · isinstance</span></div>
+    <div class="meta"><span class="etiquette clair">Composition · attributs de classe · isinstance</span></div>
 
     <h3><code>Spaceship</code> – un vaisseau et son équipage</h3>
     <table>
@@ -170,7 +170,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Revoyez les diapos « Des objets dans des objets » et « Tester le type : <code>isinstance()</code> » du cours 2.</li>
+        <li>Revoyez les notions de composition (des objets dans des objets) et d'<code>isinstance()</code>.</li>
         <li>Un mentaliste n'a pas de rôle : dans <code>check_preparation()</code> et <code>statistics()</code>, ne regardez le rôle que des objets <code>Operator</code>.</li>
       </ul>
     </details>
@@ -179,7 +179,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-3">
     <h2><span class="num">3</span> Tester vos classes</h2>
-    <div class="meta"><span class="etiquette">≈ 10 min</span><span class="etiquette clair">if __name__ == "__main__"</span></div>
+    <div class="meta"><span class="etiquette clair">if __name__ == "__main__"</span></div>
 
     <p>
       À la fin de <code>models.py</code>, sous <code>if __name__ == "__main__":</code>, instanciez des objets de chaque classe et appelez leurs
@@ -224,7 +224,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-4">
     <h2><span class="num">4</span> Construire la flotte</h2>
-    <div class="meta"><span class="etiquette">≈ 15 min</span><span class="etiquette clair">Dictionnaires · objets</span></div>
+    <div class="meta"><span class="etiquette clair">Dictionnaires · objets</span></div>
 
     <p>
       Copiez les données de la flotte Galactica dans <code>fleet_data.py</code>. Chaque vaisseau et chaque membre y est décrit par un
@@ -290,7 +290,7 @@ FLEET_DATA = {
   <!-- ================================================================== -->
   <section class="defi" id="etape-5">
     <h2><span class="num">5</span> Le menu en objets</h2>
-    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">Menu · exceptions</span></div>
+    <div class="meta"><span class="etiquette clair">Menu · exceptions</span></div>
 
     <ol>
       <li>Au lancement, <code>main.py</code> construit la flotte avec <code>build_fleet(FLEET_DATA)</code>.</li>

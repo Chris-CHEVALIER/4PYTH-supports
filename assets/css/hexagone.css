@@ -1,3 +1,4 @@
+@import url("../fonts/outfit.css");
 /* ==========================================================================
    Thème reveal.js — charte graphique École Hexagone
    Reproduit le modèle PowerPoint officiel (16:9, 1280 × 720)
@@ -14,7 +15,7 @@
   --gris-clair: #EEF2F8;
   --ambre-clair: #FEF4DE;
   --texte: var(--marine);
-  --police: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  --police: "Outfit", Arial, "Helvetica Neue", Helvetica, sans-serif;
   --police-code: "JetBrains Mono", "Cascadia Code", "SF Mono", Menlo, Consolas, "Courier New", monospace;
 }
 

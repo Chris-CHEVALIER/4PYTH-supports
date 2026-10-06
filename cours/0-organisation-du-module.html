@@ -49,7 +49,7 @@
       <div class="colonnes">
         <div>
           <p><strong>Vous le retrouverez dans vos prochains modules :</strong></p>
-          <ul>
+          <ul class="dense">
             <li><span class="etiquette">4CRYP</span> Cryptologie</li>
             <li><span class="etiquette">4FSIC</span> Forensic</li>
             <li><span class="etiquette">4TECH</span> Audit technique</li>
@@ -59,12 +59,12 @@
         </div>
         <div>
           <p><strong>Des outils de référence écrits en Python :</strong></p>
-          <ul>
-            <li><strong>Volatility</strong> – analyse de mémoire</li>
-            <li><strong>Impacket</strong> – protocoles Windows</li>
-            <li><strong>sqlmap</strong> – injections SQL</li>
-            <li><strong>Scapy</strong> – forge de paquets</li>
-            <li><strong>pwntools</strong> – exploitation</li>
+          <ul class="dense">
+            <li><a href="https://volatilityfoundation.org/" target="_blank"><strong>Volatility</strong></a> – analyser la mémoire vive</li>
+            <li><a href="https://github.com/fortra/impacket" target="_blank"><strong>Impacket</strong></a> – dialoguer avec les services Windows</li>
+            <li><a href="https://sqlmap.org/" target="_blank"><strong>sqlmap</strong></a> – tester les injections SQL</li>
+            <li><a href="https://scapy.net/" target="_blank"><strong>Scapy</strong></a> – fabriquer des paquets réseau</li>
+            <li><a href="https://github.com/Gallopsled/pwntools" target="_blank"><strong>pwntools</strong></a> – écrire des exploits (CTF)</li>
           </ul>
         </div>
       </div>
@@ -74,6 +74,9 @@
     </div>
     <aside class="notes">
       Motiver les débutants : ce module n'est pas une fin en soi, c'est un outil qui servira dans toute la formation.
+      Inutile de connaître ces outils : ils montrent seulement que Python est partout en cybersécurité.
+      Volatility analyse la mémoire vive (forensic). Impacket parle les protocoles Windows (SMB, Kerberos…) lors d'un audit d'Active Directory.
+      sqlmap automatise la recherche d'injections SQL. Scapy forge des paquets réseau sur mesure. pwntools facilite l'écriture d'exploits dans les CTF.
       Demander si certains ont déjà utilisé l'un de ces outils.
     </aside>
   </section>
@@ -107,13 +110,13 @@
         </div>
         <div class="carte">
           <h3>Cours 3 – Données</h3>
-          Fichiers texte et binaires, octets et empreintes, JSON, sauvegarde d'objets
+          Fichiers texte et binaires, octets et empreintes (hash), JSON, sauvegarde d'objets
         </div>
       </div>
       <div class="colonnes" style="margin-top: 26px;">
         <div class="carte ambre">
           <h3>Défis cyber</h3>
-          Exercices courts en séance, directement liés à chaque cours : mots de passe, empreintes, journaux, cryptographie…
+          Exercices courts l'après-midi, à faire <strong>sans IA</strong> : mots de passe, empreintes (hash), journaux, cryptographie…
         </div>
         <div class="carte pleine">
           <h3>Projet fil rouge « Fondation »</h3>
@@ -140,8 +143,8 @@
           <h3>Parcours confirmé</h3>
           <ul>
             <li>Vous programmez déjà en Python</li>
-            <li>Défis avancés en parallèle : chiffrement, brute force, Man in the Middle</li>
-            <li>Bonus du projet Fondation</li>
+            <li>Mêmes cours, mêmes défis et même projet</li>
+            <li><strong>En plus</strong> : trois défis avancés (chiffrement AES, brute force sur un hash, attaque Man in the Middle simulée) et les bonus des TP</li>
           </ul>
         </div>
       </div>
@@ -212,9 +215,9 @@
     <div class="corps">
       <table>
         <tr><th style="width: 190px;">Horaire</th><th>Déroulé</th></tr>
-        <tr><td>9h00 – 13h00</td><td>Cours en alternance avec des défis courts : une notion, une mise en pratique immédiate</td></tr>
+        <tr><td>9h00 – 13h00</td><td>Cours : toute la théorie de la journée, ponctuée de quiz oraux</td></tr>
         <tr><td>13h00 – 14h00</td><td>Pause déjeuner</td></tr>
-        <tr><td>14h00 – 16h45</td><td>TP du projet Fondation et défis ; accompagnement individuel</td></tr>
+        <tr><td>14h00 – 16h45</td><td>Pratique : défis cyber puis TP du projet Fondation, avec un accompagnement individuel</td></tr>
         <tr><td>16h45 – 17h00</td><td>Kahoot : 10 questions pour ancrer la journée</td></tr>
       </table>
       <div class="encadre marine" style="margin-top: 22px;">
@@ -230,21 +233,10 @@
       <ul style="margin-bottom: 18px;">
         <li><a href="https://www.python.org/downloads/" target="_blank"><strong>Python 3.12 ou plus récent</strong></a> · <a href="https://code.visualstudio.com/" target="_blank"><strong>VS Code</strong></a> et son <a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python" target="_blank">extension Python</a> · <a href="https://git-scm.com/downloads" target="_blank"><strong>Git</strong></a> et un compte <a href="https://github.com/signup" target="_blank"><strong>GitHub</strong></a></li>
       </ul>
-      <div class="colonnes">
-        <pre data-titre="Windows (PowerShell)"><code class="language-powershell" data-trim data-noescape>
-py --version
-py -m venv .venv
-.venv\Scripts\activate
-git --version
-        </code></pre>
-        <pre data-titre="macOS / Linux"><code class="language-bash" data-trim data-noescape>
-python3 --version
-python3 -m venv .venv
-source .venv/bin/activate
-git --version
-        </code></pre>
+      <div class="encadre marine">
+        Pendant la première heure, nous installons et vérifions ensemble ces outils sur chaque machine.
+        Sous Windows, cochez « Add python.exe to PATH » pendant l'installation de Python.
       </div>
-      <p class="petit muet">Sous Windows, cochez « Add python.exe to PATH » pendant l'installation. Un environnement virtuel (<code>.venv</code>) isole les bibliothèques de chaque projet.</p>
     </div>
     <aside class="notes">
       Première heure du 7 octobre : vérifier que tout le monde a un terminal fonctionnel avec Python et Git.
@@ -271,7 +263,7 @@ git --version
         <tr><td><strong>Défis en séance</strong> <span class="etiquette">Pratique</span></td><td>Chaque défi : non fait (0), partiel (1) ou réussi (2) ; moyenne des 3 journées</td><td class="num"><strong>10 %</strong></td></tr>
       </table>
       <div class="encadre" style="margin-top: 22px;">
-        <strong>85 % de la note</strong> porte sur ce que vous démontrez vous-mêmes, en direct.
+        <strong>75 % de la note</strong> (examen et soutenance) porte sur ce que vous démontrez vous-mêmes, en direct.
       </div>
     </div>
     <aside class="notes">

@@ -20,7 +20,7 @@
 
   <p>
     Dernière série ! Aucune notion nouvelle : ces trois défis mobilisent <strong>tout ce que vous avez appris</strong>
-    et sont un excellent entraînement pour l'examen écrit de 16h30. Comptez <strong>entre 20 et 25 minutes</strong> par défi.
+    et sont un excellent entraînement pour l'examen écrit de 16h30.
   </p>
 
   <div class="encadre marine">
@@ -44,7 +44,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-7">
     <h2><span class="num">7</span> Audit de configuration SSH</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Fichiers · chaînes · dictionnaires · JSON</span><span class="etiquette ambre">Audit</span></div>
+    <div class="meta"><span class="etiquette clair">Fichiers · chaînes · dictionnaires · JSON</span><span class="etiquette ambre">Audit</span></div>
 
     <p>
       Lors d'un audit technique, on vérifie que la configuration des serveurs respecte la politique de sécurité de l'entreprise.
@@ -54,12 +54,12 @@
     <h3>Votre mission</h3>
     <ol>
       <li>Écrivez le texte <code>SSHD_CONFIG</code> ci-dessous dans un fichier <code>sshd_config</code>.</li>
-      <li>Écrivez <code>parse_config(path)</code>, qui relit le fichier et renvoie un dictionnaire <code>{paramètre: valeur}</code>.
+      <li>Écrivez la fonction <code>parse_config(path)</code>, qui relit le fichier et renvoie un dictionnaire <code>{paramètre: valeur}</code>.
         Les lignes vides et les commentaires (qui commencent par <code>#</code>) sont ignorés.</li>
-      <li>Écrivez <code>audit(config, policy)</code>, qui renvoie une liste de constats, un par règle de <code>POLICY</code> :
+      <li>Écrivez la fonction <code>audit(config, policy)</code>, qui renvoie une liste de constats, un par règle de <code>POLICY</code> :
         un dictionnaire avec le paramètre, la valeur attendue, la valeur trouvée et un statut <code>"OK"</code>, <code>"NON CONFORME"</code> ou <code>"ABSENT"</code>.
         Quand la valeur attendue est un <strong>entier</strong>, c'est un <strong>maximum</strong>.</li>
-      <li>Écrivez <code>print_report(findings)</code>, qui affiche le rapport, puis enregistrez les constats dans <code>audit.json</code>.</li>
+      <li>Écrivez la fonction <code>print_report(findings)</code>, qui affiche le rapport, puis enregistrez les constats dans <code>audit.json</code>.</li>
     </ol>
 
     <pre data-titre="Données à copier"><code class="language-python">
@@ -127,7 +127,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-8">
     <h2><span class="num">8</span> Chiffre de César</h2>
-    <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">Boucles · % · fonctions · chaînes</span><span class="etiquette ambre">Cryptologie</span></div>
+    <div class="meta"><span class="etiquette clair">Boucles · % · fonctions · chaînes</span><span class="etiquette ambre">Cryptologie</span></div>
 
     <p>
       Jules César chiffrait ses messages en décalant chaque lettre de quelques positions dans l'alphabet. Vous avez intercepté un
@@ -137,10 +137,10 @@
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Écrivez <code>encrypt(text, shift)</code>, qui décale chaque lettre de <code>shift</code> positions. Les majuscules restent en majuscules
+      <li>Écrivez la fonction <code>encrypt(text, shift)</code>, qui décale chaque lettre de <code>shift</code> positions. Les majuscules restent en majuscules
         et les autres caractères (espaces, apostrophes…) ne changent pas. Après <code>z</code>, on revient à <code>a</code>.</li>
-      <li>Écrivez <code>decrypt(text, shift)</code>… en une seule ligne, grâce à <code>encrypt</code>.</li>
-      <li>Écrivez <code>crack(ciphertext)</code>, qui teste <strong>les 26 décalages</strong> et renvoie le décalage et le texte les plus probables :
+      <li>Écrivez la fonction <code>decrypt(text, shift)</code>… en une seule ligne, grâce à <code>encrypt</code>.</li>
+      <li>Écrivez la fonction <code>crack(ciphertext)</code>, qui teste <strong>les 26 décalages</strong> et renvoie le décalage et le texte les plus probables :
         ceux qui contiennent le plus de mots de <code>COMMON_WORDS</code>.</li>
     </ol>
 
@@ -190,7 +190,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-9">
     <h2><span class="num">9</span> Tableau de bord d'alertes</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Classes · héritage · JSON · dictionnaires</span><span class="etiquette ambre">SOC</span></div>
+    <div class="meta"><span class="etiquette clair">Classes · héritage · JSON · dictionnaires</span><span class="etiquette ambre">SOC</span></div>
 
     <p>
       Le SOC reçoit chaque matin un rapport d'alertes au format JSON. Votre mission : le recharger, recréer les objets du défi 6
@@ -200,17 +200,17 @@
     <h3>Votre mission</h3>
     <ol>
       <li>Placez votre <code>challenge6.py</code> du jour 2 dans le même dossier. Écrivez le rapport <code>REPORT</code> ci-dessous dans <code>report.json</code>.</li>
-      <li>Écrivez <code>alert_from_dict(data)</code>, qui recrée <strong>le bon type d'objet</strong> selon la clé <code>type</code> :
+      <li>Écrivez la fonction <code>alert_from_dict(data)</code>, qui recrée <strong>le bon type d'objet</strong> selon la clé <code>type</code> :
         <code>BruteForceAlert</code>, <code>CompromiseAlert</code> ou <code>Alert</code>.</li>
-      <li>Écrivez <code>load_alerts(path)</code>, qui relit <code>report.json</code> et renvoie la liste des objets.</li>
-      <li>Écrivez <code>dashboard(alerts)</code>, qui affiche le nombre d'alertes par sévérité, l'IP la plus active et les comptes compromis.</li>
+      <li>Écrivez la fonction <code>load_alerts(path)</code>, qui relit <code>report.json</code> et renvoie la liste des objets.</li>
+      <li>Écrivez la fonction <code>dashboard(alerts)</code>, qui affiche le nombre d'alertes par sévérité, l'IP la plus active et les comptes compromis.</li>
     </ol>
 
     <pre data-titre="Données à copier"><code class="language-python">
       REPORT = [
           {"type": "brute_force", "ip": "203.0.113.45", "failures": 7},
           {"type": "brute_force", "ip": "198.51.100.23", "failures": 5},
-          {"type": "compromise", "ip": "203.0.113.45", "user": "alice"},
+          {"type": "compromise", "ip": "203.0.113.45", "user": "Chris"},
           {"type": "info", "ip": "192.0.2.99"},
           {"type": "brute_force", "ip": "203.0.113.45", "failures": 12},
           {"type": "compromise", "ip": "198.51.100.23", "user": "backup"},
@@ -229,14 +229,14 @@
       #   HIGH : 3
       #   INFO : 2
       # IP la plus active : 203.0.113.45 (3 alertes)
-      # Comptes compromis : alice, backup
+      # Comptes compromis : Chris, backup
     </code></pre>
 
     <details>
       <summary>Indices</summary>
       <ul>
         <li><code>from challenge6 import Alert, BruteForceAlert, CompromiseAlert</code> fonctionne si les deux fichiers sont dans le même dossier.</li>
-        <li>Comptez avec des dictionnaires, comme au défi 2 : un pour les sévérités et un pour les IP. Parcourez ensuite celui des IP pour trouver la plus fréquente.</li>
+        <li>Comptez avec des dictionnaires : un pour les sévérités et un pour les IP. Parcourez ensuite celui des IP pour trouver la plus fréquente.</li>
         <li><code>isinstance(alert, CompromiseAlert)</code> repère les comptes compromis.</li>
       </ul>
     </details>
@@ -252,8 +252,7 @@
     <h3>Bonus</h3>
     <ul>
       <li>Affichez les alertes de la plus grave à la moins grave, grâce à leur méthode <code>describe()</code>.</li>
-      <li>Modifiez le <code>to_dict()</code> du défi 6 pour qu'il produise exactement ce format : l'aller-retour entre les défis 6 et 9 est alors complet,
-        comme la sauvegarde du TP3.</li>
+      <li>Modifiez le <code>to_dict()</code> du défi 6 pour qu'il produise exactement ce format : l'aller-retour entre les défis 6 et 9 est alors complet.</li>
     </ul>
   </section>
 

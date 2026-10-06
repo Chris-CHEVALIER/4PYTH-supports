@@ -12,7 +12,7 @@
   <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
   <div class="titre">
     <h1>Défis cyber – Jour 2</h1>
-    <p><span class="code-module">4PYTH</span> – Langage Python · Vendredi 9 octobre · 14h00 – 15h15</p>
+    <p><span class="code-module">4PYTH</span> – Langage Python · Vendredi 9 octobre</p>
   </div>
 </header>
 
@@ -20,7 +20,7 @@
 
   <p>
     Cet après-midi, vous combinez les deux cours du matin : les <strong>objets</strong> d'un côté,
-    les <strong>fichiers, octets et empreintes</strong> de l'autre. Comptez <strong>entre 20 et 30 minutes</strong> par défi.
+    les <strong>fichiers, octets et empreintes</strong> de l'autre.
   </p>
 
   <div class="encadre marine">
@@ -44,7 +44,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-4">
     <h2><span class="num">4</span> Fichiers déguisés</h2>
-    <div class="meta"><span class="etiquette">≈ 20 min</span><span class="etiquette clair">Octets · mode binaire · dictionnaires</span><span class="etiquette ambre">Forensic</span></div>
+    <div class="meta"><span class="etiquette clair">Octets · mode binaire · dictionnaires</span><span class="etiquette ambre">Forensic</span></div>
 
     <p>
       Un attaquant a glissé un exécutable Windows dans une pièce jointe nommée <code>invoice.pdf</code>. L'extension ment,
@@ -54,13 +54,13 @@
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Copiez les données ci-dessous. Écrivez <code>create_samples(folder)</code>, qui crée le dossier puis chaque fichier de
+      <li>Copiez les données ci-dessous. Écrivez la fonction <code>create_samples(folder)</code>, qui crée le dossier puis chaque fichier de
         <code>SAMPLES</code> en <strong>écrivant ses octets</strong> (mode <code>"wb"</code>).</li>
-      <li>Écrivez <code>detect_type(path)</code>, qui lit les premiers octets du fichier et renvoie son type réel d'après
+      <li>Écrivez la fonction <code>detect_type(path)</code>, qui lit les premiers octets du fichier et renvoie son type réel d'après
         <code>SIGNATURES</code>. Si le type est inconnu, elle renvoie <code>None</code>.</li>
-      <li>Écrivez <code>check_extension(path)</code>, qui renvoie un tuple : l'extension est-elle conforme (<code>True</code> ou <code>False</code>)
+      <li>Écrivez la fonction <code>check_extension(path)</code>, qui renvoie un tuple : l'extension est-elle conforme (<code>True</code> ou <code>False</code>)
         puis le type réel.</li>
-      <li>Écrivez <code>scan(folder)</code>, qui affiche un verdict pour chaque fichier du dossier, dans l'ordre alphabétique.</li>
+      <li>Écrivez la fonction <code>scan(folder)</code>, qui affiche un verdict pour chaque fichier du dossier, dans l'ordre alphabétique.</li>
     </ol>
 
     <pre data-titre="Données à copier"><code class="language-python">
@@ -130,7 +130,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-5">
     <h2><span class="num">5</span> Contrôle d'intégrité</h2>
-    <div class="meta"><span class="etiquette">≈ 30 min</span><span class="etiquette clair">hashlib · JSON · ensembles</span><span class="etiquette ambre">SOC</span></div>
+    <div class="meta"><span class="etiquette clair">hashlib · JSON · ensembles</span><span class="etiquette ambre">SOC</span></div>
 
     <p>
       Après une intrusion, un attaquant modifie souvent des fichiers de configuration, supprime des traces ou dépose une
@@ -141,10 +141,10 @@
     <h3>Votre mission</h3>
     <ol>
       <li>Créez un dossier <code>monitored</code> contenant les trois fichiers de <code>INITIAL_FILES</code>.</li>
-      <li>Écrivez <code>sha256_file(path)</code>, qui renvoie l'empreinte SHA-256 d'un fichier lu <strong>par blocs</strong>.</li>
-      <li>Écrivez <code>build_baseline(folder)</code>, qui renvoie un dictionnaire <code>{nom du fichier: empreinte}</code>.</li>
-      <li>Écrivez <code>save_baseline(baseline, json_path)</code> et <code>load_baseline(json_path)</code>.</li>
-      <li>Écrivez <code>compare(old, new)</code>, qui renvoie un dictionnaire des fichiers <strong>ajoutés</strong>,
+      <li>Écrivez la fonction <code>sha256_file(path)</code>, qui renvoie l'empreinte SHA-256 d'un fichier lu <strong>par blocs</strong>.</li>
+      <li>Écrivez la fonction <code>build_baseline(folder)</code>, qui renvoie un dictionnaire <code>{nom du fichier: empreinte}</code>.</li>
+      <li>Écrivez la fonction <code>save_baseline(baseline, json_path)</code> et <code>load_baseline(json_path)</code>.</li>
+      <li>Écrivez la fonction <code>compare(old, new)</code>, qui renvoie un dictionnaire des fichiers <strong>ajoutés</strong>,
         <strong>modifiés</strong> et <strong>supprimés</strong>, chaque liste triée.</li>
       <li>Simulez l'intrusion décrite ci-dessous puis affichez le rapport.</li>
     </ol>
@@ -152,7 +152,7 @@
     <pre data-titre="Données à copier"><code class="language-python">
       INITIAL_FILES = {
           "config.txt": "port=22\npermit_root_login=no\n",
-          "users.txt": "alice\nbob\ncarol\n",
+          "users.txt": "Chris\nManon\nCosmo\n",
           "backup.sh": "tar -czf /backup/etc.tar.gz /etc\n",
       }
     </code></pre>
@@ -186,7 +186,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Revoyez la diapo « Empreinte SHA-256 » du cours 3 pour la lecture par blocs.</li>
+        <li>Lisez le fichier par blocs (<code>f.read(65536)</code>) et alimentez l'empreinte avec <code>update()</code>, comme vu en cours.</li>
         <li>Les <a href="https://docs.python.org/fr/3/tutorial/datastructures.html#sets" target="_blank">ensembles</a> font le gros du travail :
           <code>set(new) - set(old)</code> donne les noms présents seulement dans <code>new</code> ;
           <code>set(old) &amp; set(new)</code> ceux présents dans les deux.</li>
@@ -213,7 +213,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-6">
     <h2><span class="num">6</span> Alertes en objets</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Héritage · polymorphisme · fichiers · JSON</span><span class="etiquette ambre">SOC</span></div>
+    <div class="meta"><span class="etiquette clair">Héritage · polymorphisme · fichiers · JSON</span><span class="etiquette ambre">SOC</span></div>
 
     <p>
       Votre détecteur de brute force du défi 2 fonctionne. Il faut maintenant l'industrialiser comme dans un SIEM : lire un
@@ -236,7 +236,7 @@
           <li><code>CompromiseAlert(ip, user)</code>, de sévérité <code>"CRITICAL"</code> : une IP qui réussit à se connecter après un brute force.</li>
         </ul>
       </li>
-      <li>Écrivez <code>analyze(path, threshold=5)</code>, qui <strong>lit le fichier</strong> et renvoie la liste des alertes.</li>
+      <li>Écrivez la fonction <code>analyze(path, threshold=5)</code>, qui <strong>lit le fichier</strong> et renvoie la liste des alertes.</li>
       <li>Affichez chaque alerte puis enregistrez-les toutes dans <code>report.json</code>.</li>
     </ol>
 
@@ -244,27 +244,27 @@
       <summary>Données à copier – le journal du défi 2</summary>
       <pre class="donnees" data-titre="Données à copier – journal d'authentification"><code class="language-python">
         AUTH_LOG = [
-            "Oct  7 09:12:03 srv-web sshd[2101]: Accepted password for alice from 192.0.2.10 port 50122 ssh2",
-            "Oct  7 09:40:17 srv-web sshd[2144]: Failed password for bob from 192.0.2.25 port 50388 ssh2",
-            "Oct  7 09:40:29 srv-web sshd[2144]: Accepted password for bob from 192.0.2.25 port 50388 ssh2",
+            "Oct  7 09:12:03 srv-web sshd[2101]: Accepted password for Chris from 192.0.2.10 port 50122 ssh2",
+            "Oct  7 09:40:17 srv-web sshd[2144]: Failed password for Manon from 192.0.2.25 port 50388 ssh2",
+            "Oct  7 09:40:29 srv-web sshd[2144]: Accepted password for Manon from 192.0.2.25 port 50388 ssh2",
             "Oct  7 10:02:11 srv-web sshd[2210]: Failed password for root from 203.0.113.45 port 51122 ssh2",
             "Oct  7 10:02:14 srv-web sshd[2212]: Failed password for root from 203.0.113.45 port 51130 ssh2",
             "Oct  7 10:02:18 srv-web sshd[2215]: Failed password for invalid user admin from 203.0.113.45 port 51141 ssh2",
             "Oct  7 10:02:21 srv-web sshd[2218]: Failed password for invalid user test from 203.0.113.45 port 51150 ssh2",
-            "Oct  7 10:02:25 srv-web sshd[2221]: Failed password for alice from 203.0.113.45 port 51162 ssh2",
-            "Oct  7 10:02:29 srv-web sshd[2224]: Failed password for alice from 203.0.113.45 port 51170 ssh2",
-            "Oct  7 10:02:33 srv-web sshd[2227]: Failed password for alice from 203.0.113.45 port 51178 ssh2",
-            "Oct  7 10:02:36 srv-web sshd[2230]: Accepted password for alice from 203.0.113.45 port 51185 ssh2",
-            "Oct  7 10:02:37 srv-web sshd[2230]: pam_unix(sshd:session): session opened for user alice by (uid=0)",
+            "Oct  7 10:02:25 srv-web sshd[2221]: Failed password for Chris from 203.0.113.45 port 51162 ssh2",
+            "Oct  7 10:02:29 srv-web sshd[2224]: Failed password for Chris from 203.0.113.45 port 51170 ssh2",
+            "Oct  7 10:02:33 srv-web sshd[2227]: Failed password for Chris from 203.0.113.45 port 51178 ssh2",
+            "Oct  7 10:02:36 srv-web sshd[2230]: Accepted password for Chris from 203.0.113.45 port 51185 ssh2",
+            "Oct  7 10:02:37 srv-web sshd[2230]: pam_unix(sshd:session): session opened for user Chris by (uid=0)",
             "Oct  7 10:15:40 srv-web sshd[2301]: Failed password for invalid user oracle from 198.51.100.23 port 40022 ssh2",
             "Oct  7 10:15:44 srv-web sshd[2303]: Failed password for invalid user postgres from 198.51.100.23 port 40031 ssh2",
             "Oct  7 10:15:47 srv-web sshd[2305]: Failed password for root from 198.51.100.23 port 40040 ssh2",
             "Oct  7 10:15:51 srv-web sshd[2307]: Failed password for invalid user ubuntu from 198.51.100.23 port 40052 ssh2",
             "Oct  7 10:15:55 srv-web sshd[2309]: Failed password for invalid user pi from 198.51.100.23 port 40060 ssh2",
             "Oct  7 10:16:02 srv-web sshd[2311]: Connection closed by 198.51.100.23 port 40071 [preauth]",
-            "Oct  7 11:30:08 srv-web sshd[2402]: Failed password for carol from 198.51.100.77 port 42210 ssh2",
-            "Oct  7 11:30:15 srv-web sshd[2404]: Failed password for carol from 198.51.100.77 port 42218 ssh2",
-            "Oct  7 11:31:02 srv-web sshd[2410]: Accepted password for carol from 198.51.100.77 port 42230 ssh2",
+            "Oct  7 11:30:08 srv-web sshd[2402]: Failed password for Cosmo from 198.51.100.77 port 42210 ssh2",
+            "Oct  7 11:30:15 srv-web sshd[2404]: Failed password for Cosmo from 198.51.100.77 port 42218 ssh2",
+            "Oct  7 11:31:02 srv-web sshd[2410]: Accepted password for Cosmo from 198.51.100.77 port 42230 ssh2",
         ]
       </code></pre>
     </details>
@@ -276,7 +276,7 @@
           print(alert.describe())
       # [HIGH] brute force depuis 203.0.113.45 : 7 échecs
       # [HIGH] brute force depuis 198.51.100.23 : 5 échecs
-      # [CRITICAL] 203.0.113.45 s'est connecté au compte alice après un brute force
+      # [CRITICAL] 203.0.113.45 s'est connecté au compte Chris après un brute force
 
       print(Alert("192.0.2.99").describe())
       # [INFO] activité suspecte depuis 192.0.2.99
@@ -288,7 +288,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Revoyez les diapos « Attributs de classe ou d'instance », « Hériter d'une classe » et « Le polymorphisme » du cours 2.</li>
+        <li>Revoyez les notions d'attribut de classe, d'héritage et de polymorphisme.</li>
         <li><code>to_dict()</code> ne s'écrit <strong>qu'une fois</strong>, dans <code>Alert</code> : en appelant <code>self.describe()</code>,
           elle utilisera automatiquement la bonne version.</li>
         <li>Pour que les accents restent lisibles dans <code>report.json</code> : <code>json.dump(…, indent=2, ensure_ascii=False)</code>.</li>

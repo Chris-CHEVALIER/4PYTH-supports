@@ -83,7 +83,7 @@ print(content)    # Audit du serveur srv-web
       <pre class="mini" data-titre="auth.log"><code class="language-plaintext" data-trim>
 Oct  9 10:02:11 srv-web sshd[2210]: Failed password for root from 203.0.113.45 port 51122 ssh2
 Oct  9 10:15:44 srv-web sshd[2303]: Failed password for root from 198.51.100.23 port 40031 ssh2
-Oct  9 11:31:02 srv-web sshd[2410]: Accepted password for carol from 192.0.2.10 port 42230 ssh2
+Oct  9 11:31:02 srv-web sshd[2410]: Accepted password for Cosmo from 192.0.2.10 port 42230 ssh2
       </code></pre>
       <div class="colonnes code-texte">
         <pre class="mini" data-titre="analysis.py"><code class="language-python" data-trim>
@@ -101,7 +101,6 @@ print(failures)
           <ul>
             <li><code>for line in log</code> lit <strong>une ligne à la fois</strong></li>
             <li>La mémoire reste stable, même pour un journal de plusieurs Go</li>
-            <li>C'est votre défi 2… avec un vrai fichier</li>
           </ul>
         </div>
       </div>
@@ -361,7 +360,7 @@ print(int("10", 16))
         <div class="dense">
           <ul>
             <li><strong>JSON</strong> est un format texte de données structurées, lisible par les humains</li>
-            <li>C'est le format des API web, des fichiers de configuration… et des sauvegardes du TP3</li>
+            <li>C'est le format des API web, des fichiers de configuration… et des sauvegardes de nombreux logiciels</li>
           </ul>
           <table class="serre">
             <tr><th>JSON</th><th>Python</th></tr>
@@ -448,7 +447,7 @@ json.dump(data, f, indent=2)
           <ul>
             <li>JSON ne connaît pas vos classes : on convertit chaque objet en <strong>dictionnaire</strong></li>
             <li>Au chargement, <code>user_from_dict()</code> refait l'objet</li>
-            <li>C'est <strong>la</strong> difficulté du TP3 : chaque classe aura son <code>to_dict()</code></li>
+            <li>Chaque classe a son propre <code>to_dict()</code></li>
           </ul>
         </div>
       </div>
@@ -513,7 +512,7 @@ user_from_dict({"username": "eve", "role": "root"})
           <ul>
             <li><strong>Jamais</strong> de <code>pickle</code> ni d'<code>eval()</code> sur des données non fiables : ils peuvent <strong>exécuter du code</strong> caché dans le fichier</li>
             <li><code>json</code> ne fait que lire des données : il est sûr</li>
-            <li>Mais un fichier JSON se modifie à la main : les données chargées <strong>se valident</strong>, par liste blanche comme au TP1</li>
+            <li>Mais un fichier JSON se modifie à la main : les données chargées <strong>se valident</strong>, par liste blanche</li>
           </ul>
         </div>
       </div>
@@ -531,11 +530,12 @@ user_from_dict({"username": "eve", "role": "root"})
     <h2>Récapitulatif</h2>
     <div class="corps">
       <table class="serre">
-        <tr><th>Notion</th><th>Où elle sert</th></tr>
-        <tr><td>Classes, héritage, polymorphisme, composition</td><td>TP2 : <code>Person</code>, <code>Operator</code>, <code>Mentalist</code>, <code>Spaceship</code>, <code>Fleet</code></td></tr>
-        <tr><td>Lecture ligne par ligne, <code>bytes</code>, hexadécimal, <code>hashlib</code></td><td>Défis de cet après-midi</td></tr>
-        <tr><td>JSON, <code>to_dict()</code>, chargement robuste</td><td>TP3 : sauvegarde et chargement de la flotte</td></tr>
-        <tr><td>Journal horodaté, empreinte SHA-256</td><td>Défi 5, bonus du TP3</td></tr>
+        <tr><th>Notion</th><th>À retenir</th></tr>
+        <tr><td>Fichiers texte</td><td><code>with open(…, encoding="utf-8")</code> ; modes <code>"r"</code>, <code>"w"</code> et <code>"a"</code> ; lecture ligne par ligne</td></tr>
+        <tr><td>Octets</td><td><code>encode()</code> et <code>decode()</code>, hexadécimal, mode <code>"rb"</code> et magic bytes</td></tr>
+        <tr><td>Empreintes (hash)</td><td><code>hashlib.sha256()</code> : vérifier l'intégrité d'un fichier</td></tr>
+        <tr><td>JSON</td><td><code>json.dump()</code> et <code>json.load()</code> ; <code>to_dict()</code> pour les objets ; chargement qui ne plante pas</td></tr>
+        <tr><td>Sécurité</td><td>jamais <code>pickle</code> ni <code>eval()</code> sur des données non fiables ; valider les données chargées</td></tr>
       </table>
     </div>
   </section>

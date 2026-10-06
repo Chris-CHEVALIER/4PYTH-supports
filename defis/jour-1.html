@@ -12,7 +12,7 @@
   <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
   <div class="titre">
     <h1>Défis cyber – Jour 1</h1>
-    <p><span class="code-module">4PYTH</span> – Langage Python · Mercredi 7 octobre · 14h00 – 15h15</p>
+    <p><span class="code-module">4PYTH</span> – Langage Python · Mercredi 7 octobre</p>
   </div>
 </header>
 
@@ -20,7 +20,7 @@
 
   <p>
     Cet après-midi, vous mettez en pratique les notions du matin sur trois situations tirées du quotidien
-    d'un analyste en sécurité. Chaque défi dure <strong>environ 25 minutes</strong>.
+    d'un analyste en sécurité.
   </p>
 
   <div class="encadre marine">
@@ -44,7 +44,7 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-1">
     <h2><span class="num">1</span> Politique de mots de passe</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Conditions · boucles · fonctions</span><span class="etiquette ambre">Audit</span></div>
+    <div class="meta"><span class="etiquette clair">Conditions · boucles · fonctions</span><span class="etiquette ambre">Audit</span></div>
 
     <p>
       Vous auditez la politique de sécurité d'une entreprise. Son application interne accepte n'importe quel mot de passe :
@@ -53,7 +53,7 @@
 
     <table>
       <tr><th>Règle</th><th>Message d'erreur si elle n'est pas respectée</th></tr>
-      <tr><td>12 caractères minimum</td><td><code>au moins 12 caractères</code></td></tr>
+      <tr><td>12 caractères minimum, <strong>16 pour un administrateur</strong></td><td><code>au moins 12 caractères</code> ou <code>au moins 16 caractères</code></td></tr>
       <tr><td>Au moins une majuscule</td><td><code>au moins une majuscule</code></td></tr>
       <tr><td>Au moins une minuscule</td><td><code>au moins une minuscule</code></td></tr>
       <tr><td>Au moins un chiffre</td><td><code>au moins un chiffre</code></td></tr>
@@ -63,9 +63,10 @@
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Copiez la liste des mots de passe courants ci-dessous en haut de <code>challenge1.py</code>.</li>
-      <li>Écrivez une fonction <code>check_password(password)</code> qui renvoie <strong>un tuple</strong> de deux valeurs :
-        <code>True</code> ou <code>False</code> puis la liste des messages d'erreur (vide si le mot de passe est valide).</li>
+      <li>Copiez la liste des mots de passe courants ci-dessous en haut du fichier <code>challenge1.py</code>.</li>
+      <li>Écrivez la fonction <code>check_password(password, is_admin=False)</code> qui renvoie <strong>un tuple</strong> de deux valeurs :
+        <code>True</code> ou <code>False</code> puis la liste des messages d'erreur (vide si le mot de passe est valide).
+        Le paramètre <code>is_admin</code> impose 16 caractères au lieu de 12.</li>
       <li>Testez-la avec les exemples attendus.</li>
     </ol>
 
@@ -92,6 +93,9 @@
 
       print(check_password("correct horse battery staple"))
       # (False, ['au moins une majuscule', 'au moins un chiffre'])
+
+      print(check_password("Tr0ub4dour&amp;Co", is_admin=True))
+      # (False, ['au moins 16 caractères'])
     </code></pre>
 
     <details>
@@ -115,7 +119,7 @@
     <h3>Bonus</h3>
     <ul>
       <li>Demandez un mot de passe à l'utilisateur <strong>jusqu'à ce qu'il soit valide</strong>, en affichant les règles non respectées à chaque essai.</li>
-      <li>Masquez la saisie avec <a href="https://docs.python.org/fr/3/library/getpass.html" target="_blank"><code>getpass</code></a>, comme le fait <code>sudo</code>.</li>
+      <li>Masquez la saisie avec <a href="https://docs.python.org/fr/3/library/getpass.html" target="_blank"><code>getpass</code></a>, comme le fait la commande <code>sudo</code>.</li>
       <li>Réfléchissez : « correct horse battery staple » est long et difficile à deviner. Pourtant, il est refusé. Ces règles sont-elles vraiment les bonnes ?</li>
     </ul>
   </section>
@@ -123,46 +127,46 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-2">
     <h2><span class="num">2</span> Détection de brute force</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Chaînes · dictionnaires · boucles</span><span class="etiquette ambre">SOC</span></div>
+    <div class="meta"><span class="etiquette clair">Chaînes · dictionnaires · boucles</span><span class="etiquette ambre">SOC</span></div>
 
     <p>
       Vous êtes analyste dans un SOC. Un serveur web exposé sur Internet reçoit des connexions SSH suspectes.
       Voici un extrait de son journal d'authentification (<code>/var/log/auth.log</code>). Votre mission :
       repérer les adresses IP qui tentent de deviner des mots de passe par <strong>brute force</strong>,
-      comme le fait l'outil fail2ban.
+      comme le fait l'outil <a href="https://github.com/fail2ban/fail2ban" target="_blank">fail2ban</a>.
     </p>
 
     <pre class="donnees" data-titre="Données à copier – journal d'authentification"><code class="language-python">
       AUTH_LOG = [
-          "Oct  7 09:12:03 srv-web sshd[2101]: Accepted password for alice from 192.0.2.10 port 50122 ssh2",
-          "Oct  7 09:40:17 srv-web sshd[2144]: Failed password for bob from 192.0.2.25 port 50388 ssh2",
-          "Oct  7 09:40:29 srv-web sshd[2144]: Accepted password for bob from 192.0.2.25 port 50388 ssh2",
+          "Oct  7 09:12:03 srv-web sshd[2101]: Accepted password for Chris from 192.0.2.10 port 50122 ssh2",
+          "Oct  7 09:40:17 srv-web sshd[2144]: Failed password for Manon from 192.0.2.25 port 50388 ssh2",
+          "Oct  7 09:40:29 srv-web sshd[2144]: Accepted password for Manon from 192.0.2.25 port 50388 ssh2",
           "Oct  7 10:02:11 srv-web sshd[2210]: Failed password for root from 203.0.113.45 port 51122 ssh2",
           "Oct  7 10:02:14 srv-web sshd[2212]: Failed password for root from 203.0.113.45 port 51130 ssh2",
           "Oct  7 10:02:18 srv-web sshd[2215]: Failed password for invalid user admin from 203.0.113.45 port 51141 ssh2",
           "Oct  7 10:02:21 srv-web sshd[2218]: Failed password for invalid user test from 203.0.113.45 port 51150 ssh2",
-          "Oct  7 10:02:25 srv-web sshd[2221]: Failed password for alice from 203.0.113.45 port 51162 ssh2",
-          "Oct  7 10:02:29 srv-web sshd[2224]: Failed password for alice from 203.0.113.45 port 51170 ssh2",
-          "Oct  7 10:02:33 srv-web sshd[2227]: Failed password for alice from 203.0.113.45 port 51178 ssh2",
-          "Oct  7 10:02:36 srv-web sshd[2230]: Accepted password for alice from 203.0.113.45 port 51185 ssh2",
-          "Oct  7 10:02:37 srv-web sshd[2230]: pam_unix(sshd:session): session opened for user alice by (uid=0)",
+          "Oct  7 10:02:25 srv-web sshd[2221]: Failed password for Chris from 203.0.113.45 port 51162 ssh2",
+          "Oct  7 10:02:29 srv-web sshd[2224]: Failed password for Chris from 203.0.113.45 port 51170 ssh2",
+          "Oct  7 10:02:33 srv-web sshd[2227]: Failed password for Chris from 203.0.113.45 port 51178 ssh2",
+          "Oct  7 10:02:36 srv-web sshd[2230]: Accepted password for Chris from 203.0.113.45 port 51185 ssh2",
+          "Oct  7 10:02:37 srv-web sshd[2230]: pam_unix(sshd:session): session opened for user Chris by (uid=0)",
           "Oct  7 10:15:40 srv-web sshd[2301]: Failed password for invalid user oracle from 198.51.100.23 port 40022 ssh2",
           "Oct  7 10:15:44 srv-web sshd[2303]: Failed password for invalid user postgres from 198.51.100.23 port 40031 ssh2",
           "Oct  7 10:15:47 srv-web sshd[2305]: Failed password for root from 198.51.100.23 port 40040 ssh2",
           "Oct  7 10:15:51 srv-web sshd[2307]: Failed password for invalid user ubuntu from 198.51.100.23 port 40052 ssh2",
           "Oct  7 10:15:55 srv-web sshd[2309]: Failed password for invalid user pi from 198.51.100.23 port 40060 ssh2",
           "Oct  7 10:16:02 srv-web sshd[2311]: Connection closed by 198.51.100.23 port 40071 [preauth]",
-          "Oct  7 11:30:08 srv-web sshd[2402]: Failed password for carol from 198.51.100.77 port 42210 ssh2",
-          "Oct  7 11:30:15 srv-web sshd[2404]: Failed password for carol from 198.51.100.77 port 42218 ssh2",
-          "Oct  7 11:31:02 srv-web sshd[2410]: Accepted password for carol from 198.51.100.77 port 42230 ssh2",
+          "Oct  7 11:30:08 srv-web sshd[2402]: Failed password for Cosmo from 198.51.100.77 port 42210 ssh2",
+          "Oct  7 11:30:15 srv-web sshd[2404]: Failed password for Cosmo from 198.51.100.77 port 42218 ssh2",
+          "Oct  7 11:31:02 srv-web sshd[2410]: Accepted password for Cosmo from 198.51.100.77 port 42230 ssh2",
       ]
     </code></pre>
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Écrivez <code>count_failures(lines)</code>, qui renvoie un <strong>dictionnaire</strong> associant à chaque adresse IP son nombre de lignes <code>Failed password</code>.</li>
-      <li>Écrivez <code>detect_brute_force(lines, threshold=5)</code>, qui renvoie la <strong>liste</strong> des IP ayant <strong>au moins</strong> <code>threshold</code> échecs.</li>
-      <li>Écrivez <code>print_report(lines, threshold=5)</code>, qui affiche une alerte par IP détectée.</li>
+      <li>Écrivez la fonction <code>count_failures(lines)</code>, qui renvoie un <strong>dictionnaire</strong> associant à chaque adresse IP son nombre de lignes <code>Failed password</code>.</li>
+      <li>Écrivez la fonction <code>detect_brute_force(lines, threshold=5)</code>, qui renvoie la <strong>liste</strong> des IP ayant <strong>au moins</strong> <code>threshold</code> échecs.</li>
+      <li>Écrivez la fonction <code>print_report(lines, threshold=5)</code>, qui affiche une alerte par IP détectée.</li>
     </ol>
 
     <h3>Exemples attendus</h3>
@@ -184,9 +188,9 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li>Attention : toutes les lignes n'ont pas le même nombre de mots (« invalid user »). L'adresse IP est toujours <strong>le mot qui suit <code>from</code></strong>.</li>
+        <li>Attention : toutes les lignes n'ont pas le même nombre de mots. L'adresse IP est toujours <strong>la chaîne de caractères qui suit <code>from</code></strong>.</li>
         <li>La méthode de liste <a href="https://docs.python.org/fr/3/tutorial/datastructures.html#more-on-lists" target="_blank"><code>index()</code></a> donne la position d'un élément : <code>words.index("from")</code>.</li>
-        <li>Revoyez la diapo « Compter avec un dictionnaire » du cours et la méthode <code>get()</code>.</li>
+        <li>Pour compter, la méthode <code>get()</code> des dictionnaires renvoie une valeur par défaut quand la clé n'existe pas encore.</li>
       </ul>
     </details>
 
@@ -208,21 +212,21 @@
   <!-- ================================================================== -->
   <section class="defi" id="defi-3">
     <h2><span class="num">3</span> Générateur de mots de passe</h2>
-    <div class="meta"><span class="etiquette">≈ 25 min</span><span class="etiquette clair">Modules · fonctions · exceptions</span><span class="etiquette ambre">Cryptographie</span></div>
+    <div class="meta"><span class="etiquette clair">Modules · fonctions · exceptions</span><span class="etiquette ambre">Cryptographie</span></div>
 
     <p>
       Maintenant que l'application vérifie les mots de passe, elle doit aussi pouvoir en <strong>proposer</strong> de robustes
       à ses utilisateurs. Un générateur de secrets doit être imprévisible : vous utiliserez le module
-      <a href="https://docs.python.org/fr/3/library/secrets.html" target="_blank"><code>secrets</code></a> et surtout pas <code>random</code>.
+      <a href="https://docs.python.org/fr/3/library/secrets.html" target="_blank"><code>secrets</code></a>.
     </p>
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Écrivez <code>generate_password(length=16)</code>, qui renvoie un mot de passe aléatoire de <code>length</code> caractères.</li>
+      <li>Écrivez la fonction <code>generate_password(length=16)</code>, qui renvoie un mot de passe aléatoire de <code>length</code> caractères.</li>
       <li>Le mot de passe contient <strong>toujours</strong> au moins une majuscule, une minuscule, un chiffre et un caractère spécial.
         Ces caractères ne sont pas toujours aux mêmes positions.</li>
       <li>Si <code>length</code> est inférieur à 12, la fonction <strong>lève une <code>ValueError</code></strong>.</li>
-      <li>Importez <code>check_password</code> depuis votre <code>challenge1.py</code> et vérifiez que <strong>1 000 mots de passe générés</strong> sont tous valides.</li>
+      <li>Importez <code>check_password</code> depuis votre fichier <code>challenge1.py</code> et vérifiez que <strong>1 000 mots de passe générés</strong> sont tous valides.</li>
     </ol>
 
     <h3>Exemples attendus</h3>
@@ -262,11 +266,14 @@
 
     <h3>Bonus</h3>
     <ul>
-      <li>Écrivez <code>generate_passphrase(n_words=5, separator="-")</code>, qui assemble des mots tirés au hasard dans une liste
-        (<code>volcan-radar-hibou-quartz-sabre</code>), à la manière de la méthode <strong>Diceware</strong>.</li>
-      <li>Calculez l'<strong>entropie</strong> en bits de vos secrets : <code>nombre_de_symboles × log2(taille_de_l'alphabet)</code>, avec
-        <code>math.log2()</code>. Comparez un mot de passe de 16 caractères avec une phrase de 5 mots tirés d'une liste de 30 mots,
-        puis de 7 776 mots (la liste Diceware officielle). Que concluez-vous ?</li>
+      <li>Écrivez la fonction <code>generate_passphrase(n_words=5, separator="-")</code>, qui assemble des mots tirés au hasard dans une liste
+        (<code>volcan-radar-hibou-quartz-sabre</code>), à la manière de la <a href="https://theworld.com/~reinhold/diceware.html" target="_blank">méthode Diceware</a>.
+        Sa <a href="https://theworld.com/~reinhold/diceware.wordlist.asc" target="_blank">liste officielle</a> compte 7 776 mots.</li>
+      <li><strong>Comparez la robustesse de vos secrets.</strong> L'<strong>entropie</strong>, exprimée en bits, mesure la difficulté à deviner un secret :
+        un secret de <em>N</em> bits oblige un attaquant à tester jusqu'à 2<sup><em>N</em></sup> possibilités. Elle se calcule ainsi :
+        <code>nombre de symboles × log2(nombre de choix possibles pour chaque symbole)</code>, avec <code>math.log2()</code>.
+        Par exemple, 16 caractères tirés parmi 86 donnent <code>16 × log2(86)</code>, soit environ 103 bits.
+        Calculez l'entropie d'une phrase de 5 mots tirés d'une liste de 30 mots, puis de 7 776 mots. Que concluez-vous sur la taille de la liste ?</li>
     </ul>
   </section>
 
