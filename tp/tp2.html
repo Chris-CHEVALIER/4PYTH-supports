@@ -12,7 +12,7 @@
   <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
   <div class="titre">
     <h1>TP2 – Ajout des classes</h1>
-    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation » · En autonomie, à partir du 9 octobre</p>
+    <p><span class="code-module">4PYTH</span> – Projet fil rouge « Fondation »</p>
   </div>
 </header>
 
@@ -29,7 +29,7 @@
     <strong>mentalistes</strong> de la Seconde Fondation, capables d'influencer l'esprit des autres.
   </p>
   <p>
-    Il est temps de structurer votre programme avec des <strong>objets</strong> : chaque personne, chaque vaisseau et la flotte
+    Il est temps de structurer votre programme avec des <strong>objets</strong>. Chaque personne, chaque vaisseau et la flotte
     elle-même deviennent des classes, qui portent leurs données <strong>et</strong> leurs comportements.
   </p>
 
@@ -38,8 +38,8 @@
     <ul>
       <li><strong>Objectifs</strong> : modéliser avec des classes, utiliser l'héritage, le polymorphisme, l'encapsulation et la composition,
         puis faire passer le programme du TP1 des dictionnaires aux objets.</li>
-      <li>Il se fait <strong>en autonomie</strong>, une fois le TP1 terminé : <strong>à terminer au plus tard le vendredi 23 octobre</strong> (dernier commit poussé).</li>
-      <li>Il enrichit votre dépôt <code>4pyth-fondation-nom-prenom</code> : commitez et poussez à chaque étape.</li>
+      <li>Il commence une fois le TP1 terminé. Vous avancez à votre rythme, en séance ou chez vous. Le projet complet est à rendre au plus tard le <strong>jeudi 5 novembre à 16h30</strong>.</li>
+      <li>Il enrichit votre dépôt <code>4pyth-fondation-nom-prenom</code>. Commitez et poussez à chaque étape.</li>
       <li>L'IA est autorisée pour le projet, à une condition : <strong>comprendre chaque ligne</strong> de votre code.</li>
     </ul>
   </div>
@@ -56,9 +56,13 @@
 
   <div class="encadre">
     <span class="intitule">Organisation des fichiers</span>
+    <p>Un fichier par domaine. Chaque fichier a une seule responsabilité. Revoyez au besoin le principe de responsabilité unique.</p>
     <table class="compact">
       <tr><th>Fichier</th><th>Contenu</th></tr>
-      <tr><td><code>models.py</code></td><td>les cinq classes du projet et leurs tests (étapes 1 à 3)</td></tr>
+      <tr><td><code>person.py</code></td><td><code>ROLES</code>, <code>ACTIONS</code> et les classes <code>Person</code>, <code>Operator</code> et <code>Mentalist</code> (étape 1)</td></tr>
+      <tr><td><code>spaceship.py</code></td><td>la classe <code>Spaceship</code> (étape 2)</td></tr>
+      <tr><td><code>fleet.py</code></td><td>la classe <code>Fleet</code> (étape 2)</td></tr>
+      <tr><td><code>test_classes.py</code></td><td>les tests de vos classes (étape 3)</td></tr>
       <tr><td><code>fleet_data.py</code></td><td>les données de la flotte, à copier (étape 4)</td></tr>
       <tr><td><code>crew.py</code></td><td>les fonctions du menu, adaptées aux objets (étapes 4 et 5)</td></tr>
       <tr><td><code>main.py</code></td><td>le menu interactif (étape 5)</td></tr>
@@ -70,7 +74,12 @@
     <h2><span class="num">1</span> Les personnes</h2>
     <div class="meta"><span class="etiquette clair">Classes · héritage · @property</span></div>
 
-    <h3><code>Person</code> – une personne de la flotte</h3>
+    <p>
+      Dans le fichier <code>person.py</code>, écrivez trois <strong>classes</strong> : la classe mère <code>Person</code>
+      et ses deux classes filles <code>Operator</code> et <code>Mentalist</code>.
+    </p>
+
+    <h3>La classe <code>Person</code> – une personne de la flotte</h3>
     <table>
       <tr><th>Élément</th><th>Rôle</th></tr>
       <tr><td><code>first_name</code>, <code>last_name</code>, <code>gender</code>, <code>age</code></td><td>attributs initialisés par <code>__init__()</code></td></tr>
@@ -80,22 +89,21 @@
 
     <div class="encadre marine">
       <span class="intitule">Fallom et Joie n'ont pas de nom de famille</span>
-      Pour eux, <code>last_name</code> vaut <code>""</code>. Vos affichages ne doivent pas laisser d'espace en trop
-      (<code>Joie (F, 25 ans)</code> et non <code>Joie  (F, 25 ans)</code>). Pour retirer un membre de l'équipage, on utilisera son nom de famille…
-      ou son prénom s'il n'en a pas.
+      Pour eux, <code>last_name</code> vaut <code>""</code>. Vos affichages ne doivent pas laisser d'espace en trop après leur prénom.
+      Pour retirer un membre de l'équipage, on utilisera son nom de famille… ou son prénom s'il n'en a pas.
     </div>
 
-    <h3><code>Operator(Person)</code> – un membre d'équipage avec un rôle</h3>
+    <h3>La classe <code>Operator(Person)</code> – un membre d'équipage avec un rôle</h3>
     <table>
       <tr><th>Élément</th><th>Rôle</th></tr>
-      <tr><td><code>role</code></td><td>un rôle de la liste <code>ROLES</code> du TP1. Un rôle inconnu lève une <code>ValueError</code> : validez-le avec un <strong>setter <code>@property</code></strong></td></tr>
+      <tr><td><code>role</code></td><td>un rôle de la liste <code>ROLES</code> du TP1. Un rôle inconnu lève une <code>ValueError</code>. Validez-le avec un <strong>setter <code>@property</code></strong></td></tr>
       <tr><td><code>experience</code></td><td>niveau d'expérience, <code>0</code> par défaut</td></tr>
-      <tr><td><code>act()</code></td><td>affiche l'action du membre selon son rôle (voir <code>ACTIONS</code>) puis appelle <code>gain_experience()</code></td></tr>
+      <tr><td><code>act()</code></td><td>affiche l'action du membre selon son rôle (voir <code>ACTIONS</code> ↓) puis appelle <code>gain_experience()</code></td></tr>
       <tr><td><code>gain_experience()</code></td><td>augmente l'expérience de 1</td></tr>
-      <tr><td><code>__str__()</code></td><td>complète celui de <code>Person</code> : <code>Hugo Crast (M, 37 ans) – pilote</code></td></tr>
+      <tr><td><code>__str__()</code></td><td>complète celui de <code>Person</code> avec son rôle : <code>Hugo Crast (M, 37 ans) – pilote</code></td></tr>
     </table>
 
-    <pre data-titre="models.py – données à copier"><code class="language-python">
+    <pre data-titre="person.py – données à copier"><code class="language-python">
       ROLES = ["commandant", "pilote", "technicien", "armurier", "marchand", "entretien"]
 
       ACTIONS = {
@@ -108,10 +116,10 @@
       }
     </code></pre>
 
-    <h3><code>Mentalist(Person)</code> – un membre de la Seconde Fondation</h3>
+    <h3>La classe <code>Mentalist(Person)</code> – un membre de la Seconde Fondation</h3>
     <table>
       <tr><th>Élément</th><th>Rôle</th></tr>
-      <tr><td><code>mana</code></td><td>points de mana, <code>100</code> par défaut, <strong>toujours compris entre 0 et 100</strong> : bornez-les avec un setter <code>@property</code></td></tr>
+      <tr><td><code>mana</code></td><td>points de mana, <code>100</code> par défaut, <strong>toujours compris entre 0 et 100</strong>. Bornez-les avec un setter <code>@property</code></td></tr>
       <tr><td><code>act()</code></td><td>affiche <code>Joie se concentre.</code> et regagne 10 points de mana</td></tr>
       <tr><td><code>recharge_mana()</code></td><td>regagne 50 points de mana</td></tr>
       <tr><td><code>influence(operator)</code></td><td>coûte 20 points de mana et force l'opérateur à agir (appelle son <code>act()</code>). Sans assez de mana, affiche
@@ -129,7 +137,7 @@
       <summary>Indices</summary>
       <ul>
         <li>Revoyez les notions d'héritage, de <code>super()</code> et de <code>@property</code> (validation d'une écriture).</li>
-        <li>Dans <code>__init__()</code>, écrivez <code>self.role = role</code> : l'affectation passe par votre setter, donc la validation s'applique aussi à la création.</li>
+        <li>Dans <code>__init__()</code>, écrivez <code>self.role = role</code>. L'affectation passe par votre setter, donc la validation s'applique aussi à la création.</li>
         <li>Pour borner une valeur : <code>max(0, min(value, 100))</code>.</li>
         <li>Une propriété <code>name</code> qui assemble le prénom et le nom puis retire les espaces superflus (<code>strip()</code>) vous simplifiera tous les affichages.</li>
       </ul>
@@ -141,7 +149,12 @@
     <h2><span class="num">2</span> Les vaisseaux et la flotte</h2>
     <div class="meta"><span class="etiquette clair">Composition · attributs de classe · isinstance</span></div>
 
-    <h3><code>Spaceship</code> – un vaisseau et son équipage</h3>
+    <p>
+      Écrivez la classe <code>Spaceship</code> dans le fichier <code>spaceship.py</code> et la classe <code>Fleet</code> dans le fichier <code>fleet.py</code>.
+      Importez les classes dont vous avez besoin, par exemple <code>from person import Operator</code>.
+    </p>
+
+    <h3>La classe <code>Spaceship</code> – un vaisseau et son équipage</h3>
     <table>
       <tr><th>Élément</th><th>Rôle</th></tr>
       <tr><td><code>name</code>, <code>ship_type</code>, <code>condition</code></td><td>nom, type (<code>"transport"</code>, <code>"guerre"</code> ou <code>"marchand"</code>)
@@ -156,7 +169,7 @@
       <tr><td><code>__str__()</code></td><td><code>Fearless (guerre, opérationnel) – 6 membres</code></td></tr>
     </table>
 
-    <h3><code>Fleet</code> – la flotte</h3>
+    <h3>La classe <code>Fleet</code> – la flotte</h3>
     <table>
       <tr><th>Élément</th><th>Rôle</th></tr>
       <tr><td><code>name</code>, <code>spaceships</code></td><td>nom de la flotte et liste d'objets <code>Spaceship</code>, vide au départ</td></tr>
@@ -171,7 +184,7 @@
       <summary>Indices</summary>
       <ul>
         <li>Revoyez les notions de composition (des objets dans des objets) et d'<code>isinstance()</code>.</li>
-        <li>Un mentaliste n'a pas de rôle : dans <code>check_preparation()</code> et <code>statistics()</code>, ne regardez le rôle que des objets <code>Operator</code>.</li>
+        <li>Un mentaliste n'a pas de rôle. Dans <code>check_preparation()</code> et <code>statistics()</code>, ne regardez le rôle que des objets <code>Operator</code>.</li>
       </ul>
     </details>
   </section>
@@ -179,14 +192,17 @@
   <!-- ================================================================== -->
   <section class="defi" id="etape-3">
     <h2><span class="num">3</span> Tester vos classes</h2>
-    <div class="meta"><span class="etiquette clair">if __name__ == "__main__"</span></div>
+    <div class="meta"><span class="etiquette clair">Import · instanciation</span></div>
 
     <p>
-      À la fin de <code>models.py</code>, sous <code>if __name__ == "__main__":</code>, instanciez des objets de chaque classe et appelez leurs
-      méthodes. Voici ce que doit afficher ce programme de test :
+      Dans le fichier <code>test_classes.py</code>, importez vos classes, instanciez des objets de chaque classe et appelez leurs
+      méthodes. Les classes restent ainsi séparées de leurs tests. Voici ce que doit afficher ce programme de test.
     </p>
 
-    <pre data-titre="models.py – tests"><code class="language-python">
+    <pre data-titre="test_classes.py"><code class="language-python">
+      from person import Operator, Mentalist
+      from spaceship import Spaceship
+
       bel = Operator("Bel", "Riose", "M", 48, "commandant")
       hugo = Operator("Hugo", "Crast", "M", 37, "pilote")
       joie = Mentalist("Joie", "", "F", 25)
@@ -227,8 +243,8 @@
     <div class="meta"><span class="etiquette clair">Dictionnaires · objets</span></div>
 
     <p>
-      Copiez les données de la flotte Galactica dans <code>fleet_data.py</code>. Chaque vaisseau et chaque membre y est décrit par un
-      <strong>dictionnaire</strong> ; la clé <code>type</code> indique s'il faut créer un <code>Operator</code> ou un <code>Mentalist</code>.
+      Copiez les données de la flotte Galactica dans le fichier <code>fleet_data.py</code>. Chaque vaisseau et chaque membre y est décrit par un
+      <strong>dictionnaire</strong>. La clé <code>type</code> indique s'il faut créer un <code>Operator</code> ou un <code>Mentalist</code>.
     </p>
 
     <details>
@@ -277,7 +293,7 @@ FLEET_DATA = {
     </details>
 
     <p>
-      Dans <code>crew.py</code>, écrivez <code>build_fleet(data)</code>, qui parcourt ces dictionnaires et renvoie un objet <code>Fleet</code>
+      Dans le fichier <code>crew.py</code>, écrivez la fonction <code>build_fleet(data)</code>, qui parcourt ces dictionnaires et renvoie un objet <code>Fleet</code>
       complet, avec ses vaisseaux et leurs équipages.
     </p>
 
@@ -294,12 +310,12 @@ FLEET_DATA = {
 
     <ol>
       <li>Au lancement, <code>main.py</code> construit la flotte avec <code>build_fleet(FLEET_DATA)</code>.</li>
-      <li>Adaptez les options [1] à [4] du TP1 : on choisit d'abord le vaisseau <strong>par son nom</strong>, puis on agit sur son équipage.
+      <li>Adaptez les options [1] à [4] du TP1. On choisit d'abord le vaisseau <strong>par son nom</strong>, puis on agit sur son équipage.
         Pour ajouter un membre, on précise s'il s'agit d'un opérateur ou d'un mentaliste.</li>
       <li>Ajoutez les options <strong>[5] Ajouter un vaisseau</strong> et <strong>[6] Statistiques de la flotte</strong>.
         Le TP3 ajoutera [7] et [8].</li>
-      <li>Les <code>ValueError</code> levées par vos classes (vaisseau plein, nom déjà pris, rôle inconnu…) sont interceptées et affichées :
-        <strong>elles ne font jamais planter le programme</strong>.</li>
+      <li>Les <code>ValueError</code> levées par vos classes (vaisseau plein, nom déjà pris, rôle inconnu…) sont interceptées et affichées.
+        <strong>Elles ne font jamais planter le programme</strong>.</li>
     </ol>
 
     <pre data-titre="Proposition d'affichage"><code class="language-plaintext">
@@ -345,7 +361,7 @@ FLEET_DATA = {
     <ul>
       <li><strong>Tour de garde</strong> : tout l'équipage d'un vaisseau agit (<code>watch_round()</code>).</li>
       <li><strong>Influence</strong> : un mentaliste influence un opérateur de son vaisseau.</li>
-      <li>Choisissez des numéros libres : [7] et [8] sont réservés au TP3.</li>
+      <li>Choisissez des numéros libres. Les options [7] et [8] sont réservées au TP3.</li>
     </ul>
 
     <h3>Bonus 3 – Promotions</h3>
@@ -367,11 +383,12 @@ FLEET_DATA = {
     <p>Vérifiez chaque point. Ils correspondent à la grille d'évaluation du projet Fondation.</p>
     <ul class="checklist">
       <li>Les cinq classes existent avec leurs attributs et leurs méthodes. Vos tests donnent les résultats attendus.</li>
+      <li>Chaque domaine a son fichier : <code>person.py</code>, <code>spaceship.py</code>, <code>fleet.py</code>, <code>test_classes.py</code>, <code>crew.py</code> et <code>main.py</code>.</li>
       <li><code>Operator</code> et <code>Mentalist</code> héritent de <code>Person</code> et appellent <code>super().__init__()</code>.</li>
       <li>Un rôle inconnu est refusé et le mana reste toujours entre 0 et 100.</li>
       <li>Les options [0] à [6] du menu fonctionnent et aucune erreur ne fait planter le programme.</li>
-      <li>Les dictionnaires du TP1 ont disparu : le menu ne manipule plus que des objets.</li>
-      <li>Chaque classe et chaque méthode a une docstring ; les noms sont en <code>snake_case</code> (classes en <code>PascalCase</code>).</li>
+      <li>Les dictionnaires du TP1 ont disparu. Le menu ne manipule plus que des objets.</li>
+      <li>Chaque classe et chaque méthode a une docstring. Les noms sont en <code>snake_case</code> (classes en <code>PascalCase</code>).</li>
       <li>Plusieurs commits ont été poussés sur GitHub depuis le TP1.</li>
       <li>Vous pouvez expliquer <strong>chaque ligne</strong> de votre code.</li>
     </ul>

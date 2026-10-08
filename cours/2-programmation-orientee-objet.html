@@ -50,7 +50,7 @@
     <div class="corps">
       <div class="colonnes code-texte">
         <div>
-          <p>Stockons un compte dans un dictionnaire : rien ne protège ses données.</p>
+          <p>Stockons un compte dans un dictionnaire. Rien ne protège ses données.</p>
           <pre data-titre="account.py"><code class="language-python" data-trim>
 user = {"username": "Chris", "role": "analyste",
         "failed_attempts": 0}
@@ -121,9 +121,9 @@ class User:
         <div class="dense">
           <ul>
             <li><code>class User:</code> définit la classe, nommée en <strong>PascalCase</strong></li>
-            <li><code>__init__</code> est le <strong>constructeur</strong> : il est appelé automatiquement à la création de chaque objet</li>
-            <li><code>self</code> désigne <strong>l'objet en cours de création</strong> : <code>self.role = role</code> range la valeur dans cet objet</li>
-            <li>Un attribut peut avoir une valeur de départ fixe : <code>failed_attempts = 0</code></li>
+            <li><code>__init__</code> est le <strong>constructeur</strong>. Il est appelé automatiquement à la création de chaque objet</li>
+            <li><code>self</code> désigne <strong>l'objet courant</strong>. <code>self.role = role</code> range la valeur dans cet objet</li>
+            <li>Un attribut peut avoir une valeur de départ par défaut : <code>failed_attempts = 0</code></li>
           </ul>
         </div>
       </div>
@@ -140,21 +140,24 @@ class User:
     <div class="corps">
       <div class="colonnes code-texte">
         <pre data-titre="main.py"><code class="language-python" data-trim>
+from user import User
+
 chris = User("Chris", "analyste")
 manon = User("Manon", "auditeur")
 
 print(chris.username)        # Chris
 print(manon.role)              # auditeur
-print(type(chris))           # &lt;class '__main__.User'&gt;
+print(type(chris))           # &lt;class 'user.User'&gt;
 
 chris.failed_attempts = 2
 print(manon.failed_attempts)   # 0
         </code></pre>
         <div class="dense">
           <ul>
-            <li>On appelle la classe comme une fonction : Python crée l'objet puis exécute <code>__init__</code></li>
+            <li><code>from user import User</code> importe la classe depuis le fichier <code>user.py</code></li>
+            <li>Créer un objet à partir d'une classe s'appelle l'<strong>instanciation</strong>. On appelle la classe comme une fonction. Python crée l'objet puis exécute <code>__init__</code></li>
             <li>On accède aux attributs avec le <strong>point</strong> : <code>chris.username</code></li>
-            <li>Chaque objet a <strong>ses propres attributs</strong> : modifier <code>chris</code> ne touche pas <code>manon</code></li>
+            <li>Chaque objet a <strong>ses propres attributs</strong>. Modifier <code>chris</code> ne modifie pas <code>manon</code></li>
             <li>Le type de l'objet est sa classe</li>
           </ul>
         </div>
@@ -164,29 +167,67 @@ print(manon.failed_attempts)   # 0
 
   <!-- ================================================================== -->
   <section>
+    <h2>Un fichier, une responsabilité</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <div>
+          <pre class="mini" data-titre="Organisation du projet"><code class="language-plaintext" data-trim>
+accounts/
+├── user.py      # User et Admin
+├── server.py    # Server
+├── network.py   # Network
+└── main.py      # le programme
+          </code></pre>
+          <p class="petit">Les fichiers s'écrivent en minuscules (<code>user.py</code>) et les classes en PascalCase (<code>User</code>), comme le recommande la <a href="https://peps.python.org/pep-0008/#package-and-module-names">PEP 8</a>.</p>
+        </div>
+        <div class="dense">
+          <ul>
+            <li><strong>Responsabilité unique</strong> (<em>Single Responsibility Principle</em>) : un fichier, une classe ou une fonction n'a qu'une seule raison de changer</li>
+            <li>C'est le « S » de <a href="https://fr.wikipedia.org/wiki/SOLID_(informatique)">SOLID</a>, cinq principes de conception qui rendent le code facile à faire évoluer</li>
+          </ul>
+        </div>
+      </div>
+      <div class="encadre" style="margin-top: 16px;">
+        On range le code <strong>par domaine</strong>. Une classe et ses classes filles vont dans le même fichier. Le fichier <code>main.py</code> utilise les classes sans les définir.
+        On retrouve vite le code et on modifie un domaine sans toucher aux autres.
+      </div>
+    </div>
+    <aside class="notes">
+      Faire le lien avec le TP2 : person.py (Person et ses classes filles), spaceship.py, fleet.py, crew.py puis main.py.
+      Sur les noms : un module en minuscules évite aussi les surprises entre Windows et macOS, où « User.py » et « user.py » peuvent désigner le même fichier.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
     <h2>Les méthodes</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="user.py"><code class="language-python" data-trim>
+        <div>
+          <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
 class User:
     def __init__(self, username, role):
-        ...  # comme sur la diapo précédente
+        ...  # le constructeur déjà vu
 
     def record_failure(self):
         """Enregistre un échec et verrouille au 3e."""
         self.failed_attempts += 1
         if self.failed_attempts >= 3:
             self.is_locked = True
+          </code></pre>
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
+from user import User
 
 chris = User("Chris", "analyste")
 for _ in range(3):
     chris.record_failure()
 print(chris.is_locked)       # True
-        </code></pre>
+          </code></pre>
+        </div>
         <div class="dense">
           <ul>
             <li>Une méthode est une <strong>fonction définie dans la classe</strong></li>
-            <li>Son premier paramètre est toujours <code>self</code> : elle agit sur l'objet qui l'appelle</li>
+            <li>Son premier paramètre est toujours <code>self</code>. Elle agit sur l'objet qui l'appelle</li>
             <li><code>chris.record_failure()</code> revient à écrire <code>User.record_failure(chris)</code></li>
             <li>La règle de verrouillage est écrite <strong>une seule fois</strong>, au plus près des données</li>
           </ul>
@@ -203,7 +244,8 @@ print(chris.is_locked)       # True
     <h2>Attributs de classe ou d'instance</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="user.py"><code class="language-python" data-trim>
+        <div>
+          <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
 class User:
     MAX_ATTEMPTS = 3      # attribut de classe
 
@@ -215,15 +257,17 @@ class User:
         self.failed_attempts += 1
         if self.failed_attempts >= User.MAX_ATTEMPTS:
             self.is_locked = True
-
+          </code></pre>
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
 print(User.MAX_ATTEMPTS)     # 3
 print(chris.MAX_ATTEMPTS)    # 3 : lu depuis la classe
-        </code></pre>
+          </code></pre>
+        </div>
         <div class="dense">
           <ul>
             <li><strong>Attribut d'instance</strong> (<code>self.x</code>) : une valeur par objet</li>
             <li><strong>Attribut de classe</strong> : une seule valeur, <strong>partagée par tous les objets</strong></li>
-            <li>Idéal pour une constante de la classe : on ne répète plus le nombre 3 dans le code</li>
+            <li>Le nombre 3 n'est plus répété dans le code. On le modifie à un seul endroit</li>
           </ul>
           <div class="encadre">
             Idéal pour un <strong>seuil</strong> ou une <strong>capacité maximale</strong> commun à tous les objets d'une classe.
@@ -253,14 +297,16 @@ class User:
         if self.is_locked:
             state = "verrouillé"
         return f"{self.username} ({self.role}, {state})"
-
-print(chris)    # Chris (analyste, verrouillé)
           </code></pre>
         </div>
         <div class="dense">
+          <pre class="mini" data-titre="Terminal"><code class="language-plaintext" data-trim>
+&gt;&gt;&gt; print(chris)
+Chris (analyste, verrouillé)
+          </code></pre>
           <ul>
-            <li><code>__str__</code> est une <strong>méthode spéciale</strong> : <code>print()</code> et <code>str()</code> l'appellent automatiquement</li>
-            <li>Elle <strong>renvoie</strong> une chaîne, elle ne l'affiche pas</li>
+            <li><code>__str__</code> est une <strong>méthode spéciale</strong>. <code>print()</code> et <code>str()</code> l'appellent automatiquement</li>
+            <li>Elle <strong>renvoie</strong> une chaîne. Elle ne l'affiche pas</li>
             <li>Les méthodes entourées de <code>__</code> (<em>dunder</em>) sont réservées à Python : <code>__init__</code>, <code>__str__</code>…</li>
           </ul>
         </div>
@@ -317,7 +363,7 @@ print(ssh.hit())
   <section>
     <h2>Le principe et les conventions</h2>
     <div class="corps">
-      <p>L'<strong>encapsulation</strong> consiste à garder la maîtrise des données d'un objet : on les modifie par ses méthodes plutôt que directement.</p>
+      <p>L'<strong>encapsulation</strong> consiste à garder la maîtrise des données d'un objet. On les modifie par ses méthodes plutôt que directement.</p>
       <div class="colonnes code-texte">
         <pre data-titre="user.py"><code class="language-python" data-trim>
 class User:
@@ -330,11 +376,12 @@ class User:
           <tr><th>Nom</th><th>Signification</th></tr>
           <tr><td><code>username</code></td><td>public</td></tr>
           <tr><td><code>_sessions</code></td><td>« ne pas toucher » : <strong>simple convention</strong></td></tr>
-          <tr><td><code>__password</code></td><td>renommé en <code>_User__password</code></td></tr>
+          <tr><td><code>__password</code></td><td>Python le renomme en <code>_User__password</code></td></tr>
         </table>
       </div>
       <div class="encadre marine" style="margin-top: 16px;">
-        En Python, <strong>rien n'est vraiment privé</strong>. Le <code>_</code> n'est pas « réservé aux classes filles » : c'est un signal adressé aux autres développeurs, que Python ne vérifie pas.
+        En Python, <strong>rien n'est vraiment privé</strong>. Le <code>_</code> est un simple signal adressé aux autres développeurs, que Python ne vérifie pas.
+        Le <code>__</code> va plus loin. Python renomme l'attribut, ce qui évite de le lire ou de l'écraser <strong>par erreur</strong> depuis l'extérieur ou depuis une classe fille.
       </div>
     </div>
     <aside class="notes">
@@ -365,7 +412,7 @@ AttributeError: 'User' object has no attribute
           </ul>
           <div class="encadre">
             <strong>L'encapsulation n'est pas un mécanisme de sécurité.</strong> Elle protège contre les erreurs, pas contre un attaquant.
-            Un secret ne se stocke jamais en clair : il se <strong>hache</strong> avec une fonction dédiée comme bcrypt ou argon2.
+            Un secret ne se stocke jamais en clair. Il se <strong>hache</strong> avec une fonction dédiée comme <a href="https://pypi.org/project/bcrypt/">bcrypt</a> ou <a href="https://argon2-cffi.readthedocs.io/">Argon2</a>.
           </div>
         </div>
       </div>
@@ -381,6 +428,7 @@ AttributeError: 'User' object has no attribute
     <h2><code>@property</code> : un attribut en lecture seule</h2>
     <div class="corps">
       <div class="colonnes code-texte">
+        <div>
         <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
 class User:
     def __init__(self, username):
@@ -391,20 +439,23 @@ class User:
     def failed_attempts(self):   # lecture seule
         return self._failed_attempts
 
-chris = User("Chris")
-print(chris.failed_attempts)     # 0
-chris.failed_attempts = 5
-# AttributeError: property 'failed_attempts'
-#   of 'User' object has no setter
+    def record_failure(self):
+        self._failed_attempts += 1
         </code></pre>
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
+chris = User("Chris")
+chris.record_failure()
+print(chris.failed_attempts)     # 1
+chris.failed_attempts = 5        # AttributeError
+          </code></pre>
+        </div>
         <div class="dense">
           <ul>
-            <li><code>@property</code> transforme une méthode en <strong>attribut calculé</strong> : on l'utilise sans parenthèses</li>
-            <li>Sans <em>setter</em>, l'attribut est en <strong>lecture seule</strong></li>
-            <li>Seules les méthodes de la classe, comme <code>record_failure()</code>, modifient <code>_failed_attempts</code></li>
+            <li><code>@property</code> transforme une méthode en <strong>attribut calculé</strong>. On l'utilise sans parenthèses</li>
+            <li>Sans <em>setter</em>, l'attribut est en <strong>lecture seule</strong>. Seules les méthodes de la classe, comme <code>record_failure()</code>, modifient <code>_failed_attempts</code></li>
           </ul>
           <div class="encadre marine">
-            C'est la façon pythonique de remplacer les <code>get_…()</code> et <code>set_…()</code> d'autres langages.
+            C'est ainsi que Python remplace les <em>getters</em> et <em>setters</em> des autres langages.
           </div>
         </div>
       </div>
@@ -443,7 +494,7 @@ chris.role = "hacker"
           </code></pre>
           <ul>
             <li>Le <strong>setter</strong> s'exécute à chaque affectation, y compris dans <code>__init__</code></li>
-            <li>Le rôle est validé par <strong>liste blanche</strong> : on n'accepte que les valeurs connues</li>
+            <li>Le rôle est validé par <strong>liste blanche</strong>. On n'accepte que les valeurs connues</li>
           </ul>
         </div>
       </div>
@@ -465,25 +516,32 @@ chris.role = "hacker"
     <h2>Hériter d'une classe</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="admin.py"><code class="language-python" data-trim>
+        <div>
+          <pre class="mini" data-titre="user.py (suite)"><code class="language-python" data-trim>
 class Admin(User):
     def __init__(self, username, scope):
         super().__init__(username, "admin")
         self.scope = scope     # attribut en plus
+          </code></pre>
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
+from user import User, Admin
 
 root = Admin("root", "serveurs Linux")
 print(root.username, root.role)   # root admin
 root.record_failure()             # méthode héritée
 print(root.failed_attempts)       # 1
 print(isinstance(root, User))     # True
-        </code></pre>
+          </code></pre>
+        </div>
         <div class="dense">
           <ul>
-            <li><code>class Admin(User):</code> : la <strong>classe fille</strong> <code>Admin</code> hérite de la <strong>classe mère</strong> <code>User</code></li>
-            <li>Elle récupère <strong>tous</strong> ses attributs et toutes ses méthodes</li>
-            <li><code>super().__init__(…)</code> appelle le constructeur de la classe mère : sans lui, <code>username</code> n'existerait pas</li>
-            <li>Un <code>Admin</code> <strong>est un</strong> <code>User</code></li>
+            <li><code>class Admin(User):</code> signifie que la <strong>classe fille</strong> <code>Admin</code> hérite de la <strong>classe mère</strong> <code>User</code></li>
+            <li>Elle récupère <strong>tous</strong> ses attributs et <strong>toutes</strong> ses méthodes</li>
+            <li><code>super().__init__(…)</code> appelle le constructeur de la classe mère. Sans lui, <code>username</code> n'existerait pas</li>
           </ul>
+          <div class="encadre">
+            Avant d'hériter, on doit pouvoir dire « un <code>Admin</code> <strong>est un</strong> <code>User</code> ». Ce test vaut pour toute classe mère et sa classe fille.
+          </div>
         </div>
       </div>
     </div>
@@ -497,7 +555,8 @@ print(isinstance(root, User))     # True
     <h2>Redéfinir une méthode</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="accounts.py"><code class="language-python" data-trim>
+        <div>
+          <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
 class User:
     ...
     def describe(self):
@@ -507,12 +566,14 @@ class Admin(User):
     ...
     def describe(self):          # redéfinition
         return f"Administrateur {self.username}"
-
+          </code></pre>
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
 print(User("Chris", "analyste").describe())
 # Compte Chris (analyste)
 print(Admin("root", "serveurs Linux").describe())
 # Administrateur root
-        </code></pre>
+          </code></pre>
+        </div>
         <div class="dense">
           <ul>
             <li>La classe fille peut <strong>remplacer</strong> une méthode héritée en la redéfinissant avec le même nom</li>
@@ -534,21 +595,24 @@ print(Admin("root", "serveurs Linux").describe())
     <h2>Étendre une méthode avec <code>super()</code></h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="admin.py"><code class="language-python" data-trim>
+        <div>
+          <pre class="mini" data-titre="user.py (suite)"><code class="language-python" data-trim>
 class Admin(User):
     ...
     def describe(self):
         base = super().describe()    # version de User
         return f"{base} – périmètre : {self.scope}"
-
+          </code></pre>
+          <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
 root = Admin("root", "serveurs Linux")
 print(root.describe())
 # Compte root (admin) – périmètre : serveurs Linux
-        </code></pre>
+          </code></pre>
+        </div>
         <div class="dense">
           <ul>
-            <li><code>super()</code> donne accès à la version de la <strong>classe mère</strong></li>
-            <li>On <strong>réutilise</strong> son résultat au lieu de le réécrire : moins de code dupliqué</li>
+            <li><code>super()</code> donne accès à la version de la méthode de la <strong>classe mère</strong></li>
+            <li>On <strong>réutilise</strong> son résultat au lieu de le réécrire. Le code n'est pas dupliqué</li>
             <li>Si le format de <code>User.describe()</code> change, <code>Admin</code> suit automatiquement</li>
           </ul>
         </div>
@@ -562,7 +626,9 @@ print(root.describe())
     <div class="corps">
       <div class="colonnes code-texte">
         <div>
-          <pre data-titre="audit.py"><code class="language-python" data-trim>
+          <pre data-titre="main.py"><code class="language-python" data-trim>
+from user import User, Admin
+
 accounts = [
     User("Chris", "analyste"),
     Admin("root", "serveurs Linux"),
@@ -595,7 +661,7 @@ Compte Manon (auditeur)
     <h2>Tester le type : <code>isinstance()</code></h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre data-titre="audit.py"><code class="language-python" data-trim>
+        <pre data-titre="main.py (suite)"><code class="language-python" data-trim>
 admins = 0
 for account in accounts:
     if isinstance(account, Admin):
@@ -608,7 +674,7 @@ print(type(accounts[1]) == User)        # False
         <div class="dense">
           <ul>
             <li><code>isinstance(objet, Classe)</code> est vrai si l'objet est de cette classe <strong>ou d'une classe fille</strong></li>
-            <li><code>type(…) == …</code> ignore l'héritage : préférez <code>isinstance()</code></li>
+            <li><code>type(…) == …</code> ignore l'héritage. Préférez <code>isinstance()</code></li>
             <li>Pratique pour <strong>compter par type</strong> : administrateurs, mentalistes…</li>
           </ul>
           <div class="encadre">
@@ -671,17 +737,23 @@ print(isinstance(alerts[1], Alert))
         <tr><td><strong>Est un</strong> → héritage</td><td>Un administrateur <strong>est un</strong> utilisateur</td><td><code>class Admin(User):</code></td></tr>
         <tr><td><strong>A un</strong> → composition</td><td>Un réseau <strong>a des</strong> serveurs</td><td><code>self.servers = []</code></td></tr>
       </table>
-      <div class="colonnes code-texte" style="margin-top: 18px;">
-        <pre data-titre="server.py"><code class="language-python" data-trim>
+      <div class="colonnes" style="margin-top: 18px; gap: 24px;">
+        <pre class="mini" data-titre="server.py"><code class="language-python" data-trim>
 class Server:
     def __init__(self, hostname, ip, services):
         self.hostname = hostname
         self.ip = ip
-        self.services = services   # liste de chaînes
+        self.services = services   # chaînes
         </code></pre>
-        <div class="encadre marine">
-          La <strong>composition</strong> consiste à ranger des objets <strong>dans les attributs</strong> d'un autre objet. En cas de doute, préférez-la à l'héritage.
-        </div>
+        <pre class="mini" data-titre="network.py"><code class="language-python" data-trim>
+class Network:
+    def __init__(self, name):
+        self.name = name
+        self.servers = []   # objets Server
+        </code></pre>
+      </div>
+      <div class="encadre marine" style="margin-top: 16px;">
+        La <strong>composition</strong> consiste à ranger des objets <strong>dans les attributs</strong> d'un autre objet. Un <code>Network</code> n'est pas un <code>Server</code>. Il en <strong>contient</strong>. En cas de doute, préférez la composition à l'héritage.
       </div>
     </div>
   </section>
@@ -712,6 +784,9 @@ class Network:
         </code></pre>
         <div class="dense">
           <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
+from network import Network
+from server import Server
+
 dmz = Network("DMZ")
 dmz.add_server(Server("web01",
     "10.0.1.10", ["http", "https"]))
@@ -721,8 +796,8 @@ dmz.find_by_ip("10.0.1.20").hostname
 # 'mail01'
           </code></pre>
           <ul>
-            <li>Le réseau <strong>contrôle</strong> ce qu'on lui ajoute : capacité maximale</li>
-            <li>Un dossier contient des fichiers, une équipe contient des membres : la composition est partout</li>
+            <li>Le réseau <strong>contrôle</strong> ce qu'on lui ajoute, ici sa capacité maximale</li>
+            <li>Un dossier contient des fichiers, une équipe contient des membres. La composition est partout</li>
           </ul>
         </div>
       </div>
@@ -730,6 +805,38 @@ dmz.find_by_ip("10.0.1.20").hostname
     <aside class="notes">
       Au 4e serveur, add_server lève ValueError: capacité maximale atteinte (testé).
       find_by_ip renvoie None si l'adresse est inconnue : même logique que find_member au TP1.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Lire un diagramme de classes UML</h2>
+    <div class="corps">
+      <p class="petit">L'<strong>UML</strong> (<em>Unified Modeling Language</em>) est une notation standard pour dessiner un programme avant de le coder. Son <a href="https://fr.wikipedia.org/wiki/Diagramme_de_classes">diagramme de classes</a> montre les classes et leurs relations.</p>
+      <div class="colonnes" style="grid-template-columns: 280px 1fr; gap: 30px; align-items: start;">
+        <div>
+          <div class="classe-uml">
+            <div class="nom">User</div>
+            <div class="attributs">+ username<br># _failed_attempts<br>- __password</div>
+            <div class="methodes">+ record_failure()<br>+ describe()</div>
+          </div>
+          <p class="petit">Trois cases : le nom, les attributs puis les méthodes.</p>
+        </div>
+        <table class="serre" style="font-size: 17px;">
+          <tr><th style="width: 140px;">Symbole</th><th>Signification</th></tr>
+          <tr><td><code>+</code></td><td><strong>public</strong> : <code>username</code></td></tr>
+          <tr><td><code>#</code></td><td><strong>protégé</strong> (classe et classes filles) : <code>_nom</code> en Python</td></tr>
+          <tr><td><code>-</code></td><td><strong>privé</strong> : en Python, <code>__nom</code></td></tr>
+          <tr><td><svg width="120" height="20" viewBox="0 0 120 20"><line x1="2" y1="10" x2="100" y2="10" stroke="#1E427C" stroke-width="2"/><polygon points="100,2 116,10 100,18" fill="#FFFFFF" stroke="#1E427C" stroke-width="2"/></svg></td><td><strong>héritage</strong> : la pointe creuse vise la classe mère</td></tr>
+          <tr><td><svg width="120" height="20" viewBox="0 0 120 20"><polygon points="2,10 14,3 26,10 14,17" fill="#1E427C"/><line x1="26" y1="10" x2="116" y2="10" stroke="#1E427C" stroke-width="2"/></svg></td><td><strong>composition</strong> : le losange plein est du côté du conteneur</td></tr>
+          <tr><td><svg width="120" height="20" viewBox="0 0 120 20"><polygon points="2,10 14,3 26,10 14,17" fill="#FFFFFF" stroke="#1E427C" stroke-width="2"/><line x1="26" y1="10" x2="116" y2="10" stroke="#1E427C" stroke-width="2"/></svg></td><td><strong>agrégation</strong> : les objets existent sans le conteneur</td></tr>
+          <tr><td><code>0..3</code>, <code>*</code></td><td><strong>multiplicité</strong> : combien d'objets sont liés</td></tr>
+        </table>
+      </div>
+    </div>
+    <aside class="notes">
+      Rester au niveau lecture : savoir lire et dessiner les cases, les symboles de visibilité et les deux flèches utiles au TP2 (héritage, composition).
+      En UML, # est « protégé » ; Python n'a pas cette notion, on l'écrit _nom par convention.
     </aside>
   </section>
 
@@ -776,7 +883,7 @@ dmz.find_by_ip("10.0.1.20").hostname
   <section>
     <h2>Récapitulatif</h2>
     <div class="corps">
-      <table class="serre">
+      <table class="serre" style="font-size: 18px;">
         <tr><th>Notion</th><th>Exemple du cours</th><th>À retenir</th></tr>
         <tr><td>Classe, <code>__init__</code>, <code>self</code></td><td><code>User</code></td><td>le modèle ; <code>__init__</code> initialise, <code>self</code> désigne l'objet</td></tr>
         <tr><td>Méthode</td><td><code>record_failure()</code></td><td>une action que l'objet sait faire</td></tr>
@@ -787,6 +894,8 @@ dmz.find_by_ip("10.0.1.20").hostname
         <tr><td>Polymorphisme</td><td><code>describe()</code></td><td>même appel, comportement propre à chaque classe</td></tr>
         <tr><td><code>isinstance()</code></td><td>compter les administrateurs</td><td>tester le type d'un objet</td></tr>
         <tr><td>Composition</td><td><code>Network</code> → <code>Server</code></td><td>un objet en contient d'autres (« a un »)</td></tr>
+        <tr><td>Responsabilité unique</td><td><code>user.py</code>, <code>main.py</code></td><td>un fichier par domaine</td></tr>
+        <tr><td>Diagramme UML</td><td>vue d'ensemble</td><td>cases, visibilité (<code>+ # -</code>), flèches</td></tr>
       </table>
     </div>
   </section>

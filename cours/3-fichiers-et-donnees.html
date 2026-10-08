@@ -30,7 +30,6 @@
     <h1>Sommaire</h1>
     <ol>
       <li>Lire et écrire des fichiers</li>
-      <li>Octets et empreintes <small style="opacity:.75; font-size:.7em;">(facultatif)</small></li>
       <li>JSON et sauvegarde d'objets</li>
     </ol>
   </section>
@@ -48,27 +47,25 @@
     <div class="corps">
       <div class="colonnes code-texte">
         <pre data-titre="notes.py"><code class="language-python" data-trim>
-with open("notes.txt", "w", encoding="utf-8") as f:
-    f.write("Audit du serveur srv-web\n")
+with open("notes.txt", "w", encoding="utf-8") as file:
+    file.write("Audit du serveur srv-web\n")
 
-with open("notes.txt", encoding="utf-8") as f:
-    content = f.read()
+with open("notes.txt", encoding="utf-8") as file:
+    content = file.read()
 print(content)    # Audit du serveur srv-web
         </code></pre>
         <div class="dense">
           <table class="serre">
             <tr><th>Mode</th><th>Effet</th></tr>
             <tr><td><code>"r"</code></td><td>lecture (par défaut)</td></tr>
-            <tr><td><code>"w"</code></td><td>écriture : <strong>écrase</strong> le fichier</td></tr>
+            <tr><td><code>"w"</code></td><td>écriture, qui <strong>écrase</strong> le fichier</td></tr>
             <tr><td><code>"a"</code></td><td>ajout à la fin</td></tr>
           </table>
-          <ul>
-            <li><code>with</code> <strong>ferme le fichier</strong> automatiquement, même en cas d'erreur</li>
-          </ul>
+          <p class="petit">D'autres modes existent, comme <code>"r+"</code> (lecture et écriture). Ils sont décrits dans la <a href="https://docs.python.org/fr/3/library/functions.html#open">documentation de <code>open()</code></a>.</p>
         </div>
       </div>
       <div class="encadre" style="margin-top: 14px;">
-        <strong>Piège</strong> : précisez toujours <code>encoding="utf-8"</code>. Sans lui, Windows utilise un autre encodage et les accents deviennent illisibles.
+        Précisez toujours <code>encoding="utf-8"</code>. Sans lui, Windows utilise un autre encodage et les accents deviennent illisibles.
       </div>
     </div>
     <aside class="notes">
@@ -100,7 +97,7 @@ print(failures)
         <div class="dense">
           <ul>
             <li><code>for line in log</code> lit <strong>une ligne à la fois</strong></li>
-            <li>La mémoire reste stable, même pour un journal de plusieurs Go</li>
+            <li>La mémoire reste stable, même pour un journal de plusieurs gigaoctets</li>
           </ul>
         </div>
       </div>
@@ -115,25 +112,27 @@ print(failures)
     <h2>Écrire et ajouter</h2>
     <div class="corps">
       <pre class="mini" data-titre="event_log.py"><code class="language-python" data-trim>
-from datetime import datetime
+from datetime import datetime   # dates et heures
 
 def log_event(message):
+    # date et heure actuelles, au format 2026-10-09T10:42:05
     now = datetime.now().isoformat(timespec="seconds")
-    with open("actions.log", "a", encoding="utf-8") as f:
-        f.write(f"{now} {message}\n")
+    with open("actions.log", "a", encoding="utf-8") as file:
+        file.write(f"{now} {message}\n")
 
-log_event("Ajout du membre Jagger Fount")
-log_event("Retrait du membre Hugo Crast")
+log_event("Ajout de Jagger Fount")
+log_event("Retrait de Hugo Crast")
       </code></pre>
-      <div class="colonnes">
+      <div class="colonnes" style="grid-template-columns: 1.15fr 1.3fr; gap: 26px; align-items: start;">
         <pre class="mini" data-titre="actions.log"><code class="language-plaintext" data-trim>
-2026-10-09T10:42:05 Ajout du membre Jagger Fount
-2026-10-09T10:42:05 Retrait du membre Hugo Crast
+2026-10-09T10:42:05 Ajout de Jagger Fount
+2026-10-09T10:42:05 Retrait de Hugo Crast
         </code></pre>
         <div class="dense">
           <ul>
-            <li>Le mode <code>"a"</code> <strong>ajoute</strong> : relancer le programme allonge le journal</li>
-            <li><code>write()</code> n'ajoute pas de retour à la ligne : <code>\n</code> est à votre charge</li>
+            <li>Le module standard <a href="https://docs.python.org/fr/3/library/datetime.html"><code>datetime</code></a> gère les dates et les heures</li>
+            <li>Le mode <code>"a"</code> <strong>ajoute</strong> à la fin du journal</li>
+            <li><code>write()</code> n'ajoute pas de retour à la ligne. Écrivez le <code>\n</code> vous-même</li>
           </ul>
         </div>
       </div>
@@ -150,8 +149,8 @@ log_event("Retrait du membre Hugo Crast")
       <div class="colonnes code-texte">
         <pre data-titre="reading.py"><code class="language-python" data-trim>
 try:
-    with open("report.txt", encoding="utf-8") as f:
-        print(f.read())
+    with open("report.txt", encoding="utf-8") as file:
+        print(file.read())
 except FileNotFoundError:
     print("Fichier introuvable")
 except PermissionError:
@@ -166,7 +165,7 @@ print(path.exists())   # True
 print(path.suffix)     # .log
           </code></pre>
           <ul>
-            <li>Un fichier peut manquer ou être protégé : le programme ne doit pas planter</li>
+            <li>Un fichier peut manquer ou être protégé. Le programme ne doit pas planter</li>
             <li><a href="https://docs.python.org/fr/3/library/pathlib.html" target="_blank"><code>pathlib</code></a> manipule les chemins sous Windows, macOS et Linux</li>
           </ul>
         </div>
@@ -177,178 +176,6 @@ print(path.suffix)     # .log
   <!-- ================================================================== -->
   <section data-layout="section">
     <div class="numero">#2</div>
-    <h2>Octets et empreintes</h2>
-    <div class="sous-titre">Partie facultative · pour aller plus loin, non évaluée</div>
-    <aside class="notes">Partie facultative : la survoler ou la sauter selon le temps. Elle n'est évaluée ni à l'examen ni dans le Kahoot.</aside>
-  </section>
-
-  <!-- ================================================================== -->
-  <section>
-    <h2>Texte ou octets ?</h2>
-    <div class="corps">
-      <div class="colonnes code-texte">
-        <pre data-titre="encoding.py"><code class="language-python" data-trim>
-text = "Clé"
-data = text.encode("utf-8")
-print(data)        # b'Cl\xc3\xa9'
-print(len(text))   # 3 caractères
-print(len(data))   # 4 octets
-print(data.decode("utf-8"))   # Clé
-        </code></pre>
-        <div class="dense">
-          <ul>
-            <li><code>str</code> : du <strong>texte</strong>, pour les humains</li>
-            <li><code>bytes</code> : des <strong>octets</strong>, pour les machines (fichiers, réseau, cryptographie)</li>
-            <li><code>encode()</code> : texte → octets ; <code>decode()</code> : octets → texte</li>
-            <li>En UTF-8, <code>é</code> occupe <strong>2 octets</strong></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <aside class="notes">
-      Toute la cryptographie travaille sur des octets : hashlib, chiffrement, sockets. D'où l'importance de cette distinction pour la suite de la formation.
-    </aside>
-  </section>
-
-  <!-- ================================================================== -->
-  <section>
-    <h2>L'hexadécimal</h2>
-    <div class="corps">
-      <div class="colonnes code-texte">
-        <pre data-titre="hexadecimal.py"><code class="language-python" data-trim>
-data = "Hi!".encode()
-print(data.hex())                 # 486921
-print(bytes.fromhex("486921"))    # b'Hi!'
-
-print(int("ff", 16))              # 255
-print(hex(443))                   # 0x1bb
-        </code></pre>
-        <div class="dense">
-          <ul>
-            <li>Un octet s'écrit avec <strong>2 chiffres hexadécimaux</strong> : <code>48</code> = <code>H</code></li>
-            <li>C'est la notation des empreintes, des adresses mémoire et des éditeurs hexadécimaux</li>
-            <li><code>int(texte, 16)</code> convertit depuis la base 16</li>
-          </ul>
-        </div>
-      </div>
-      <div class="encadre marine" style="margin-top: 14px;">
-        Vous la retrouverez partout en <span class="etiquette">4FSIC</span> Forensic et en <span class="etiquette">5REVE</span> Reverse engineering.
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================== -->
-  <section>
-    <h2>Lire un fichier binaire</h2>
-    <div class="corps">
-      <div class="colonnes code-texte">
-        <pre class="mini" data-titre="signature.py"><code class="language-python" data-trim>
-SIGNATURES = {
-    b"%PDF": "PDF",
-    b"\x89PNG": "PNG",
-    b"PK": "ZIP (ou docx, xlsx…)",
-}
-
-def detect_type(path):
-    with open(path, "rb") as f:
-        header = f.read(8)
-    for magic, kind in SIGNATURES.items():
-        if header.startswith(magic):
-            return kind
-    return "inconnu"
-
-print(detect_type("invoice.pdf"))   # PDF
-print(detect_type("photo.jpg"))     # PNG !
-        </code></pre>
-        <div class="dense">
-          <ul>
-            <li><code>"rb"</code> : lecture <strong>binaire</strong>, on obtient des <code>bytes</code></li>
-            <li>Les premiers octets d'un fichier, les <strong>magic bytes</strong>, révèlent son vrai format</li>
-            <li><code>photo.jpg</code> est en réalité un PNG</li>
-          </ul>
-          <div class="encadre">
-            On reconnaît un fichier à son <strong>contenu</strong>, pas à son extension : un réflexe de base du forensic.
-          </div>
-        </div>
-      </div>
-    </div>
-    <aside class="notes">
-      Un malware déguisé en invoice.pdf.exe ou une image qui cache une archive : l'extension ne prouve rien.
-      La commande file sous Linux et macOS fait exactement ce travail.
-    </aside>
-  </section>
-
-  <!-- ================================================================== -->
-  <section>
-    <h2>Empreinte SHA-256</h2>
-    <div class="corps">
-      <div class="colonnes code-texte">
-        <pre class="mini" data-titre="hashing.py"><code class="language-python" data-trim>
-import hashlib
-
-print(hashlib.sha256(b"Fondation").hexdigest())
-# 9dff5c74a4ea8611…eef425fd
-print(hashlib.sha256(b"fondation").hexdigest())
-# 7e1f6f4f4672b3fa…3a988cbc
-
-def file_sha256(path):
-    digest = hashlib.sha256()
-    with open(path, "rb") as f:
-        while True:
-            chunk = f.read(65536)   # blocs de 64 Ko
-            if not chunk:
-                break
-            digest.update(chunk)
-    return digest.hexdigest()
-        </code></pre>
-        <div class="dense">
-          <ul>
-            <li>Une <strong>empreinte</strong> (hash) résume n'importe quelles données en 64 caractères hexadécimaux</li>
-            <li>Une seule lettre change : l'empreinte change <strong>entièrement</strong></li>
-            <li>Comparer deux empreintes permet de vérifier l'<strong>intégrité</strong> d'un fichier</li>
-          </ul>
-          <div class="encadre">
-            <strong>SHA-256 seul ne suffit pas</strong> pour stocker des mots de passe : il est trop rapide. On utilise des fonctions lentes comme bcrypt ou argon2.
-          </div>
-        </div>
-      </div>
-    </div>
-    <aside class="notes">
-      Empreintes complètes : Fondation → 9dff5c74a4ea8611996f5472159e01872bdfe3fb49a766405014d90eeef425fd ;
-      fondation → 7e1f6f4f4672b3fa6652f219759357ab44a21cec7e32e0f36573b3c73a988cbc.
-      Vérification croisée possible : shasum -a 256 fichier (macOS, Linux) ou Get-FileHash fichier (PowerShell).
-      Pourquoi SHA-256 ne suffit pas pour les mots de passe : il est trop rapide, un attaquant en teste des milliards par seconde. D'où bcrypt ou Argon2.
-    </aside>
-  </section>
-
-  <!-- ================================================================== -->
-  <section>
-    <h2>Qu'affiche ce programme ?</h2>
-    <div class="corps">
-      <div class="colonnes code-texte">
-        <pre data-titre="quiz.py"><code class="language-python" data-trim>
-word = "café"
-data = word.encode()
-print(len(word), len(data))
-print(data[-2:].hex())
-print(int("10", 16))
-        </code></pre>
-        <div>
-          <div class="reponse fragment"><code>4 5</code> : 4 caractères mais 5 octets, car <code>é</code> en occupe 2</div>
-          <div class="reponse fragment"><code>c3a9</code> : les 2 derniers octets, ceux du <code>é</code></div>
-          <div class="reponse fragment"><code>16</code> : <code>10</code> en base 16 vaut 16</div>
-        </div>
-      </div>
-    </div>
-    <aside class="notes">
-      Réponses : 4 5 · c3a9 · 16.
-      On retrouve le c3a9 de la diapo « Texte ou octets ? ».
-    </aside>
-  </section>
-
-  <!-- ================================================================== -->
-  <section data-layout="section">
-    <div class="numero">#3</div>
     <h2>JSON et sauvegarde d'objets</h2>
     <div class="sous-titre">Fichiers et données</div>
   </section>
@@ -360,7 +187,7 @@ print(int("10", 16))
       <div class="colonnes texte-code">
         <div class="dense">
           <ul>
-            <li><strong>JSON</strong> est un format texte de données structurées, lisible par les humains</li>
+            <li><strong>JSON</strong> (<em>JavaScript Object Notation</em>) est un format texte de données structurées, lisible par les humains</li>
             <li>C'est le format des API web, des fichiers de configuration… et des sauvegardes de nombreux logiciels</li>
           </ul>
           <table class="serre">
@@ -394,11 +221,11 @@ import json
 config = {"server": "srv-web", "ports": [22, 443],
           "mfa": True, "owner": "Équipe SOC"}
 
-with open("config.json", "w", encoding="utf-8") as f:
-    json.dump(config, f, indent=2, ensure_ascii=False)
+with open("config.json", "w", encoding="utf-8") as file:
+    json.dump(config, file, indent=2, ensure_ascii=False)
 
-with open("config.json", encoding="utf-8") as f:
-    loaded = json.load(f)
+with open("config.json", encoding="utf-8") as file:
+    loaded = json.load(file)
 print(loaded["ports"])            # [22, 443]
 
 text = json.dumps(config)         # dict → str
@@ -408,7 +235,7 @@ print(json.loads(text)["mfa"])    # True
           <ul>
             <li><code>dump</code> / <code>load</code> : vers ou depuis un <strong>fichier</strong></li>
             <li><code>dumps</code> / <code>loads</code> : vers ou depuis une <strong>chaîne</strong> (le « s » de <em>string</em>)</li>
-            <li><code>indent=2</code> : un fichier lisible</li>
+            <li><code>indent=2</code> : un fichier indenté, donc lisible</li>
             <li><code>ensure_ascii=False</code> : les accents restent lisibles</li>
           </ul>
         </div>
@@ -421,7 +248,8 @@ print(json.loads(text)["mfa"])    # True
     <h2>Sauvegarder des objets</h2>
     <div class="corps">
       <div class="colonnes code-texte">
-        <pre class="mini" data-titre="user.py"><code class="language-python" data-trim>
+        <div>
+        <pre class="mini" data-titre="user.py" style="margin-bottom: 12px;"><code class="language-python" data-trim>
 class User:
     def __init__(self, username, role):
         self.username = username
@@ -434,19 +262,18 @@ class User:
 def user_from_dict(data):
     return User(data["username"], data["role"])
         </code></pre>
-        <div class="dense">
           <pre class="mini" data-titre="main.py"><code class="language-python" data-trim>
-json.dumps(users)
-# TypeError: Object of type User
-#   is not JSON serializable
-
 data = []
 for user in users:
     data.append(user.to_dict())
-json.dump(data, f, indent=2)
+with open("users.json", "w", encoding="utf-8") as file:
+    json.dump(data, file, indent=2)
           </code></pre>
+        </div>
+        <div class="dense">
           <ul>
-            <li>JSON ne connaît pas vos classes : on convertit chaque objet en <strong>dictionnaire</strong></li>
+            <li>JSON ne connaît pas vos classes. <code>json.dumps(users)</code> lève <code>TypeError: Object of type User is not JSON serializable</code></li>
+            <li>On convertit donc chaque objet en <strong>dictionnaire</strong></li>
             <li>Au chargement, <code>user_from_dict()</code> refait l'objet</li>
             <li>Chaque classe a son propre <code>to_dict()</code></li>
           </ul>
@@ -455,7 +282,6 @@ json.dump(data, f, indent=2)
     </div>
     <aside class="notes">
       Au TP3, une flotte contient des vaisseaux qui contiennent des membres : le to_dict() de Fleet appelle celui de Spaceship, qui appelle celui de chaque membre.
-      Les confirmés pourront remplacer user_from_dict() par une méthode de classe (@classmethod) en bonus du TP3.
     </aside>
   </section>
 
@@ -467,8 +293,8 @@ json.dump(data, f, indent=2)
         <pre class="mini" data-titre="save.py"><code class="language-python" data-trim>
 def load_users(path):
     try:
-        with open(path, encoding="utf-8") as f:
-            data = json.load(f)
+        with open(path, encoding="utf-8") as file:
+            data = json.load(file)
     except FileNotFoundError:
         return []                # premier lancement
     except json.JSONDecodeError:
@@ -484,8 +310,8 @@ print(len(load_users("users.json")))    # 2
         </code></pre>
         <div class="dense">
           <ul>
-            <li>Au <strong>premier lancement</strong>, la sauvegarde n'existe pas encore : ce n'est pas une erreur</li>
-            <li>Un fichier tronqué ou modifié à la main lève <code>json.JSONDecodeError</code></li>
+            <li>Au <strong>premier lancement</strong>, la sauvegarde n'existe pas encore. Ce n'est pas une erreur</li>
+            <li>Un fichier tronqué ou modifié à la main lève l'erreur <code>json.JSONDecodeError</code></li>
             <li>Dans les deux cas, le programme démarre avec des données vides</li>
           </ul>
         </div>
@@ -511,18 +337,17 @@ user_from_dict({"username": "eve", "role": "root"})
         </code></pre>
         <div class="dense">
           <ul>
-            <li><strong>Jamais</strong> de <code>pickle</code> ni d'<code>eval()</code> sur des données non fiables : ils peuvent <strong>exécuter du code</strong> caché dans le fichier</li>
-            <li><code>json</code> ne fait que lire des données : il est sûr</li>
-            <li>Mais un fichier JSON se modifie à la main : les données chargées <strong>se valident</strong>, par liste blanche</li>
+            <li><code>json</code> ne fait que lire des données. Il n'exécute jamais de code</li>
+            <li>Un fichier JSON se modifie pourtant à la main. Les données chargées <strong>se valident</strong> donc, par liste blanche</li>
           </ul>
+          <div class="encadre">
+            <strong>Jamais</strong> d'<code>eval()</code> (qui exécute une chaîne comme du code Python) sur des données non fiables. Un fichier piégé suffirait à <strong>exécuter du code</strong> sur votre machine.
+          </div>
         </div>
-      </div>
-      <div class="encadre" style="margin-top: 14px;">
-        Une <strong>empreinte SHA-256</strong> de la sauvegarde permet de détecter toute modification du fichier.
       </div>
     </div>
     <aside class="notes">
-      pickle.load() sur un fichier piégé exécute du code arbitraire : c'est une vraie classe de vulnérabilités (désérialisation non sûre, catégorie de l'OWASP Top 10).
+      Même risque avec le module pickle (sauvegarde binaire d'objets Python) : charger un fichier piégé exécute du code arbitraire. C'est une vraie classe de vulnérabilités (désérialisation non sûre, catégorie de l'OWASP Top 10).
     </aside>
   </section>
 
@@ -533,10 +358,10 @@ user_from_dict({"username": "eve", "role": "root"})
       <table class="serre">
         <tr><th>Notion</th><th>À retenir</th></tr>
         <tr><td>Fichiers texte</td><td><code>with open(…, encoding="utf-8")</code> ; modes <code>"r"</code>, <code>"w"</code> et <code>"a"</code> ; lecture ligne par ligne</td></tr>
-        <tr><td>Octets <small>(facultatif)</small></td><td><code>encode()</code> et <code>decode()</code>, hexadécimal, mode <code>"rb"</code> et magic bytes</td></tr>
-        <tr><td>Empreintes (hash) <small>(facultatif)</small></td><td><code>hashlib.sha256()</code> : vérifier l'intégrité d'un fichier</td></tr>
+        <tr><td>Dates</td><td><code>datetime.now()</code> pour horodater un journal</td></tr>
+        <tr><td>Erreurs de fichier</td><td><code>FileNotFoundError</code>, <code>PermissionError</code></td></tr>
         <tr><td>JSON</td><td><code>json.dump()</code> et <code>json.load()</code> ; <code>to_dict()</code> pour les objets ; chargement qui ne plante pas</td></tr>
-        <tr><td>Sécurité</td><td>jamais <code>pickle</code> ni <code>eval()</code> sur des données non fiables ; valider les données chargées</td></tr>
+        <tr><td>Sécurité</td><td>jamais d'<code>eval()</code> sur des données non fiables ; valider les données chargées</td></tr>
       </table>
     </div>
   </section>
@@ -550,13 +375,8 @@ user_from_dict({"username": "eve", "role": "root"})
         <tr><td>14h00 – 16h45</td><td><strong>TP1 – Fondation</strong> : gestion de l'équipage, avec mon accompagnement. Ceux qui ont fini enchaînent sur le TP2</td></tr>
         <tr><td>16h45 – 17h00</td><td><strong>Kahoot</strong> : 10 questions sur la journée</td></tr>
       </table>
-      <div class="colonnes" style="margin-top: 22px;">
-        <div class="encadre">
-          Les <strong>défis du jour 2</strong> sont <strong>facultatifs</strong> et non notés : pour ceux qui ont terminé le TP1.
-        </div>
-        <div class="encadre marine">
-          <strong>Parcours confirmé</strong> : défis du jour 2 ou défis avancés, puis bonus des TP.
-        </div>
+      <div class="encadre" style="margin-top: 22px;">
+        Le <strong>défi du jour 2</strong> est <strong>facultatif</strong> et non noté. Il s'adresse à ceux qui ont terminé le TP1.
       </div>
     </div>
   </section>

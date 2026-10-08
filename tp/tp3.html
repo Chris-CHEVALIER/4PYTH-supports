@@ -25,7 +25,7 @@
   <h3>Contexte</h3>
   <p>
     La galaxie est en plein chaos et la gestion de vos équipages devient critique. Aujourd'hui, chaque fois que le programme
-    s'arrête, la flotte revient à son état de départ : recrues, promotions et vaisseaux ajoutés disparaissent.
+    s'arrête, la flotte revient à son état de départ. Recrues, promotions et vaisseaux ajoutés disparaissent.
   </p>
   <p>
     Pour ne plus rien perdre, votre poste de commandement doit <strong>sauvegarder</strong> l'état de la flotte dans un fichier
@@ -37,8 +37,8 @@
     <ul>
       <li><strong>Objectifs</strong> : convertir des objets en dictionnaires, sauvegarder et charger en JSON, gérer les erreurs de fichier
         et valider des données venues de l'extérieur.</li>
-      <li>Il se fait <strong>en autonomie</strong>. Le projet complet est à rendre <strong>au plus tard le jeudi 5 novembre à 16h30</strong> : seul le dernier commit poussé avant cette heure est évalué.</li>
-      <li>Commitez et poussez <strong>régulièrement</strong> : je suis l'avancée de vos dépôts pendant ces quatre semaines.</li>
+      <li>Vous avancez à votre rythme, en séance ou chez vous. Le projet complet est à rendre <strong>au plus tard le jeudi 5 novembre à 16h30</strong>. Seul le dernier commit poussé avant cette heure est évalué.</li>
+      <li>Commitez et poussez <strong>régulièrement</strong>. Je suis l'avancée de vos dépôts jusqu'au 5 novembre.</li>
       <li>Bloqué ? Relisez le cours 3, puis écrivez-moi : <a href="mailto:chris.chevalier@ecole-hexagone.com">chris.chevalier@ecole-hexagone.com</a>.</li>
       <li>L'IA est autorisée pour le projet, à une condition : <strong>comprendre chaque ligne</strong> de votre code. Je le vérifierai en soutenance.</li>
     </ul>
@@ -60,8 +60,9 @@
     <div class="meta"><span class="etiquette clair">Méthodes · héritage · composition</span></div>
 
     <p>
-      JSON ne connaît pas vos classes : <code>json.dumps(fleet)</code> provoque une <code>TypeError</code>. Chaque classe doit donc savoir
-      se <strong>convertir en dictionnaire</strong>, avec une méthode <code>to_dict()</code>.
+      JSON ne connaît pas vos classes. <code>json.dumps(fleet)</code> provoque donc une <code>TypeError</code>. Chaque classe doit savoir
+      se <strong>convertir en dictionnaire</strong>, avec une méthode <code>to_dict()</code> écrite dans son propre fichier
+      (<code>person.py</code>, <code>spaceship.py</code> ou <code>fleet.py</code>).
     </p>
 
     <table>
@@ -76,8 +77,8 @@
     <div class="encadre">
       <span class="intitule">Le bon format, vous l'avez déjà</span>
       Le résultat de <code>fleet.to_dict()</code> a <strong>exactement le format de <code>FLEET_DATA</code></strong> du TP2, avec une clé
-      <code>experience</code> en plus pour les opérateurs. Votre <code>build_fleet()</code> saura donc reconstruire la flotte :
-      adaptez-le seulement pour lire l'expérience avec <code>m.get("experience", 0)</code>, puisqu'elle est absente de <code>FLEET_DATA</code>.
+      <code>experience</code> en plus pour les opérateurs. Votre <code>build_fleet()</code> saura donc reconstruire la flotte.
+      Adaptez-le seulement pour lire l'expérience avec <code>m.get("experience", 0)</code>, puisqu'elle est absente de <code>FLEET_DATA</code>.
     </div>
 
     <pre data-titre="Vérification – l'aller-retour doit être parfait"><code class="language-python">
@@ -97,8 +98,8 @@
       <summary>Indices</summary>
       <ul>
         <li>Revoyez la notion de sauvegarde d'objets avec <code>to_dict()</code>.</li>
-        <li>Dans <code>Operator</code>, ne réécrivez pas les quatre clés de <code>Person</code> : partez de <code>super().to_dict()</code> puis complétez le dictionnaire.</li>
-        <li>Dans <code>Spaceship</code> et <code>Fleet</code>, chaque objet contenu sait déjà se convertir : une boucle qui appelle leur <code>to_dict()</code> suffit.
+        <li>Dans <code>Operator</code>, ne réécrivez pas les quatre clés de <code>Person</code>. Partez de <code>super().to_dict()</code> puis complétez le dictionnaire.</li>
+        <li>Dans <code>Spaceship</code> et <code>Fleet</code>, chaque objet contenu sait déjà se convertir. Une boucle qui appelle leur <code>to_dict()</code> suffit.
           C'est la composition qui travaille pour vous.</li>
       </ul>
     </details>
@@ -140,7 +141,7 @@
       <summary>Indices</summary>
       <ul>
         <li>Revoyez l'écriture et la lecture du JSON ainsi que le chargement robuste.</li>
-        <li><code>json.dump(data, f, indent=2, ensure_ascii=False)</code> dans un fichier ouvert avec <code>encoding="utf-8"</code>.</li>
+        <li><code>json.dump(data, file, indent=2, ensure_ascii=False)</code> dans un fichier ouvert avec <code>encoding="utf-8"</code>.</li>
         <li>Dans un <code>except</code>, vous pouvez lever une nouvelle exception : <code>raise ValueError("…")</code>.</li>
       </ul>
     </details>
@@ -189,10 +190,9 @@
     <div class="encadre">
       <span class="intitule">Réfléchissez</span>
       <ul>
-        <li>Pour le mana, votre programme <strong>corrige</strong> la valeur ; pour le rôle, il la <strong>refuse</strong>. Quelle stratégie est la plus sûre ? Dans quels cas ?</li>
-        <li>Si l'attaquant change un âge de 37 en 38, aucune de vos validations ne le voit : la valeur est plausible.
-          Pour détecter <strong>toute</strong> modification, il faut une empreinte de la sauvegarde : c'est le bonus 5.</li>
-        <li>C'est pour éviter ces pièges que l'on utilise JSON et jamais <code>pickle</code> ni <code>eval()</code> sur des données non fiables (cours 3).</li>
+        <li>Pour le mana, votre programme <strong>corrige</strong> la valeur. Pour le rôle, il la <strong>refuse</strong>. Quelle stratégie est la plus sûre ? Dans quels cas ?</li>
+        <li>Si l'attaquant change un âge de 37 en 38, aucune de vos validations ne le voit. La valeur est plausible. Valider les données ne détecte pas toutes les modifications.</li>
+        <li>C'est pour éviter ces pièges que l'on utilise JSON et jamais <code>eval()</code> sur des données non fiables.</li>
       </ul>
     </div>
   </section>
@@ -224,7 +224,7 @@
     <ul>
       <li>Après chaque action du menu, un événement peut survenir au hasard : une <strong>attaque du Mulet</strong> endommage un vaisseau
         opérationnel. Ou bien des <strong>renforts</strong> rejoignent un vaisseau qui a encore de la place.</li>
-      <li>Utilisez le module <code>random</code> : il convient parfaitement pour un jeu, jamais pour générer un secret !</li>
+      <li>Utilisez le module <code>random</code>. Il convient parfaitement pour un jeu, jamais pour générer un secret !</li>
     </ul>
 
     <h3>Bonus 2 – Statistiques enrichies</h3>
@@ -237,18 +237,12 @@
       <li>Au lancement, si <code>fleet.json</code> existe, la dernière sauvegarde est chargée automatiquement. Sinon, on part de <code>FLEET_DATA</code>.</li>
     </ul>
 
-    <h3>Bonus 4 – Parcours confirmé : <code>from_dict()</code></h3>
+    <h3>Bonus 4 – Une méthode de classe <code>from_dict()</code></h3>
     <ul>
       <li>Remplacez <code>build_fleet()</code> par une méthode de classe <code>from_dict()</code> dans chaque classe, symétrique de <code>to_dict()</code>.
         Découvrez le décorateur <a href="https://docs.python.org/fr/3/library/functions.html#classmethod" target="_blank"><code>@classmethod</code></a>.</li>
     </ul>
 
-    <h3>Bonus 5 – Protéger la sauvegarde par une empreinte</h3>
-    <ul>
-      <li>À chaque sauvegarde, calculez l'<strong>empreinte SHA-256</strong> de <code>fleet.json</code> (cours 3) et enregistrez-la dans <code>fleet.json.sha256</code>.</li>
-      <li>Au chargement, recalculez l'empreinte : si elle diffère, refusez le fichier. Même le passage d'un âge de 37 à 38 est alors détecté.</li>
-      <li>Réfléchissez : un attaquant qui peut modifier <code>fleet.json</code> peut aussi recalculer l'empreinte. Comment l'en empêcher ?</li>
-    </ul>
   </section>
 
   <!-- ================================================================== -->

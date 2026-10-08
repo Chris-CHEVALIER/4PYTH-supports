@@ -18,8 +18,14 @@
 
 <main>
 
+  <div class="encadre">
+    <span class="intitule">Défis facultatifs</span>
+    Ces défis sont <strong>facultatifs et non notés</strong>. Votre priorité est de terminer le <strong>projet Fondation</strong>,
+    à rendre au plus tard à 16h30.
+  </div>
+
   <p>
-    Dernière série ! Aucune notion nouvelle : ces trois défis mobilisent <strong>tout ce que vous avez appris</strong>
+    Dernière série ! Aucune notion nouvelle. Ces trois défis mobilisent <strong>tout ce que vous avez appris</strong>
     et sont un excellent entraînement pour l'examen écrit de 16h30.
   </p>
 
@@ -28,27 +34,26 @@
     <ul>
       <li>Vous codez <strong>vous-mêmes, sans IA</strong> : ni ChatGPT, ni Claude, ni autocomplétion Copilot.</li>
       <li>La <a href="https://docs.python.org/fr/3/" target="_blank">documentation Python</a> est autorisée et même encouragée.</li>
-      <li>Un fichier par défi : <code>challenge7.py</code>, <code>challenge8.py</code> et <code>challenge9.py</code>.</li>
+      <li>Un fichier par défi : <code>challenge5.py</code>, <code>challenge6.py</code> et <code>challenge7.py</code>.</li>
       <li><strong>Validation</strong> : levez la main, exécutez votre code devant moi puis répondez à une question sur votre code.</li>
-      <li><strong>Notation</strong> : non fait (0), partiel (1) ou réussi (2). Les défis comptent pour 10 % de la note du module.</li>
-      <li><strong>Parcours confirmé</strong> : validez ces trois défis puis passez aux défis avancés.</li>
+      <li><strong>Notation</strong> : aucune, ces défis sont facultatifs. Faites-les valider quand même. C'est un bon entraînement pour l'examen.</li>
     </ul>
   </div>
 
   <nav class="sommaire">
-    <a href="#defi-7"><span class="n">Défi 7</span><br>Audit de configuration SSH</a>
-    <a href="#defi-8"><span class="n">Défi 8</span><br>Chiffre de César</a>
-    <a href="#defi-9"><span class="n">Défi 9</span><br>Tableau de bord d'alertes</a>
+    <a href="#defi-5"><span class="n">Défi 5</span><br>Audit de configuration SSH</a>
+    <a href="#defi-6"><span class="n">Défi 6</span><br>Chiffre de César</a>
+    <a href="#defi-7"><span class="n">Défi 7</span><br>Tableau de bord d'alertes</a>
   </nav>
 
   <!-- ================================================================== -->
-  <section class="defi" id="defi-7">
-    <h2><span class="num">7</span> Audit de configuration SSH</h2>
+  <section class="defi" id="defi-5">
+    <h2><span class="num">5</span> Audit de configuration SSH</h2>
     <div class="meta"><span class="etiquette clair">Fichiers · chaînes · dictionnaires · JSON</span><span class="etiquette ambre">Audit</span></div>
 
     <p>
       Lors d'un audit technique, on vérifie que la configuration des serveurs respecte la politique de sécurité de l'entreprise.
-      Le serveur SSH de <code>srv-web</code> vous semble mal durci : à vous d'écrire l'outil qui le prouve.
+      Le serveur SSH de <code>srv-web</code> vous semble mal durci. À vous d'écrire l'outil qui le prouve.
     </p>
 
     <h3>Votre mission</h3>
@@ -103,7 +108,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li><code>line.split(maxsplit=1)</code> coupe la ligne en deux au premier espace seulement : le nom du paramètre puis sa valeur.</li>
+        <li><code>line.split(maxsplit=1)</code> coupe la ligne en deux au premier espace seulement. On obtient le nom du paramètre puis sa valeur.</li>
         <li><code>config.get(setting)</code> renvoie <code>None</code> si le paramètre est absent, au lieu de lever une <code>KeyError</code>.</li>
         <li><code>isinstance(expected, int)</code> vous dit s'il faut comparer des nombres. Attention : <code>"10" &lt;= "3"</code> est vrai entre chaînes !</li>
       </ul>
@@ -125,8 +130,8 @@
   </section>
 
   <!-- ================================================================== -->
-  <section class="defi" id="defi-8">
-    <h2><span class="num">8</span> Chiffre de César</h2>
+  <section class="defi" id="defi-6">
+    <h2><span class="num">6</span> Chiffre de César</h2>
     <div class="meta"><span class="etiquette clair">Boucles · % · fonctions · chaînes</span><span class="etiquette ambre">Cryptologie</span></div>
 
     <p>
@@ -188,18 +193,18 @@
   </section>
 
   <!-- ================================================================== -->
-  <section class="defi" id="defi-9">
-    <h2><span class="num">9</span> Tableau de bord d'alertes</h2>
+  <section class="defi" id="defi-7">
+    <h2><span class="num">7</span> Tableau de bord d'alertes</h2>
     <div class="meta"><span class="etiquette clair">Classes · héritage · JSON · dictionnaires</span><span class="etiquette ambre">SOC</span></div>
 
     <p>
-      Le SOC reçoit chaque matin un rapport d'alertes au format JSON. Votre mission : le recharger, recréer les objets du défi 6
+      Le SOC reçoit chaque matin un rapport d'alertes au format JSON. Votre mission : le recharger, recréer les objets du défi 4
       puis afficher un <strong>tableau de bord</strong> pour l'équipe d'astreinte.
     </p>
 
     <h3>Votre mission</h3>
     <ol>
-      <li>Placez votre <code>challenge6.py</code> du jour 2 dans le même dossier. Écrivez le rapport <code>REPORT</code> ci-dessous dans <code>report.json</code>.</li>
+      <li>Placez votre <code>challenge4.py</code> du jour 2 dans le même dossier. Écrivez le rapport <code>REPORT</code> ci-dessous dans <code>report.json</code>.</li>
       <li>Écrivez la fonction <code>alert_from_dict(data)</code>, qui recrée <strong>le bon type d'objet</strong> selon la clé <code>type</code> :
         <code>BruteForceAlert</code>, <code>CompromiseAlert</code> ou <code>Alert</code>.</li>
       <li>Écrivez la fonction <code>load_alerts(path)</code>, qui relit <code>report.json</code> et renvoie la liste des objets.</li>
@@ -235,7 +240,7 @@
     <details>
       <summary>Indices</summary>
       <ul>
-        <li><code>from challenge6 import Alert, BruteForceAlert, CompromiseAlert</code> fonctionne si les deux fichiers sont dans le même dossier.</li>
+        <li><code>from challenge4 import Alert, BruteForceAlert, CompromiseAlert</code> fonctionne si les deux fichiers sont dans le même dossier.</li>
         <li>Comptez avec des dictionnaires : un pour les sévérités et un pour les IP. Parcourez ensuite celui des IP pour trouver la plus fréquente.</li>
         <li><code>isinstance(alert, CompromiseAlert)</code> repère les comptes compromis.</li>
       </ul>
@@ -252,7 +257,7 @@
     <h3>Bonus</h3>
     <ul>
       <li>Affichez les alertes de la plus grave à la moins grave, grâce à leur méthode <code>describe()</code>.</li>
-      <li>Modifiez le <code>to_dict()</code> du défi 6 pour qu'il produise exactement ce format : l'aller-retour entre les défis 6 et 9 est alors complet.</li>
+      <li>Modifiez le <code>to_dict()</code> du défi 4 pour qu'il produise exactement ce format. L'aller-retour entre les défis 4 et 7 est alors complet.</li>
     </ul>
   </section>
 

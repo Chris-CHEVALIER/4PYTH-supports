@@ -36,7 +36,7 @@
         </div>
         <div class="carte">
           <h3>2. Découper</h3>
-          Écrire les étapes <strong>en français</strong>, une par ligne, avant de taper la moindre ligne de code : c'est le <strong>pseudo-code</strong>.
+          Écrire les étapes <strong>en français</strong>, une par ligne, avant de taper la moindre ligne de code. C'est le <strong>pseudo-code</strong>.
         </div>
         <div class="carte">
           <h3>3. Coder petit à petit</h3>
@@ -62,10 +62,10 @@
         <tr><td><strong>Entrées</strong></td><td><code>password</code> (une chaîne de caractères) et <code>is_admin</code> (<code>True</code> ou <code>False</code>, <code>False</code> par défaut)</td></tr>
         <tr><td><strong>Sortie</strong></td><td>un <strong>tuple</strong> : <code>True</code> ou <code>False</code>, puis la <strong>liste des messages d'erreur</strong></td></tr>
         <tr><td><strong>Exemple valide</strong></td><td><code>check_password("Tr0ub4dour&amp;Co")</code> renvoie <code>(True, [])</code></td></tr>
-        <tr><td><strong>Exemple refusé</strong></td><td><code>check_password("azerty")</code> renvoie <code>False</code> et 5 messages : il ne respecte presque aucune règle</td></tr>
+        <tr><td><strong>Exemple refusé</strong></td><td><code>check_password("azerty")</code> renvoie <code>False</code> et 5 messages. Il ne respecte presque aucune règle</td></tr>
       </table>
       <div class="encadre" style="margin-top: 18px;">
-        Le mot de passe est valide <strong>si et seulement si la liste des erreurs est vide</strong> : il suffit de remplir cette liste, règle après règle.
+        Le mot de passe est valide <strong>si et seulement si la liste des erreurs est vide</strong>. Il suffit de remplir cette liste, règle après règle.
       </div>
     </div>
     <aside class="notes">
@@ -86,7 +86,7 @@ pour chaque catégorie jamais rencontrée : ajouter une erreur
 si le mot de passe est un mot de passe courant : ajouter une erreur
 renvoyer (la liste est-elle vide ?, la liste des erreurs)
       </code></pre>
-      <p class="petit">Chaque ligne du plan deviendra quelques lignes de Python. Le plus dur est fait : il ne reste qu'à traduire.</p>
+      <p class="petit">Chaque ligne du plan deviendra quelques lignes de Python. Le plus dur est fait. Il ne reste qu'à traduire.</p>
     </div>
     <aside class="notes">
       Construire ce plan avec la classe, au tableau, avant de le dévoiler. Accepter d'autres découpages s'ils sont justes.
@@ -111,7 +111,7 @@ def check_password(password, is_admin=False):
 print(check_password("azerty"))   # (True, [])
         </code></pre>
         <ul class="dense">
-          <li>La fonction <strong>tourne déjà</strong> : elle accepte tout, mais elle renvoie le bon type de résultat</li>
+          <li>La fonction <strong>tourne déjà</strong>. Elle accepte tout, mais elle renvoie le bon type de résultat</li>
           <li><code>len(errors) == 0</code> vaut <code>True</code> quand la liste est vide</li>
           <li><code>return a, b</code> renvoie un <strong>tuple</strong></li>
         </ul>
@@ -141,7 +141,7 @@ def check_password(password, is_admin=False):
     return len(errors) == 0, errors
         </code></pre>
         <ul class="dense">
-          <li>Les seuils sont des <strong>constantes</strong> en majuscules : on les modifie à un seul endroit</li>
+          <li>Les seuils sont des <strong>constantes</strong> en majuscules. On les modifie à un seul endroit</li>
           <li>Test : <code>check_password("azerty")</code> renvoie maintenant <code>(False, ['au moins 12 caractères'])</code></li>
         </ul>
       </div>
@@ -171,7 +171,7 @@ def check_password(password, is_admin=False):
         <ul class="dense">
           <li>Quatre <strong>drapeaux</strong> (des booléens) partent à <code>False</code> : « je n'ai encore rien vu »</li>
           <li>La boucle les passe à <code>True</code> dès qu'elle rencontre la catégorie</li>
-          <li><code>isalnum()</code> est vrai pour une lettre ou un chiffre : <code>not char.isalnum()</code> repère donc un caractère spécial</li>
+          <li><code>isalnum()</code> est vrai pour une lettre ou un chiffre. <code>not char.isalnum()</code> repère donc un caractère spécial</li>
         </ul>
       </div>
     </div>
@@ -202,8 +202,8 @@ def check_password(password, is_admin=False):
     return len(errors) == 0, errors
         </code></pre>
         <ul class="dense">
-          <li>Des <code>if</code> <strong>indépendants</strong> (et non des <code>elif</code>) : plusieurs règles peuvent échouer en même temps</li>
-          <li>On compare tout <strong>en minuscules</strong> : « AZERTY » est aussi faible que « azerty »</li>
+          <li>Des <code>if</code> <strong>indépendants</strong> (et non des <code>elif</code>). Plusieurs règles peuvent échouer en même temps</li>
+          <li>On compare tout <strong>en minuscules</strong>. « AZERTY » est aussi faible que « azerty »</li>
           <li>Le <code>return</code> reste <strong>à la fin</strong>, après toutes les vérifications</li>
         </ul>
       </div>
@@ -225,7 +225,7 @@ print(check_password("azerty"))
 print(check_password("Tr0ub4dour&amp;Co", is_admin=True))
 # (False, ['au moins 16 caractères'])
       </code></pre>
-      <p class="petit">Si un résultat diffère, on relit l'étape correspondante du plan : c'est là que se trouve l'erreur.</p>
+      <p class="petit">Si un résultat diffère, on relit l'étape correspondante du plan. C'est là que se trouve l'erreur.</p>
     </div>
   </section>
 

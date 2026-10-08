@@ -34,7 +34,6 @@
     </ol>
     <aside class="notes">
       Toute la théorie ce matin, toute la pratique cet après-midi (défis puis TP1).
-      Les octets, encodages et hash viendront au cours 3, vendredi.
     </aside>
   </section>
 
@@ -63,7 +62,7 @@
         <div>
           <div class="encadre">
             <p><strong>Python 2 ou Python 3 ?</strong></p>
-            <p>Python 2 n'est plus maintenu depuis le 1<sup>er</sup> janvier 2020. Pourtant, beaucoup de vieux scripts sont encore écrits en Python 2 : il faut savoir les reconnaître et les adapter.</p>
+            <p>Python 2 n'est plus maintenu depuis le 1<sup>er</sup> janvier 2020. Pourtant, beaucoup de vieux scripts sont encore écrits en Python 2. Il faut savoir les reconnaître et les adapter.</p>
           </div>
           <pre data-titre="Reconnaître la version"><code class="language-python" data-trim>
 print "pwned"    # Python 2
@@ -96,7 +95,7 @@ print("pwned")   # Python 3
           <ul>
             <li>Installateur de python.org ou <code>brew install python</code></li>
             <li>Vérifiez : <code>python3 --version</code></li>
-            <li>⚠ Le <code>python3</code> fourni avec les outils Xcode est <strong>trop ancien</strong> (3.9) : vérifiez toujours la version</li>
+            <li>⚠ Le <code>python3</code> fourni avec les outils Xcode est <strong>trop ancien</strong> (3.9). Vérifiez toujours la version</li>
           </ul>
         </div>
         <div class="carte">
@@ -111,7 +110,7 @@ print("pwned")   # Python 3
       </div>
     </div>
     <aside class="notes">
-      Première heure : je fais le tour des postes. Les confirmés aident leurs voisins.
+      Première heure : je fais le tour des postes. Ceux qui ont déjà programmé aident leurs voisins.
       Sous Windows, le lanceur py est installé avec Python ; python fonctionne aussi une fois le PATH configuré.
     </aside>
   </section>
@@ -149,7 +148,7 @@ $ python3 scan.py    # macOS / Linux
       <div class="colonnes">
         <div class="dense">
           <ul>
-            <li>Sans venv, tous les paquets s'installent <strong>au même endroit</strong> : deux projets qui exigent deux versions d'une même bibliothèque entrent en conflit</li>
+            <li>Sans venv, tous les paquets s'installent <strong>au même endroit</strong>. Deux projets qui exigent deux versions d'une même bibliothèque entrent en conflit</li>
             <li>Un venv (<em>virtual environment</em>, environnement virtuel) est un dossier <code>.venv</code> <strong>propre au projet</strong>, avec son Python et ses paquets</li>
             <li><strong>Aucun droit administrateur</strong> nécessaire</li>
             <li><strong>Reproductible</strong> : la liste des paquets tient dans un fichier</li>
@@ -158,7 +157,7 @@ $ python3 scan.py    # macOS / Linux
         <div>
           <div class="encadre marine">
             <p><strong>Côté cyber</strong></p>
-            <p>Chaque outil de sécurité installé dans son propre venv : pas de conflit entre outils et vous savez exactement ce qui est installé sur votre machine.</p>
+            <p>Chaque outil de sécurité s'installe dans son propre venv. Il n'y a pas de conflit entre outils et vous savez exactement ce qui est installé sur votre machine.</p>
           </div>
           <div class="encadre" style="margin-top: 16px;">
             <p><strong>Attention au typosquatting</strong></p>
@@ -189,8 +188,8 @@ source .venv/bin/activate
       </div>
       <ul class="dense">
         <li><code>python -m venv .venv</code> <strong>crée</strong> le venv, une seule fois par projet</li>
-        <li><code>activate</code> <strong>active</strong> le venv dans le terminal ouvert : les commandes <code>python</code> et <code>pip</code> utilisent désormais le Python et les paquets du venv plutôt que ceux de l'ordinateur</li>
-        <li>L'invite affiche <code>(.venv)</code> : c'est le signe que le venv est actif</li>
+        <li><code>activate</code> <strong>active</strong> le venv dans le terminal ouvert. Les commandes <code>python</code> et <code>pip</code> utilisent désormais le Python et les paquets du venv plutôt que ceux de l'ordinateur</li>
+        <li>L'invite affiche <code>(.venv)</code>. C'est le signe que le venv est actif</li>
       </ul>
       <div class="encadre">
         <strong>PowerShell refuse l'activation</strong> (« l'exécution de scripts est désactivée sur ce système ») ? Une seule fois :
@@ -216,9 +215,9 @@ __pycache__/
         </code></pre>
       </div>
       <ul class="dense">
-        <li><strong>Activez toujours le venv avant <code>pip install</code></strong>, sinon le paquet s'installe sur tout l'ordinateur. L'activation vaut pour un terminal : à chaque nouveau terminal, on réactive. <code>deactivate</code> revient au Python de l'ordinateur</li>
-        <li><code>requirements.txt</code> liste les paquets et leurs versions : <strong>on le versionne</strong> dans Git</li>
-        <li><code>.venv</code> se recrée en une commande et <code>__pycache__</code> contient le code déjà compilé que Python garde pour démarrer plus vite : <strong>on ne versionne ni l'un ni l'autre</strong></li>
+        <li><strong>Activez toujours le venv avant <code>pip install</code></strong>, sinon le paquet s'installe sur tout l'ordinateur. L'activation vaut pour un terminal. À chaque nouveau terminal, on réactive. <code>deactivate</code> revient au Python de l'ordinateur</li>
+        <li><code>requirements.txt</code> liste les paquets et leurs versions. <strong>On le versionne</strong> dans Git</li>
+        <li><code>.venv</code> se recrée en une commande et <code>__pycache__</code> contient le code déjà compilé que Python garde pour démarrer plus vite. <strong>On ne versionne ni l'un ni l'autre</strong></li>
       </ul>
     </div>
   </section>
@@ -237,7 +236,7 @@ __pycache__/
     <div class="corps">
       <div class="colonnes code-texte">
         <div>
-          <p>Une variable est une <strong>boîte étiquetée</strong> : le nom est l'étiquette, la valeur est le contenu. On la crée avec <strong>l'opérateur d'affectation</strong> <code>=</code>.</p>
+          <p>Une variable est une <strong>boîte étiquetée</strong>. Le nom est l'étiquette, la valeur est le contenu. On la crée avec <strong>l'opérateur d'affectation</strong> <code>=</code>.</p>
           <pre data-titre="variables.py"><code class="language-python" data-trim>
 username = "Chris"
 failed_attempts = 0
@@ -311,7 +310,7 @@ print("Port " + label)      # Port 443
           </div>
           <ul class="dense" style="margin-top: 16px;">
             <li><code>print()</code> affiche une ou plusieurs valeurs, séparées par des espaces</li>
-            <li><strong>Concaténation</strong> : l'opérateur <code>+</code> colle deux chaînes de caractères bout à bout. Les deux côtés doivent être des chaînes : d'où le <code>str(443)</code></li>
+            <li><strong>Concaténation</strong> : l'opérateur <code>+</code> colle deux chaînes de caractères bout à bout. Les deux côtés doivent être des chaînes. D'où le <code>str(443)</code></li>
           </ul>
         </div>
       </div>
@@ -339,7 +338,7 @@ print(len(ip))     # 12
         <ul class="dense">
           <li>Le premier indice est <strong>0</strong> ; les indices négatifs partent de la fin</li>
           <li><code>s[début:fin]</code> : la <strong>fin est exclue</strong> ; début omis = depuis le début, fin omise = jusqu'au bout</li>
-          <li>Une chaîne <strong>ne se modifie pas</strong> : <code>ip[0] = "2"</code> provoque une erreur</li>
+          <li>Une chaîne <strong>ne se modifie pas</strong>. <code>ip[0] = "2"</code> provoque une erreur</li>
         </ul>
       </div>
     </div>
@@ -371,7 +370,7 @@ print(f"CVSS : {9.8123:.1f}")      # CVSS : 9.8
           <tr><td><code>x in s</code></td><td><code>s</code> contient <code>x</code> ?</td></tr>
         </table>
       </div>
-      <p class="petit">La <strong>f-string</strong> (<code>f"…{variable}…"</code>) est une <strong>concaténation moderne</strong> : au lieu de coller des morceaux avec <code>+</code>,
+      <p class="petit">La <strong>f-string</strong> (<code>f"…{variable}…"</code>) est une <strong>concaténation moderne</strong>. Au lieu de coller des morceaux avec <code>+</code>,
         on insère les valeurs directement dans le texte. <code>"Échec pour " + user</code> devient <code>f"Échec pour {user}"</code>, sans conversion avec <code>str()</code>.</p>
     </div>
     <aside class="notes">
@@ -437,7 +436,7 @@ print(port == 443, port != 443, port &gt; 1024)
             <tr><td><code>&gt;</code> / <code>&gt;=</code></td><td>supérieur / ou égal</td></tr>
           </table>
           <div class="encadre" style="margin-top: 16px;">
-            <strong><code>%</code> (modulo)</strong> donne le reste d'une division : il permet de « faire le tour » d'un cycle (les heures d'une horloge, les lettres d'un alphabet). Il est très utilisé en cryptographie.
+            <strong><code>%</code> (modulo)</strong> donne le reste d'une division. Il permet de « faire le tour » d'un cycle (les heures d'une horloge, les lettres d'un alphabet). Il est très utilisé en cryptographie.
           </div>
         </div>
       </div>
@@ -463,7 +462,7 @@ else:
     print("Accès refusé")
         </code></pre>
         <ul class="dense">
-          <li>Les conditions sont testées <strong>dans l'ordre</strong> : seul le premier bloc dont la condition est vraie s'exécute</li>
+          <li>Les conditions sont testées <strong>dans l'ordre</strong>. Seul le premier bloc dont la condition est vraie s'exécute</li>
           <li><code>elif</code> et <code>else</code> sont facultatifs</li>
           <li>Les deux-points <code>:</code> ouvrent un bloc ; <strong>l'indentation (4 espaces)</strong> délimite ce bloc</li>
           <li>Une erreur d'indentation change le sens du programme, voire l'empêche de s'exécuter</li>
@@ -521,7 +520,7 @@ match command:
           <li>Compare une valeur à plusieurs <strong>motifs</strong>, du premier au dernier</li>
           <li><code>|</code> signifie « ou »</li>
           <li><code>_</code> est le cas par défaut</li>
-          <li>Disponible depuis Python 3.10 : c'est l'équivalent du bloc <code>switch</code> / <code>case</code> de nombreux langages (C, Java, JavaScript…)</li>
+          <li>Disponible depuis Python 3.10. C'est l'équivalent du bloc <code>switch</code> / <code>case</code> de nombreux langages (C, Java, JavaScript…)</li>
           <li>Idéal pour un <strong>menu</strong></li>
         </ul>
       </div>
@@ -555,7 +554,7 @@ print(open_ports[-2:])      # [443, 3306]
         </code></pre>
         <ul class="dense">
           <li>Une collection <strong>ordonnée</strong> et <strong>modifiable</strong>, entre crochets <code>[]</code></li>
-          <li>Indices et découpage fonctionnent <strong>comme pour les chaînes de caractères</strong> : <code>liste[-2:]</code> part du 2<sup>e</sup> élément en partant de la fin et va jusqu'au bout. <code>logs[-10:]</code> donne ainsi les 10 dernières lignes d'un journal</li>
+          <li>Indices et découpage fonctionnent <strong>comme pour les chaînes de caractères</strong>. <code>liste[-2:]</code> part du 2<sup>e</sup> élément en partant de la fin et va jusqu'au bout. <code>logs[-10:]</code> donne ainsi les 10 dernières lignes d'un journal</li>
           <li><code>remove()</code> retire la <strong>première</strong> occurrence trouvée</li>
           <li>Toutes les méthodes : <a href="https://docs.python.org/fr/3/tutorial/datastructures.html" target="_blank">documentation officielle</a></li>
         </ul>
@@ -779,7 +778,7 @@ for i in range(3):
 print(total)
         </code></pre>
         <div>
-          <div class="reponse fragment"><code>1</code> : 21 et 22 sont sautés par <code>continue</code>, 80 est compté, puis la boucle s'arrête sur 443 : 8080 n'est jamais atteint</div>
+          <div class="reponse fragment"><code>1</code> : 21 et 22 sont sautés par <code>continue</code>, 80 est compté, puis la boucle s'arrête sur 443. Le port 8080 n'est jamais atteint</div>
           <div class="reponse fragment"><code>3</code> : <code>range(3)</code> produit 0, 1 et 2, donc 0 + 1 + 2 = 3</div>
         </div>
       </div>
@@ -818,7 +817,7 @@ print(format_alert("10.0.0.5", level="HIGH"))
 </code></pre>
         <ul class="dense">
           <li><code>def nom(paramètres):</code> définit un bloc réutilisable</li>
-          <li><code>return</code> <strong>renvoie</strong> un résultat et termine la fonction. Il n'est pas obligatoire : sans <code>return</code>, la fonction renvoie <code>None</code> (on parle alors parfois de <strong>procédure</strong>)</li>
+          <li><code>return</code> <strong>renvoie</strong> un résultat et termine la fonction. Il n'est pas obligatoire. Sans <code>return</code>, la fonction renvoie <code>None</code> (on parle alors parfois de <strong>procédure</strong>)</li>
           <li>La <strong>docstring</strong> (<code>"""…"""</code>) documente la fonction</li>
           <li><code>level="INFO"</code> : valeur <strong>par défaut</strong>, utilisée si l'argument est omis</li>
         </ul>
@@ -832,16 +831,16 @@ print(format_alert("10.0.0.5", level="HIGH"))
       <div class="colonnes c3">
         <div class="carte">
           <h3>Ne pas se répéter</h3>
-          Un même code copié à plusieurs endroits devient une fonction : on le corrige alors à un seul endroit
+          Un même code copié à plusieurs endroits devient une fonction. On le corrige alors à un seul endroit
           (principe <strong>DRY</strong>, <em>Don't Repeat Yourself</em>).
         </div>
         <div class="carte">
           <h3>Une fonction, une tâche</h3>
-          Des fonctions courtes, <strong>15 lignes au maximum</strong>. Plus longue, elle fait plusieurs choses : découpez-la.
+          Des fonctions courtes, <strong>15 lignes au maximum</strong>. Plus longue, elle fait plusieurs choses. Découpez-la.
         </div>
         <div class="carte">
           <h3>Rester générique</h3>
-          Passez les valeurs en <strong>paramètres</strong> plutôt que de les écrire en dur : <code>is_valid_port(port)</code> sert pour n'importe quel port.
+          Passez les valeurs en <strong>paramètres</strong> plutôt que de les écrire en dur. <code>is_valid_port(port)</code> sert pour n'importe quel port.
         </div>
       </div>
       <div class="encadre marine" style="margin-top: 24px;">
@@ -873,7 +872,7 @@ NameError: name 'words' is not defined
         <ul class="dense">
           <li>Variable créée dans une fonction : <strong>locale</strong>, elle n'existe que dans la fonction et disparaît à sa sortie</li>
           <li>Variable créée hors de toute fonction : <strong>globale</strong>, à éviter dans les fonctions (passez-la en paramètre)</li>
-          <li>Un <code>if</code> ou une boucle <strong>ne crée pas de portée</strong> : une variable créée dans un bloc reste accessible après lui. Seules les fonctions et les classes en créent une</li>
+          <li>Un <code>if</code> ou une boucle <strong>ne crée pas de portée</strong>. Une variable créée dans un bloc reste accessible après lui. Seules les fonctions et les classes en créent une</li>
           <li>Pour renvoyer plusieurs valeurs : un <strong>tuple</strong>, que l'on déballe</li>
         </ul>
       </div>
@@ -959,7 +958,7 @@ print(c)         # une lettre au hasard
         </div>
       </div>
       <div class="encadre">
-        <code>random</code> est <strong>pseudo-aléatoire</strong> : qui connaît son état prédit la suite. Parfait pour un jeu, <strong>jamais</strong> pour un mot de passe, un jeton ou une clé : utilisez <code>secrets</code>.
+        <code>random</code> est <strong>pseudo-aléatoire</strong>. Qui connaît son état prédit la suite. Parfait pour un jeu, <strong>jamais</strong> pour un mot de passe, un jeton ou une clé. Utilisez <code>secrets</code>.
       </div>
     </div>
     <aside class="notes">
@@ -1056,8 +1055,8 @@ except ValueError:
         </div>
       </div>
       <ul class="dense">
-        <li>Un <code>except: pass</code> <strong>masque les anomalies</strong>, y compris une tentative d'attaque : on attrape toujours une erreur <strong>précise</strong></li>
-        <li>N'affichez jamais un traceback complet à l'utilisateur : chemins, versions et noms de fichiers sont une <strong>fuite d'informations</strong> précieuse pour un attaquant</li>
+        <li>Un <code>except: pass</code> <strong>masque les anomalies</strong>, y compris une tentative d'attaque. On attrape toujours une erreur <strong>précise</strong></li>
+        <li>N'affichez jamais un traceback complet à l'utilisateur. Chemins, versions et noms de fichiers sont une <strong>fuite d'informations</strong> précieuse pour un attaquant</li>
         <li>Le détail de l'erreur se consigne dans un <strong>journal</strong>, côté serveur</li>
       </ul>
     </div>
@@ -1075,13 +1074,8 @@ except ValueError:
         <tr><td>15h15 – 16h45</td><td><strong>TP1 – Fondation</strong> : gestion fonctionnelle de l'équipage</td></tr>
         <tr><td>16h45 – 17h00</td><td><strong>Kahoot</strong> : 10 questions sur la journée</td></tr>
       </table>
-      <div class="colonnes" style="margin-top: 22px;">
-        <div class="encadre">
-          Les défis sont <strong>notés en séance</strong> : appelez-moi pour me montrer chaque défi réussi.
-        </div>
-        <div class="encadre marine">
-          <strong>Parcours confirmé</strong> : défis avancés en parallèle, puis bonus du TP1.
-        </div>
+      <div class="encadre" style="margin-top: 22px;">
+        Les défis sont <strong>notés en séance</strong>. Appelez-moi pour me montrer chaque défi réussi.
       </div>
     </div>
   </section>
