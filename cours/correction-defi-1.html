@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De l'énoncé au code – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reset.css">
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reveal.css">
+  <link rel="stylesheet" href="../assets/css/hexagone.css">
+</head>
+<body data-pied="4PYTH – Langage Python · Correction guidée du défi 1">
+<div class="reveal">
+<div class="slides">
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>De l'énoncé au code</h1>
+    <div class="sous-titre">
+      <span class="code-module">4PYTH</span> – Correction guidée du défi 1<br>
+      Chris CHEVALIER
+    </div>
+    <aside class="notes">
+      Objectif : montrer une méthode, pas seulement une solution. Un volontaire qui a réussi le défi tape le code ;
+      la classe propose chaque étape à l'oral, je guide et je questionne. Environ 40 minutes.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>La méthode en 4 étapes</h2>
+    <div class="corps">
+      <div class="colonnes">
+        <div class="carte">
+          <h3>1. Comprendre</h3>
+          Qu'est-ce qui entre dans la fonction ? Qu'est-ce qui en sort ? Que donnent les exemples de l'énoncé ?
+        </div>
+        <div class="carte">
+          <h3>2. Découper</h3>
+          Écrire les étapes <strong>en français</strong>, une par ligne, avant de taper la moindre ligne de code : c'est le <strong>pseudo-code</strong>.
+        </div>
+        <div class="carte">
+          <h3>3. Coder petit à petit</h3>
+          Une étape du plan à la fois. Le programme doit tourner après chaque ajout, même s'il ne fait pas encore tout.
+        </div>
+        <div class="carte pleine">
+          <h3>4. Tester tout de suite</h3>
+          Relancer avec les exemples de l'énoncé après chaque étape. Une erreur trouvée tôt est une erreur facile à corriger.
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Insister : la plupart des blocages d'hier venaient du passage de l'énoncé au code, pas de la syntaxe (le Kahoot était bon).
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 1 – Comprendre l'énoncé</h2>
+    <div class="corps">
+      <table>
+        <tr><th style="width: 200px;">Question</th><th>Réponse</th></tr>
+        <tr><td><strong>Entrées</strong></td><td><code>password</code> (une chaîne de caractères) et <code>is_admin</code> (<code>True</code> ou <code>False</code>, <code>False</code> par défaut)</td></tr>
+        <tr><td><strong>Sortie</strong></td><td>un <strong>tuple</strong> : <code>True</code> ou <code>False</code>, puis la <strong>liste des messages d'erreur</strong></td></tr>
+        <tr><td><strong>Exemple valide</strong></td><td><code>check_password("Tr0ub4dour&amp;Co")</code> renvoie <code>(True, [])</code></td></tr>
+        <tr><td><strong>Exemple refusé</strong></td><td><code>check_password("azerty")</code> renvoie <code>False</code> et 5 messages : il ne respecte presque aucune règle</td></tr>
+      </table>
+      <div class="encadre" style="margin-top: 18px;">
+        Le mot de passe est valide <strong>si et seulement si la liste des erreurs est vide</strong> : il suffit de remplir cette liste, règle après règle.
+      </div>
+    </div>
+    <aside class="notes">
+      Faire répondre la classe à chaque ligne du tableau avant de l'afficher. La dernière phrase est la clé du défi.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 2 – Le plan en français</h2>
+    <div class="corps">
+      <pre data-titre="Pseudo-code"><code class="language-plaintext" data-trim>
+créer une liste d'erreurs vide
+si le mot de passe est trop court : ajouter une erreur
+regarder chaque caractère du mot de passe :
+    noter les catégories vues : majuscule, minuscule, chiffre, spécial
+pour chaque catégorie jamais rencontrée : ajouter une erreur
+si le mot de passe est un mot de passe courant : ajouter une erreur
+renvoyer (la liste est-elle vide ?, la liste des erreurs)
+      </code></pre>
+      <p class="petit">Chaque ligne du plan deviendra quelques lignes de Python. Le plus dur est fait : il ne reste qu'à traduire.</p>
+    </div>
+    <aside class="notes">
+      Construire ce plan avec la classe, au tableau, avant de le dévoiler. Accepter d'autres découpages s'ils sont justes.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3a – Le squelette</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge1.py"><code class="language-python" data-trim>
+def check_password(password, is_admin=False):
+    """Vérifie un mot de passe."""
+    errors = []
+
+    # … les règles viendront ici …
+
+    return len(errors) == 0, errors
+
+
+print(check_password("azerty"))   # (True, [])
+        </code></pre>
+        <ul class="dense">
+          <li>La fonction <strong>tourne déjà</strong> : elle accepte tout, mais elle renvoie le bon type de résultat</li>
+          <li><code>len(errors) == 0</code> vaut <code>True</code> quand la liste est vide</li>
+          <li><code>return a, b</code> renvoie un <strong>tuple</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3b – La longueur</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge1.py" class="mini"><code class="language-python" data-trim>
+MIN_LENGTH = 12
+ADMIN_MIN_LENGTH = 16
+
+def check_password(password, is_admin=False):
+    errors = []
+
+    if is_admin:
+        min_length = ADMIN_MIN_LENGTH
+    else:
+        min_length = MIN_LENGTH
+    if len(password) &lt; min_length:
+        errors.append(f"au moins {min_length} caractères")
+
+    return len(errors) == 0, errors
+        </code></pre>
+        <ul class="dense">
+          <li>Les seuils sont des <strong>constantes</strong> en majuscules : on les modifie à un seul endroit</li>
+          <li>Test : <code>check_password("azerty")</code> renvoie maintenant <code>(False, ['au moins 12 caractères'])</code></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3c – Regarder chaque caractère</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge1.py (suite)"><code class="language-python" data-trim>
+    has_upper = False
+    has_lower = False
+    has_digit = False
+    has_special = False
+    for char in password:
+        if char.isupper():
+            has_upper = True
+        elif char.islower():
+            has_lower = True
+        elif char.isdigit():
+            has_digit = True
+        elif not char.isalnum():
+            has_special = True
+        </code></pre>
+        <ul class="dense">
+          <li>Quatre <strong>drapeaux</strong> (des booléens) partent à <code>False</code> : « je n'ai encore rien vu »</li>
+          <li>La boucle les passe à <code>True</code> dès qu'elle rencontre la catégorie</li>
+          <li><code>isalnum()</code> est vrai pour une lettre ou un chiffre : <code>not char.isalnum()</code> repère donc un caractère spécial</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Piège fréquent d'hier : vouloir tout décider dans la boucle. On observe d'abord (drapeaux), on conclut ensuite.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3d – Conclure puis vérifier la liste</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge1.py (suite)" class="mini"><code class="language-python" data-trim>
+    if not has_upper:
+        errors.append("au moins une majuscule")
+    if not has_lower:
+        errors.append("au moins une minuscule")
+    if not has_digit:
+        errors.append("au moins un chiffre")
+    if not has_special:
+        errors.append("au moins un caractère spécial")
+
+    common = [p.lower() for p in COMMON_PASSWORDS]
+    if password.lower() in common:
+        errors.append("ne doit pas être un mot de passe courant")
+
+    return len(errors) == 0, errors
+        </code></pre>
+        <ul class="dense">
+          <li>Des <code>if</code> <strong>indépendants</strong> (et non des <code>elif</code>) : plusieurs règles peuvent échouer en même temps</li>
+          <li>On compare tout <strong>en minuscules</strong> : « AZERTY » est aussi faible que « azerty »</li>
+          <li>Le <code>return</code> reste <strong>à la fin</strong>, après toutes les vérifications</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 4 – Tester avec les exemples</h2>
+    <div class="corps">
+      <pre data-titre="Tests" class="compact"><code class="language-python" data-trim>
+print(check_password("Tr0ub4dour&amp;Co"))
+# (True, [])
+print(check_password("Azerty123456!"))
+# (False, ['ne doit pas être un mot de passe courant'])
+print(check_password("azerty"))
+# (False, ['au moins 12 caractères', 'au moins une majuscule', 'au moins un chiffre',
+#          'au moins un caractère spécial', 'ne doit pas être un mot de passe courant'])
+print(check_password("Tr0ub4dour&amp;Co", is_admin=True))
+# (False, ['au moins 16 caractères'])
+      </code></pre>
+      <p class="petit">Si un résultat diffère, on relit l'étape correspondante du plan : c'est là que se trouve l'erreur.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Les pièges les plus fréquents</h2>
+    <div class="corps">
+      <table>
+        <tr><th>Piège</th><th>Correction</th></tr>
+        <tr><td><code>return</code> placé dans la boucle</td><td>la fonction s'arrête au premier caractère : le <code>return</code> va à la fin</td></tr>
+        <tr><td>une chaîne d'<code>elif</code> pour les règles</td><td>une seule erreur est signalée : des <code>if</code> indépendants</td></tr>
+        <tr><td>comparer sans <code>lower()</code></td><td>« AZERTY » passe le contrôle : comparer en minuscules</td></tr>
+        <tr><td>renvoyer seulement <code>True</code> ou <code>False</code></td><td>l'énoncé demande aussi la liste : <code>return valide, errors</code></td></tr>
+        <tr><td>tout écrire d'un coup puis tester</td><td>coder et tester étape par étape</td></tr>
+      </table>
+      <div class="encadre marine" style="margin-top: 18px;">
+        Cette méthode s'applique à <strong>chaque exercice</strong> : comprendre, découper en français, coder petit à petit, tester.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Des questions ?</h1>
+    <div class="sous-titre">
+      Chris CHEVALIER<br>
+      chris.chevalier@ecole-hexagone.com
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script src="../assets/vendor/reveal/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../assets/js/hexagone.js"></script>
+</body>
+</html>

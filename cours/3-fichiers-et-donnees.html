@@ -30,7 +30,7 @@
     <h1>Sommaire</h1>
     <ol>
       <li>Lire et écrire des fichiers</li>
-      <li>Octets et empreintes</li>
+      <li>Octets et empreintes <small style="opacity:.75; font-size:.7em;">(facultatif)</small></li>
       <li>JSON et sauvegarde d'objets</li>
     </ol>
   </section>
@@ -178,7 +178,8 @@ print(path.suffix)     # .log
   <section data-layout="section">
     <div class="numero">#2</div>
     <h2>Octets et empreintes</h2>
-    <div class="sous-titre">Fichiers et données</div>
+    <div class="sous-titre">Partie facultative · pour aller plus loin, non évaluée</div>
+    <aside class="notes">Partie facultative : la survoler ou la sauter selon le temps. Elle n'est évaluée ni à l'examen ni dans le Kahoot.</aside>
   </section>
 
   <!-- ================================================================== -->
@@ -532,8 +533,8 @@ user_from_dict({"username": "eve", "role": "root"})
       <table class="serre">
         <tr><th>Notion</th><th>À retenir</th></tr>
         <tr><td>Fichiers texte</td><td><code>with open(…, encoding="utf-8")</code> ; modes <code>"r"</code>, <code>"w"</code> et <code>"a"</code> ; lecture ligne par ligne</td></tr>
-        <tr><td>Octets</td><td><code>encode()</code> et <code>decode()</code>, hexadécimal, mode <code>"rb"</code> et magic bytes</td></tr>
-        <tr><td>Empreintes (hash)</td><td><code>hashlib.sha256()</code> : vérifier l'intégrité d'un fichier</td></tr>
+        <tr><td>Octets <small>(facultatif)</small></td><td><code>encode()</code> et <code>decode()</code>, hexadécimal, mode <code>"rb"</code> et magic bytes</td></tr>
+        <tr><td>Empreintes (hash) <small>(facultatif)</small></td><td><code>hashlib.sha256()</code> : vérifier l'intégrité d'un fichier</td></tr>
         <tr><td>JSON</td><td><code>json.dump()</code> et <code>json.load()</code> ; <code>to_dict()</code> pour les objets ; chargement qui ne plante pas</td></tr>
         <tr><td>Sécurité</td><td>jamais <code>pickle</code> ni <code>eval()</code> sur des données non fiables ; valider les données chargées</td></tr>
       </table>
@@ -546,16 +547,15 @@ user_from_dict({"username": "eve", "role": "root"})
     <div class="corps">
       <table>
         <tr><th style="width: 190px;">Horaire</th><th>Programme</th></tr>
-        <tr><td>14h00 – 15h15</td><td><strong>Défis du jour 2</strong> : fichiers, octets et empreintes</td></tr>
-        <tr><td>15h15 – 16h45</td><td><strong>TP2 – Fondation</strong> : ajout des classes. Le TP3 est à avancer en autonomie</td></tr>
+        <tr><td>14h00 – 16h45</td><td><strong>TP1 – Fondation</strong> : gestion de l'équipage, avec mon accompagnement. Ceux qui ont fini enchaînent sur le TP2</td></tr>
         <tr><td>16h45 – 17h00</td><td><strong>Kahoot</strong> : 10 questions sur la journée</td></tr>
       </table>
       <div class="colonnes" style="margin-top: 22px;">
         <div class="encadre">
-          Les défis sont <strong>notés en séance</strong> : appelez-moi pour me montrer chaque défi réussi.
+          Les <strong>défis du jour 2</strong> sont <strong>facultatifs</strong> et non notés : pour ceux qui ont terminé le TP1.
         </div>
         <div class="encadre marine">
-          <strong>Parcours confirmé</strong> : défis avancés en parallèle, puis bonus des TP2 et TP3.
+          <strong>Parcours confirmé</strong> : défis du jour 2 ou défis avancés, puis bonus des TP.
         </div>
       </div>
     </div>
