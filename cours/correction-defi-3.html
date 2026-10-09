@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De l'énoncé au code – défi 3 – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reset.css">
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reveal.css">
+  <link rel="stylesheet" href="../assets/css/hexagone.css">
+</head>
+<body data-pied="4PYTH – Langage Python · Correction guidée du défi 3">
+<div class="reveal">
+<div class="slides">
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>De l'énoncé au code</h1>
+    <div class="sous-titre">
+      <span class="code-module">4PYTH</span> – Correction guidée du défi 3<br>
+      Chris CHEVALIER
+    </div>
+    <aside class="notes">
+      Même méthode que pour les défis 1 et 2 : un volontaire tape le code, la classe propose chaque étape à l'oral, je guide et je questionne.
+      Nouveautés de ce défi : utiliser des modules (secrets, string), lever une exception et importer son propre fichier.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 1 – Comprendre l'énoncé</h2>
+    <div class="corps">
+      <table>
+        <tr><th style="width: 220px;">Question</th><th>Réponse</th></tr>
+        <tr><td><strong>Entrée</strong></td><td><code>length</code>, la longueur voulue (un entier, <code>16</code> par défaut)</td></tr>
+        <tr><td><strong>Sortie</strong></td><td>une <strong>chaîne de caractères</strong> aléatoire de <code>length</code> caractères</td></tr>
+        <tr><td><strong>Contraintes</strong></td><td>au moins une majuscule, une minuscule, un chiffre et un caractère spécial, <strong>à des positions variables</strong></td></tr>
+        <tr><td><strong>Cas d'erreur</strong></td><td><code>length</code> inférieur à 12 : <strong>lever</strong> une <code>ValueError</code></td></tr>
+        <tr><td><strong>Vérification</strong></td><td>1 000 mots de passe générés, tous validés par <code>check_password()</code> du défi 1</td></tr>
+      </table>
+    </div>
+    <aside class="notes">
+      Faire répondre la classe à chaque ligne du tableau avant de l'afficher.
+      La sortie change à chaque exécution : on ne peut donc pas comparer à un résultat exact. C'est pour cela que l'énoncé demande la vérification par le défi 1.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 1 – Les outils à disposition</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="Terminal"><code class="language-python" data-trim>
+&gt;&gt;&gt; import secrets
+&gt;&gt;&gt; import string
+&gt;&gt;&gt; string.ascii_uppercase
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+&gt;&gt;&gt; string.digits
+'0123456789'
+&gt;&gt;&gt; secrets.choice("ABC")
+'B'
+&gt;&gt;&gt; chars = ["a", "B", "7"]
+&gt;&gt;&gt; secrets.SystemRandom().shuffle(chars)
+&gt;&gt;&gt; "".join(chars)
+'7aB'
+        </code></pre>
+        <ul class="dense">
+          <li><a href="https://docs.python.org/fr/3/library/string.html#string-constants"><code>string</code></a> fournit les alphabets tout faits</li>
+          <li><code>secrets.choice()</code> tire <strong>un</strong> caractère au hasard, de façon imprévisible</li>
+          <li><code>shuffle()</code> mélange une <strong>liste</strong> sur place. Une chaîne ne se modifie pas, on travaille donc avec une liste</li>
+          <li><code>"".join(liste)</code> recolle la liste en une chaîne</li>
+        </ul>
+      </div>
+      <div class="encadre" style="margin-top: 14px;">
+        Jamais <code>random</code> pour un secret. Il est <strong>prévisible</strong>. Qui connaît son état devine la suite. <code>secrets</code> est fait pour ça.
+      </div>
+    </div>
+    <aside class="notes">
+      Tester chaque outil dans le terminal Python avant de coder. Les valeurs tirées changeront à chaque essai : c'est le but.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 2 – Le plan en français</h2>
+    <div class="corps">
+      <pre data-titre="Pseudo-code" class="compact"><code class="language-plaintext" data-trim>
+si la longueur est inférieure à 12 : lever une ValueError
+
+préparer les 4 catégories : majuscules, minuscules, chiffres, spéciaux
+créer une liste vide de caractères
+pour chaque catégorie : tirer un caractère de cette catégorie
+pour chaque caractère manquant : tirer un caractère parmi toutes les catégories
+mélanger la liste
+recoller la liste en une chaîne et la renvoyer
+      </code></pre>
+      <p class="petit">Tirer d'abord un caractère de chaque catégorie <strong>garantit</strong> les 4 règles. Le mélange final évite qu'elles soient toujours aux mêmes positions.</p>
+    </div>
+    <aside class="notes">
+      Construire ce plan avec la classe. Demander : pourquoi ne pas tirer 16 caractères au hasard parmi tous ? Réponse : rien ne garantit alors un chiffre ou un caractère spécial.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3a – Refuser une longueur trop courte</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="challenge3.py"><code class="language-python" data-trim>
+import secrets
+import string
+
+from challenge1 import check_password, MIN_LENGTH
+
+
+def generate_password(length=16):
+    """Génère un mot de passe aléatoire robuste."""
+    if length &lt; MIN_LENGTH:
+        raise ValueError(f"longueur minimale : {MIN_LENGTH}")
+    return ""
+        </code></pre>
+        <ul class="dense">
+          <li>On <strong>réutilise</strong> la constante <code>MIN_LENGTH</code> du défi 1. La règle des 12 caractères n'est écrite qu'à un endroit</li>
+          <li><code>raise</code> <strong>arrête</strong> la fonction et signale l'erreur à celui qui l'appelle</li>
+          <li>Le <code>return ""</code> provisoire permet déjà d'exécuter et de tester</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Si le défi 1 d'un étudiant n'a pas de constante MIN_LENGTH, il écrit MIN_LENGTH = 12 dans challenge3.py.
+      Faire la différence entre print("erreur") et raise : avec print, la fonction continue et renvoie un mot de passe trop court.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3b – Un caractère de chaque catégorie</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge3.py"><code class="language-python" data-trim>
+SPECIALS = "!@#$%^&amp;*()-_=+[]{};:,.?/"
+
+
+def generate_password(length=16):
+    ...  # vérification de la longueur
+    categories = [string.ascii_uppercase,
+                  string.ascii_lowercase,
+                  string.digits, SPECIALS]
+    chars = []
+    for category in categories:
+        chars.append(secrets.choice(category))
+    print(chars)       # ['K', 'q', '4', '#']
+    return ""
+        </code></pre>
+        <ul class="dense">
+          <li>Les caractères spéciaux sont <strong>choisis par nous</strong> et rangés dans une constante</li>
+          <li>Une <strong>liste de catégories</strong> permet une boucle au lieu de quatre lignes presque identiques</li>
+          <li>Le <code>print()</code> provisoire montre que l'étape fonctionne</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3c – Compléter, mélanger, recoller</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge3.py (suite)"><code class="language-python" data-trim>
+    all_chars = "".join(categories)
+    for _ in range(length - len(chars)):
+        chars.append(secrets.choice(all_chars))
+
+    secrets.SystemRandom().shuffle(chars)
+    return "".join(chars)
+        </code></pre>
+        <ul class="dense">
+          <li><code>all_chars</code> réunit les 4 catégories en une seule chaîne</li>
+          <li>Il manque <code>length - len(chars)</code> caractères, soit 12 pour une longueur de 16</li>
+          <li><code>_</code> est le nom d'usage d'une variable de boucle dont on ne se sert pas</li>
+          <li>Sans le mélange, le mot de passe commencerait <strong>toujours</strong> par une majuscule, une minuscule, un chiffre puis un spécial</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Un attaquant qui connaît la structure fixe d'un mot de passe réduit d'autant son travail de brute force : d'où le mélange.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 4 – Tester avec les exemples</h2>
+    <div class="corps">
+      <pre data-titre="Tests" class="compact"><code class="language-python" data-trim>
+print(generate_password())       # par exemple : 45h#O_$APXE[QLje
+print(generate_password(24))     # par exemple : {U/7/lzny-b{MJb[-B1agCX(
+
+try:
+    generate_password(8)
+except ValueError as error:
+    print("Erreur :", error)     # Erreur : longueur minimale : 12
+      </code></pre>
+      <p class="petit">Le <code>try</code> / <code>except</code> sert seulement à afficher l'erreur sans arrêter le programme de test.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 4 – Vérifier 1 000 mots de passe</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="challenge3.py (suite)"><code class="language-python" data-trim>
+invalid = 0
+for _ in range(1000):
+    valid, errors = check_password(generate_password())
+    if not valid:
+        invalid += 1
+print("Mots de passe invalides sur 1000 :", invalid)
+# Mots de passe invalides sur 1000 : 0
+        </code></pre>
+        <ul class="dense">
+          <li><code>check_password()</code> renvoie un <strong>tuple</strong>, que l'on déballe en deux variables</li>
+          <li>Un seul cas raté sur 1 000 suffirait à révéler un défaut. C'est l'intérêt de tester en grand nombre</li>
+          <li><code>challenge1.py</code> doit être <strong>dans le même dossier</strong> que <code>challenge3.py</code></li>
+        </ul>
+      </div>
+      <div class="encadre" style="margin-top: 14px;">
+        Les tests de <code>challenge1.py</code> s'affichent à l'import ? Placez-les sous <code>if __name__ == "__main__":</code>. Ils ne s'exécuteront plus que si l'on lance ce fichier directement.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Les pièges les plus fréquents</h2>
+    <div class="corps">
+      <table>
+        <tr><th>Piège</th><th>Correction</th></tr>
+        <tr><td><code>random</code> au lieu de <code>secrets</code></td><td>un secret doit être imprévisible. Utiliser <code>secrets</code></td></tr>
+        <tr><td>16 caractères tirés parmi tous</td><td>rien ne garantit les 4 catégories. En tirer une de chaque d'abord</td></tr>
+        <tr><td>pas de mélange</td><td>les 4 premiers caractères suivent toujours le même ordre</td></tr>
+        <tr><td><code>print("erreur")</code> au lieu de <code>raise</code></td><td>la fonction continue. Lever une <code>ValueError</code></td></tr>
+        <tr><td><code>ImportError</code> sur <code>challenge1</code></td><td>les deux fichiers doivent être dans le même dossier</td></tr>
+      </table>
+      <div class="encadre marine" style="margin-top: 18px;">
+        Un bon programme <strong>réutilise</strong> ce qui existe : les modules de Python et son propre code, comme le défi 1.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Des questions ?</h1>
+    <div class="sous-titre">
+      Chris CHEVALIER<br>
+      chris.chevalier@ecole-hexagone.com
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script src="../assets/vendor/reveal/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../assets/js/hexagone.js"></script>
+</body>
+</html>

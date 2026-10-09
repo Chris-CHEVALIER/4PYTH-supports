@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De l'énoncé au code – défi 2 – 4PYTH</title>
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reset.css">
+  <link rel="stylesheet" href="../assets/vendor/reveal/dist/reveal.css">
+  <link rel="stylesheet" href="../assets/css/hexagone.css">
+</head>
+<body data-pied="4PYTH – Langage Python · Correction guidée du défi 2">
+<div class="reveal">
+<div class="slides">
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>De l'énoncé au code</h1>
+    <div class="sous-titre">
+      <span class="code-module">4PYTH</span> – Correction guidée du défi 2<br>
+      Chris CHEVALIER
+    </div>
+    <aside class="notes">
+      Même méthode que pour le défi 1 : un volontaire tape le code, la classe propose chaque étape à l'oral, je guide et je questionne.
+      Nouveauté de ce défi : découper le problème en petites fonctions qui s'appellent entre elles.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>La méthode en 4 étapes</h2>
+    <div class="corps">
+      <div class="colonnes">
+        <div class="carte">
+          <h3>1. Comprendre</h3>
+          Qu'est-ce qui entre dans chaque fonction ? Qu'est-ce qui en sort ? Que donnent les exemples de l'énoncé ?
+        </div>
+        <div class="carte">
+          <h3>2. Découper</h3>
+          Écrire les étapes <strong>en français</strong>, une par ligne, avant de taper la moindre ligne de code. C'est le <strong>pseudo-code</strong>.
+        </div>
+        <div class="carte">
+          <h3>3. Coder petit à petit</h3>
+          Une fonction à la fois. Le programme doit tourner après chaque ajout, même s'il ne fait pas encore tout.
+        </div>
+        <div class="carte pleine">
+          <h3>4. Tester tout de suite</h3>
+          Relancer avec les exemples de l'énoncé après chaque fonction. Une erreur trouvée tôt est une erreur facile à corriger.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 1 – Comprendre l'énoncé</h2>
+    <div class="corps">
+      <table class="serre">
+        <tr><th style="width: 260px;">Fonction</th><th>Entrée</th><th>Sortie</th></tr>
+        <tr><td><code>count_failures(lines)</code></td><td>la liste des lignes du journal</td><td>un <strong>dictionnaire</strong> <code>{IP: nombre d'échecs}</code></td></tr>
+        <tr><td><code>detect_brute_force(lines, threshold=5)</code></td><td>les lignes et un seuil</td><td>une <strong>liste</strong> d'IP</td></tr>
+        <tr><td><code>print_report(lines, threshold=5)</code></td><td>les lignes et un seuil</td><td>rien : elle <strong>affiche</strong> une alerte par IP</td></tr>
+      </table>
+      <div class="encadre" style="margin-top: 18px;">
+        Les trois fonctions s'appuient les unes sur les autres. Pour détecter, il faut d'abord <strong>compter</strong>. Pour afficher le rapport, il faut d'abord <strong>détecter</strong>.
+      </div>
+    </div>
+    <aside class="notes">
+      Faire remarquer la différence entre renvoyer (return) et afficher (print) : seule print_report affiche.
+      Rappeler qu'une adresse IP du journal est une chaîne de caractères, pas un nombre.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 1 – Lire une ligne du journal</h2>
+    <div class="corps">
+      <pre class="mini" data-titre="Deux lignes Failed password" style="font-size: 12.5px;"><code class="language-plaintext" data-trim>
+Oct  7 10:02:11 srv-web sshd[2210]: Failed password for root from 203.0.113.45 port 51122 ssh2
+Oct  7 10:02:18 srv-web sshd[2215]: Failed password for invalid user admin from 203.0.113.45 port 51141 ssh2
+      </code></pre>
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="Terminal"><code class="language-python" data-trim>
+&gt;&gt;&gt; line = AUTH_LOG[3]
+&gt;&gt;&gt; words = line.split()
+&gt;&gt;&gt; words.index("from")
+9
+&gt;&gt;&gt; words[words.index("from") + 1]
+'203.0.113.45'
+        </code></pre>
+        <div class="dense">
+          <ul>
+            <li><code>split()</code> découpe la ligne en <strong>mots</strong>, quel que soit le nombre d'espaces</li>
+            <li>La 2e ligne a deux mots de plus (« invalid user »). L'IP n'est donc <strong>pas toujours à la même position</strong></li>
+            <li>Elle suit <strong>toujours</strong> le mot <code>from</code>. On cherche donc la position de <code>from</code> puis on prend le mot suivant</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      Piège fréquent du 7 octobre : words[9] codé en dur. Ça marche sur la 1re ligne et donne « user » sur la 2e.
+      Faire tester les deux lignes dans le terminal Python avant d'écrire la moindre fonction.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 2 – Le plan en français</h2>
+    <div class="corps">
+      <pre data-titre="Pseudo-code" class="compact"><code class="language-plaintext" data-trim>
+extraire l'IP d'une ligne :
+    découper la ligne en mots, renvoyer le mot qui suit « from »
+
+compter les échecs :
+    créer un dictionnaire vide
+    pour chaque ligne qui contient « Failed password » :
+        extraire l'IP puis ajouter 1 à son compteur
+    renvoyer le dictionnaire
+
+détecter le brute force :
+    pour chaque IP et son nombre d'échecs : si le nombre atteint le seuil, garder l'IP
+
+afficher le rapport :
+    pour chaque IP détectée : afficher une alerte avec son nombre d'échecs
+      </code></pre>
+    </div>
+    <aside class="notes">
+      Construire ce plan avec la classe, au tableau, avant de le dévoiler.
+      Insister sur la première fonction, qui n'est pas demandée par l'énoncé : on a le droit d'écrire ses propres fonctions utilitaires.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3a – Extraire l'IP</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge2.py"><code class="language-python" data-trim>
+from log_data import AUTH_LOG
+
+
+def extract_ip(line):
+    """Renvoie l'IP qui suit le mot « from »."""
+    words = line.split()
+    return words[words.index("from") + 1]
+
+
+print(extract_ip(AUTH_LOG[3]))   # 203.0.113.45
+print(extract_ip(AUTH_LOG[5]))   # 203.0.113.45
+        </code></pre>
+        <ul class="dense">
+          <li>Une fonction <strong>courte</strong>, testée tout de suite sur une ligne simple et sur une ligne « invalid user »</li>
+          <li>Le journal est rangé dans <code>log_data.py</code> et importé. Le fichier du défi reste lisible</li>
+          <li>On pourra la réutiliser partout où il faut une IP, y compris pour les bonus</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Coller AUTH_LOG directement dans challenge2.py fonctionne aussi. Le fichier séparé est simplement plus propre.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3b – Compter les échecs</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre data-titre="challenge2.py (suite)"><code class="language-python" data-trim>
+def count_failures(lines):
+    """Compte les échecs par adresse IP."""
+    failures = {}
+    for line in lines:
+        if "Failed password" in line:
+            ip = extract_ip(line)
+            failures[ip] = failures.get(ip, 0) + 1
+    return failures
+        </code></pre>
+        <ul class="dense">
+          <li><code>"Failed password" in line</code> garde seulement les échecs. Les lignes <code>Accepted</code> ou <code>Connection closed</code> sont ignorées</li>
+          <li><code>failures.get(ip, 0)</code> renvoie le compteur actuel ou <code>0</code> si l'IP est nouvelle</li>
+          <li>Le <code>return</code> est <strong>après</strong> la boucle, une fois toutes les lignes lues</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Sans get(), failures[ip] += 1 lève une KeyError à la première apparition d'une IP.
+      Variante acceptée : if ip in failures: ... else: failures[ip] = 1.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3c – Détecter le brute force</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="challenge2.py (suite)"><code class="language-python" data-trim>
+def detect_brute_force(lines, threshold=5):
+    """Renvoie les IP ayant au moins threshold échecs."""
+    suspects = []
+    for ip, count in count_failures(lines).items():
+        if count >= threshold:
+            suspects.append(ip)
+    return suspects
+        </code></pre>
+        <ul class="dense">
+          <li>On <strong>réutilise</strong> <code>count_failures()</code> au lieu de recompter</li>
+          <li><code>items()</code> donne chaque paire clé et valeur : l'IP et son nombre d'échecs</li>
+          <li><code>&gt;=</code> et non <code>&gt;</code> : l'énoncé dit « <strong>au moins</strong> » <code>threshold</code> échecs</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Avec >, l'IP 198.51.100.23 (exactement 5 échecs) disparaît du résultat : bon exemple pour montrer l'intérêt de tester avec les exemples.
+    </aside>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 3d – Afficher le rapport</h2>
+    <div class="corps">
+      <div class="colonnes code-texte">
+        <pre class="mini" data-titre="challenge2.py (suite)"><code class="language-python" data-trim>
+def print_report(lines, threshold=5):
+    """Affiche une alerte par IP détectée."""
+    failures = count_failures(lines)
+    for ip in detect_brute_force(lines, threshold):
+        message = f"{failures[ip]} échecs d'authentification"
+        print(f"[ALERTE] {ip} : {message}")
+        </code></pre>
+        <ul class="dense">
+          <li>On a besoin <strong>des deux</strong> : la liste des IP détectées et leur nombre d'échecs</li>
+          <li>Le seuil reçu est <strong>transmis</strong> à <code>detect_brute_force()</code>. Sinon, <code>print_report(lines, 2)</code> utiliserait toujours 5</li>
+          <li>Cette fonction <strong>affiche</strong> et ne renvoie rien</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Étape 4 – Tester avec les exemples</h2>
+    <div class="corps">
+      <pre data-titre="Tests" class="compact"><code class="language-python" data-trim>
+print(count_failures(AUTH_LOG))
+# {'192.0.2.25': 1, '203.0.113.45': 7, '198.51.100.23': 5, '198.51.100.77': 2}
+print(detect_brute_force(AUTH_LOG))
+# ['203.0.113.45', '198.51.100.23']
+print(detect_brute_force(AUTH_LOG, threshold=2))
+# ['203.0.113.45', '198.51.100.23', '198.51.100.77']
+print_report(AUTH_LOG)
+# [ALERTE] 203.0.113.45 : 7 échecs d'authentification
+# [ALERTE] 198.51.100.23 : 5 échecs d'authentification
+      </code></pre>
+      <p class="petit">Si un résultat diffère, on relance la fonction concernée seule. Comme chaque fonction est courte, l'erreur se trouve vite.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section>
+    <h2>Les pièges les plus fréquents</h2>
+    <div class="corps">
+      <table>
+        <tr><th>Piège</th><th>Correction</th></tr>
+        <tr><td>l'IP prise à une position fixe (<code>words[9]</code>)</td><td>chercher la position de <code>from</code> avec <code>index()</code></td></tr>
+        <tr><td><code>failures[ip] += 1</code> sur une IP nouvelle</td><td><code>KeyError</code>. Utiliser <code>get(ip, 0)</code></td></tr>
+        <tr><td><code>count &gt; threshold</code></td><td>l'énoncé dit « au moins ». Utiliser <code>&gt;=</code></td></tr>
+        <tr><td>tout le code dans une seule fonction</td><td>une fonction par tâche, qui réutilise les autres</td></tr>
+        <tr><td>le seuil oublié dans <code>print_report()</code></td><td>le transmettre à <code>detect_brute_force()</code></td></tr>
+      </table>
+      <div class="encadre marine" style="margin-top: 18px;">
+        Découper un problème en <strong>petites fonctions</strong> le rend plus simple à écrire, à tester et à réutiliser.
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <section data-layout="titre">
+    <h1>Des questions ?</h1>
+    <div class="sous-titre">
+      Chris CHEVALIER<br>
+      chris.chevalier@ecole-hexagone.com
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script src="../assets/vendor/reveal/dist/reveal.js"></script>
+<script src="../assets/vendor/reveal/plugin/highlight/highlight.js"></script>
+<script src="../assets/vendor/reveal/plugin/notes/notes.js"></script>
+<script src="../assets/js/hexagone.js"></script>
+</body>
+</html>
